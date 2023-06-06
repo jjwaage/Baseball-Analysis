@@ -1,0 +1,17 @@
+---
+title: "Resources"
+author: "Jonna Waage"
+date: "2023-05-30"
+---
+
+**Links to resources used**
+
+[How FiveThirtyEight does their predictions](https://fivethirtyeight.com/features/how-our-mlb-predictions-work/)
+
+[Playoff Simulator](https://playoffpredictors.com/Baseball?L=Aw18ZXTt-DFOS1b0c17Pd-wYUcSaWeRZVdTbXfQ408y6xQEwCMw7wn7Azvy6CuQ4QLHD+QqZMkyxI+VPEy1I6UtnilowVp3KFE3etOztpqzq2rFB9XN1Xjh88flnH+h06+Wii6WyiESns4qXgoGAYHSZua2blEa9h4ebi7OGgmGomqF4XklTmFpiY5hkRkOoQVV+rHRVRXJKu7BJkFZ1SFNRd2teq3JpWNVPHKaSQkdMz2aNrNZJqOhifEBC4E+Q8F2xTGpMeEDFSfcuctrS0bzm3W9RrkHhafWC8eucz92jUI+BtohZfGDrHkAUtpp1topEEA)
+
+[Simulator in R](https://baseballwithr.wordpress.com/2020/06/29/simulating-a-60-game-season/)
+
+[2022 Updated Playoffs](https://www.sportingnews.com/us/mlb/news/mlb-expanded-playoffs-postseason-2022-teams/sayv4pysmmlopks7hg2o2lbv)
+
+[Home Field Advantage](https://sabr.org/journal/article/home-field-advantage/#:~:text=In%20every%20sport%20and%20at,percent%20of%20the%20games%20played.)

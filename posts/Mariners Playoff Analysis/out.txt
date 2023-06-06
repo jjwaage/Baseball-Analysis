@@ -1,0 +1,35 @@
+
+===================================================
+Teams                 Num_Playoffs Percent_Playoffs
+---------------------------------------------------
+Atlanta Braves             41           0.041      
+Miami Marlins              46           0.046      
+New York Mets              38           0.038      
+Philadelphia Phillies      35           0.035      
+Washington Nationals       40            0.04      
+Chicago Cubs               42           0.042      
+Cincinnati Reds            36           0.036      
+Milwaukee Brewers          45           0.045      
+Pittsburgh Pirates         39           0.039      
+St. Louis Cardinals        37           0.037      
+Arizona Diamondbacks       43           0.043      
+Colorado Rockies           39           0.039      
+Los Angeles Dodgers        34           0.034      
+San Diego Padres           37           0.037      
+San Francisco Giants       48           0.048      
+Baltimore Orioles          36           0.036      
+Boston Red Sox             38           0.038      
+New York Yankees           44           0.044      
+Tampa Bay Rays             34           0.034      
+Toronto Blue Jays          41           0.041      
+Chicago White Sox          37           0.037      
+Cleveland Guardians        36           0.036      
+Detroit Tigers             48           0.048      
+Kansas City Royals         36           0.036      
+Minnesota Twins            45           0.045      
+Oakland Athletics          41           0.041      
+Houston Astros             34           0.034      
+Texas Rangers              38           0.038      
+Los Angeles Angels         50            0.05      
+Seattle Mariners           42           0.042      
+---------------------------------------------------

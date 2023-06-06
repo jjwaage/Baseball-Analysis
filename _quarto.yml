@@ -1,0 +1,20 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Sports Data Analysis and Visualization"
+  navbar:
+    background: "#0C2C56"
+    foreground: light
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+editor: visual
+
