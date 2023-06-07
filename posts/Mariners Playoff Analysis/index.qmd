@@ -13,6 +13,8 @@ library("readxl")
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE)
+library(ggplot2)
+library(MASS)
 ```
 
 #### Introduction
@@ -27,7 +29,7 @@ Talent has been edited so that each team has the same talent. Essentially a 50/5
 
 Read in two functions:
 
--   `one.simulation.20()` performs the simulation
+-   `one.simulation()` performs the simulation
 -   `print_standings()` prints the division standings of the simulation
 
 Reads in the data:
@@ -35,17 +37,8 @@ Reads in the data:
 -   `schedule1 <- read_excel("schedule.xlsx")` reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
 
 ```{r, echo = FALSE}
-one.simulation.20 <- function(s.talent = 0.01){
+one.simulation <- function(s.talent = 0.01){
   require(dplyr)
-  
-  # make.schedule <- function(teams, k){
-  #   n.teams <- length(teams)
-  #   Home <- rep(rep(teams, each=n.teams), k)
-  #   Visitor <- rep(rep(teams, n.teams), k)
-  #   schedule <- tibble(Home = Home,
-  #                      Visitor = Visitor)
-  #   dplyr::filter(schedule, Home != Visitor)
-  # }
 
   NL_East <- c("Atlanta Braves", "Miami Marlins", "New York Mets","Philadelphia Phillies","Washington Nationals")
   
@@ -69,23 +62,18 @@ one.simulation.20 <- function(s.talent = 0.01){
                           League = league,
                           Division = division)
 
-  # s1 <- make.schedule(NL_East, 3)
-  # s2 <- make.schedule(AL_East, 3)
-  # s3 <- make.schedule(c(NL_East, AL_East), 2)
-  # s4 <- make.schedule(NL_Cent, 3)
-  # s5 <- make.schedule(AL_Cent, 3)
-  # s6 <- make.schedule(c(NL_Cent, AL_Cent), 2)
-  # s7 <- make.schedule(NL_West, 3)
-  # s8 <- make.schedule(AL_West, 3)
-  # s9 <- make.schedule(c(NL_West, AL_West), 2)
-  # schedule <- rbind(s1, s2, s3, s4, s5, s6, s7, s8, s9)
-
-  schedule1 <- read_excel("schedule.xlsx")
-  schedule <- schedule1
+  schedule <- read_excel("schedule.xlsx")
+  battingstats <- read_excel("2022battingstats.xlsx")
+  fieldingstats <- read_excel("fieldingstats2022.xlsx")
+  
+  runs_per_game <- (battingstats$RG)
+  zruns_per_game <- (runs_per_game-mean(runs_per_game))/sd(runs_per_game)
+  
+  runs_against <- (fieldingstats$RAG)
+  zruns_against <-  (runs_against-mean(runs_against))/sd(runs_against)
   
   # simulate talents
-  #talents <- rnorm(30, 0, s.talent)
-  talents <- runif(30, min = 0.00001, max = 0.00002)
+  talents <- ((zruns_per_game - zruns_against) / 10)
   TAL <- tibble(Team = teams, Talent = talents)
   
   # merge talents and win probs with schedule data frame
@@ -98,7 +86,7 @@ one.simulation.20 <- function(s.talent = 0.01){
   # play season of games
   SCH %>% 
     mutate(prob.Home = exp(Talent.Home) /
-             (exp(Talent.Home) + exp(Talent.Visitor)) + .04) -> SCH
+             (exp(Talent.Home) + exp(Talent.Visitor)) +.04) -> SCH # explain this in blog
   
   SCH %>%
     mutate(outcome = rbinom(nrow(.), 1, prob.Home),
@@ -182,22 +170,10 @@ print_standings <- function(out){
 
 ```
 
-Read in several packages that I'll need.
-
-```{r}
-library(ggplot2)
-library(dplyr)
-library(MASS)
-```
-
 Also I am adding several helper functions `increasefont()` and `centertitle()` that I will use in ggplot2.
 
 ```{r}
 increasefont <- function(Size = 18){
-  theme(text = element_text(size = Size))
-}
-
-decreasefont <- function(Size = 14){
   theme(text = element_text(size = Size))
 }
 
@@ -213,8 +189,7 @@ centertitle <- function(Color = "blue"){
 One simulation assuming a standard deviation of 0.3.
 
 ```{r}
-# set.seed(121)
-out <- one.simulation.20(0.01)
+out <- one.simulation(0.01)
 print_standings(out)
 ```
 
@@ -224,8 +199,8 @@ Store the results of 1000 simulated seasons:
 
 ```{r}
 all_out <- NULL  
-for(j in 1:1000){
-  out <- one.simulation.20(0.01)
+for(j in 1:100){
+  out <- one.simulation(0.01)
   out$Simulation <- j
   all_out <- rbind(all_out, out)
 }
@@ -233,210 +208,28 @@ for(j in 1:1000){
 
 #### Talent and probability of making playoffs
 
-```{r, echo = FALSE}
-playoffs <- NULL
-atlplayoffs = 0
-miaplayoffs = 0
-nymplayoffs = 0
-phiplayoffs = 0
-wasplayoffs = 0
-chcplayoffs = 0 
-milplayoffs = 0
-cinplayoffs = 0
-pitplayoffs = 0
-stlplayoffs = 0
-ariplayoffs = 0 
-colplayoffs = 0
-ladplayoffs = 0
-sdplayoffs = 0
-sfplayoffs = 0
-balplayoffs = 0
-bosplayoffs = 0
-nyyplayoffs = 0
-tbplayoffs = 0
-torplayoffs = 0
-cwsplayoffs = 0
-cleplayoffs = 0 
-detplayoffs = 0 
-kanplayoffs = 0
-minplayoffs = 0
-oakplayoffs = 0
-houplayoffs = 0
-texplayoffs = 0
-laaplayoffs = 0
-seaplayoffs = 0
-```
-
 Define a new variable Level that is 0 (missed playoffs), 1 (wild-card), or 2 (win division).
 
 ```{r, echo = FALSE}
+
+playoffs <- NULL
+
 all_out %>%
-  mutate(Level = as.factor(2 * (Winner.Div == 1) +(Wild.Card == 1))) -> all_out
-
-for(j in 1:nrow(all_out)) {
-  if (all_out[j,9] != "0") {
-    if (all_out[j,1] == "Atlanta Braves") {
-      atlplayoffs = atlplayoffs + 1
-    }
-    if (all_out[j,1] == "Miami Marlins") {
-      miaplayoffs = miaplayoffs + 1
-    }
-    if (all_out[j,1] == "New York Mets") {
-      nymplayoffs = nymplayoffs + 1
-    }
-    if (all_out[j,1] == "Philadelphia Phillies") {
-      phiplayoffs = phiplayoffs + 1
-    }
-    if (all_out[j,1] == "Washington Nationals") {
-      wasplayoffs = wasplayoffs + 1
-    }
-    if (all_out[j,1] == "Chicago Cubs") {
-      chcplayoffs = chcplayoffs + 1
-    }
-    if (all_out[j,1] == "Milwaukee Brewers") {
-      milplayoffs = milplayoffs + 1
-    }
-    if (all_out[j,1] == "Cincinnati Reds") {
-      cinplayoffs = cinplayoffs + 1
-    }
-    if (all_out[j,1] == "Pittsburgh Pirates") {
-      pitplayoffs = pitplayoffs + 1
-    }
-    if (all_out[j,1] == "St. Louis Cardinals") {
-      stlplayoffs = stlplayoffs + 1
-    }
-    if (all_out[j,1] == "Arizona Diamondbacks") {
-      ariplayoffs = ariplayoffs + 1
-    }
-    if (all_out[j,1] == "Colorado Rockies") {
-      colplayoffs = colplayoffs + 1
-    }
-    if (all_out[j,1] == "Los Angeles Dodgers") {
-      ladplayoffs = ladplayoffs + 1
-    }
-    if (all_out[j,1] == "San Diego Padres") {
-      sdplayoffs = sdplayoffs + 1
-    }
-    if (all_out[j,1] == "San Francisco Giants") {
-      sfplayoffs = sfplayoffs + 1
-    }
-    if (all_out[j,1] == "Baltimore Orioles") {
-      balplayoffs = balplayoffs + 1
-    }
-    if (all_out[j,1] == "Boston Red Sox") {
-      bosplayoffs = bosplayoffs + 1
-    }
-    if (all_out[j,1] == "New York Yankees") {
-      nyyplayoffs = nyyplayoffs + 1
-    }
-    if (all_out[j,1] == "Tampa Bay Rays") {
-      tbplayoffs = tbplayoffs + 1
-    }
-    if (all_out[j,1] == "Toronto Blue Jays") {
-      torplayoffs = torplayoffs + 1
-    }
-    if (all_out[j,1] == "Chicago White Sox") {
-      cwsplayoffs = cwsplayoffs + 1
-    }
-    if (all_out[j,1] == "Cleveland Guardians") {
-      cleplayoffs = cleplayoffs + 1
-    }
-    if (all_out[j,1] == "Detroit Tigers") {
-      detplayoffs = detplayoffs + 1
-    }
-    if (all_out[j,1] == "Kansas City Royals") {
-      kanplayoffs = kanplayoffs + 1
-    }
-    if (all_out[j,1] == "Minnesota Twins") {
-      minplayoffs = minplayoffs + 1
-    }
-    if (all_out[j,1] == "Oakland Athletics") {
-      oakplayoffs = oakplayoffs + 1
-    }
-    if (all_out[j,1] == "Houston Astros") {
-      houplayoffs = houplayoffs + 1
-    }
-    if (all_out[j,1] == "Texas Rangers") {
-      texplayoffs = texplayoffs + 1
-    }
-    if (all_out[j,1] == "Los Angeles Angels") {
-      laaplayoffs = laaplayoffs + 1
-    }
-    if (all_out[j,1] == "Seattle Mariners") {
-      seaplayoffs = seaplayoffs + 1
-    }
-  }
-}
-
-```
-
-```{r, echo = FALSE}
-Num_Playoffs <- c(atlplayoffs, miaplayoffs, nymplayoffs, phiplayoffs, wasplayoffs, chcplayoffs, milplayoffs, cinplayoffs, pitplayoffs, stlplayoffs, ariplayoffs, 
-                  colplayoffs, ladplayoffs, sdplayoffs, sfplayoffs, balplayoffs, bosplayoffs, nyyplayoffs, tbplayoffs, torplayoffs, cwsplayoffs, 
-                  cleplayoffs, detplayoffs, kanplayoffs, minplayoffs, oakplayoffs, houplayoffs, texplayoffs, laaplayoffs, seaplayoffs)
-
- NL_East <- c("Atlanta Braves", "Miami Marlins", "New York Mets","Philadelphia Phillies","Washington Nationals")
+  mutate(Level = as.factor(2 * (Winner.Div == 1) + (Wild.Card == 1))) -> all_out
   
-  NL_Cent <- c("Chicago Cubs", "Cincinnati Reds","Milwaukee Brewers", "Pittsburgh Pirates", "St. Louis Cardinals")
-  
-  NL_West <- c("Arizona Diamondbacks", "Colorado Rockies", "Los Angeles Dodgers","San Diego Padres", "San Francisco Giants")
-  
-  AL_East <- c("Baltimore Orioles", "Boston Red Sox","New York Yankees", "Tampa Bay Rays","Toronto Blue Jays")
-  
-  AL_Cent <- c("Chicago White Sox", "Cleveland Guardians","Detroit Tigers", "Kansas City Royals","Minnesota Twins")
-  
-  AL_West <- c("Oakland Athletics", "Houston Astros","Texas Rangers", "Los Angeles Angels","Seattle Mariners")
+all_out <- all_out %>% 
+  mutate(playoffs = Winner.Div + Wild.Card)
 
-  teams <- c(NL_East, NL_Cent, NL_West,
-             AL_East, AL_Cent, AL_West)
-  league <- c(rep("NL", 15), rep("AL", 15))
-  division <- c(rep("NL_East", 5), rep("NL_Cent", 5),
-                rep("NL_West", 5), rep("AL_East", 5),
-                rep("AL_Cent", 5), rep("AL_West", 5))
-
-percent <- function(x, digits = 1, format = "f", ...) {
-  paste0(formatC(100 * x, format = format, digits = digits, ...), "%")
-}  
-  
-Percent_Playoffs <- Num_Playoffs / 1000
-Percent_Playoffs = percent(Percent_Playoffs)
-
-playoffs <- t(rbind(teams, division, Num_Playoffs, Percent_Playoffs))
-playoffs = as_tibble(playoffs)
-
-playoffs <- arrange(playoffs, division, desc(Percent_Playoffs))
+playoffsummary <- all_out %>% 
+  group_by(Team) %>% 
+  summarize(playoffpercent = sum(playoffs) / 100)
 
 ```
 
 Printing percentage of playoffs made from each team over 1000 seasons.
 
 ```{r, echo = FALSE}
-playoffs %>%  
-    mutate(Line = paste(" ",teams, Num_Playoffs, " ", Percent_Playoffs, sep="  ")) %>% 
-    dplyr::select(Line) -> out2
-
-  breaks <- c("--------------------", "--------------------")
-  Heading1 <- c("AL East  Count  Percent", "NL East  Count  Percent")
-  results1 <- cbind(out2[6:10, ], out2[21:25, ])
-  names(results1) <- c("A", "B")
-  d1 <- rbind(Heading1, breaks, results1)
-
-  Heading2 <- c("AL Cent  Count  Percent", "NL Cent  Count  Percent")
-  results2 <- cbind(out2[1:5, ], out2[16:20, ])
-  names(results2) <- c("A", "B")
-  d2 <- rbind(Heading2,  breaks, results2)
-
-  Heading3 <- c("AL West  Count  Percent", "NL West  Count  Percent")
-  results3 <- cbind(out2[11:15, ], out2[26:30, ])
-  names(results3) <- c("A", "B")
-  d3 <- rbind(Heading3, breaks, results3)
-
-  d <- rbind(d1, "", d2, "", d3)
-  names(d) <- c("", "")
-  rownames(d) <- NULL
-
-  print(d, row.names = FALSE)
-
+knitr::kable(playoffsummary)
 ```
 
 Level is an ordinal response variable. Using a proportional odds model, model the ordinal response as a function of the team's talent.
