@@ -62,19 +62,22 @@ one.simulation <- function(s.talent = 0.01){
                           League = league,
                           Division = division)
 
+  Teams <- sort(teams)
+  
   schedule <- read_excel("schedule.xlsx")
   battingstats <- read_excel("2022battingstats.xlsx")
   fieldingstats <- read_excel("fieldingstats2022.xlsx")
   
   runs_per_game <- (battingstats$RG)
-  zruns_per_game <- (runs_per_game-mean(runs_per_game))/sd(runs_per_game)
-  
   runs_against <- (fieldingstats$RAG)
-  zruns_against <-  (runs_against-mean(runs_against))/sd(runs_against)
+  
+  stats <- (runs_per_game - runs_against)
+  stats <- (stats-mean(stats))/sd(stats)
   
   # simulate talents
-  talents <- ((zruns_per_game - zruns_against) / 10)
-  TAL <- tibble(Team = teams, Talent = talents)
+  talents <- (stats / 10)
+  what <- t(rbind(Teams, runs_per_game, runs_against, stats))
+  TAL <- tibble(Team = Teams, Talent = talents)
   
   # merge talents and win probs with schedule data frame
   SCH <- schedule %>%
@@ -86,7 +89,7 @@ one.simulation <- function(s.talent = 0.01){
   # play season of games
   SCH %>% 
     mutate(prob.Home = exp(Talent.Home) /
-             (exp(Talent.Home) + exp(Talent.Visitor)) +.04) -> SCH # explain this in blog
+             (exp(Talent.Home) + exp(Talent.Visitor)) + 0.04) -> SCH # explain this in blog
   
   SCH %>%
     mutate(outcome = rbinom(nrow(.), 1, prob.Home),
