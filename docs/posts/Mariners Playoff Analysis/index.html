@@ -230,11 +230,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>increasefont <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">Size =</span> <span class="dv">18</span>){</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> Size))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>centertitle <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">Color =</span> <span class="st">"blue"</span>){</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">element_text</span>(<span class="at">colour =</span> Color, <span class="at">size =</span> <span class="dv">18</span>, </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.8</span>, <span class="at">angle =</span> <span class="dv">0</span>))</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>decreasefont <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">Size =</span> <span class="dv">14</span>){</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> Size))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>centertitle <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">Color =</span> <span class="st">"blue"</span>){</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            <span class="fu">element_text</span>(<span class="at">colour =</span> Color, <span class="at">size =</span> <span class="dv">18</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.8</span>, <span class="at">angle =</span> <span class="dv">0</span>))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="one-simulation" class="level4">
@@ -248,27 +253,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>                                                                        
                  AL East    W     L                   NL East    W     L
                  ------------------                   ------------------
-           Tampa Bay Rays   93   68              Miami Marlins   91   70
-        Toronto Blue Jays   86   75              New York Mets   87   74
-        Baltimore Orioles   85   76             Atlanta Braves   86   75
-           Boston Red Sox   81   80      Philadelphia Phillies   76   85
-         New York Yankees   80   81       Washington Nationals   73   88
+           Tampa Bay Rays   88   73       Washington Nationals   85   76
+        Baltimore Orioles   85   76              Miami Marlins   80   81
+        Toronto Blue Jays   84   77              New York Mets   79   82
+         New York Yankees   77   84             Atlanta Braves   73   88
+           Boston Red Sox   71   90      Philadelphia Phillies   65   96
                                                                         
                  AL Cent    W     L                   NL Cent    W     L
                  ------------------                   ------------------
-      Cleveland Guardians   97   64          Milwaukee Brewers   87   74
-        Chicago White Sox   79   82         Pittsburgh Pirates   83   78
-          Minnesota Twins   77   84               Chicago Cubs   78   83
-           Detroit Tigers   74   87            Cincinnati Reds   78   83
-       Kansas City Royals   73   88        St. Louis Cardinals   74   87
+           Detroit Tigers   87   74         Pittsburgh Pirates   87   74
+       Kansas City Royals   86   75            Cincinnati Reds   85   76
+          Minnesota Twins   84   77        St. Louis Cardinals   82   79
+        Chicago White Sox   83   78          Milwaukee Brewers   74   87
+      Cleveland Guardians   79   82               Chicago Cubs   72   89
                                                                         
                  AL West    W     L                    NL West   W     L
                  ------------------                   ------------------
-           Houston Astros   85   76           San Diego Padres   86   75
-         Seattle Mariners   78   83           Colorado Rockies   85   76
-            Texas Rangers   78   83       San Francisco Giants   84   77
-        Oakland Athletics   76   85       Arizona Diamondbacks   78   83
-       Los Angeles Angels   67   94        Los Angeles Dodgers   75   86</code></pre>
+         Seattle Mariners   90   71           Colorado Rockies   97   64
+            Texas Rangers   87   74       Arizona Diamondbacks   93   68
+       Los Angeles Angels   79   82        Los Angeles Dodgers   81   80
+           Houston Astros   77   84           San Diego Padres   77   84
+        Oakland Athletics   74   87       San Francisco Giants   69   92</code></pre>
 </div>
 </div>
 </section>
@@ -299,54 +304,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Printing percentage of playoffs made from each team over 1000 seasons.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                 
-                 AL East    Number     Percentage
-                               ------------------
-             New York Yankees      431      43.1%
-            Baltimore Orioles      405      40.5%
-            Toronto Blue Jays      392      39.2%
-               Tampa Bay Rays      386      38.6%
-               Boston Red Sox      384      38.4%
-                                                 
-                  AL Cent   Number     Percentage
-                               ------------------
-          Cleveland Guardians      422      42.2%
-            Chicago White Sox      411      41.1%
-           Kansas City Royals      381      38.1%
-              Minnesota Twins      378      37.8%
-               Detroit Tigers      363      36.3%
-                                                 
-                  AL West   Number     Percentage
-                               ------------------
-             Seattle Mariners      429      42.9%
-            Oakland Athletics      416      41.6%
-               Houston Astros      415      41.5%
-                Texas Rangers      399      39.9%
-           Los Angeles Angels      388      38.8%
-                                                   
-                   NL East    Number     Percentage
-                                 ------------------
-          Philadelphia Phillies      407      40.7%
-                  New York Mets      401      40.1%
-                  Miami Marlins      391      39.1%
-                 Atlanta Braves      390      39.0%
-           Washington Nationals      389      38.9%
-                                                   
-                  NL Cent     Number     Percentage
-                                 ------------------
-                Cincinnati Reds      416      41.6%
-            St. Louis Cardinals      412      41.2%
-              Milwaukee Brewers      403      40.3%
-             Pittsburgh Pirates      402      40.2%
-                   Chicago Cubs      396      39.6%
-                                                   
-                   NL West     Number    Percentage
-                                 ------------------
-           Arizona Diamondbacks      413      41.3%
-            Los Angeles Dodgers      402      40.2%
-           San Francisco Giants      394      39.4%
-               San Diego Padres      393      39.3%
-               Colorado Rockies      391      39.1%</code></pre>
+<pre><code>                                                                              
+               AL East  Count  Percent                 NL East  Count  Percent
+                  --------------------                    --------------------
+         Boston Red Sox  419     41.9%           Atlanta Braves  412     41.2%
+       New York Yankees  408     40.8%            New York Mets  401     40.1%
+         Tampa Bay Rays  404     40.4%            Miami Marlins  392     39.2%
+      Baltimore Orioles  393     39.3%    Philadelphia Phillies  388     38.8%
+      Toronto Blue Jays  387     38.7%     Washington Nationals  388     38.8%
+                                                                              
+               AL Cent  Count  Percent                 NL Cent  Count  Percent
+                  --------------------                    --------------------
+      Chicago White Sox  421     42.1%          Cincinnati Reds  416     41.6%
+     Kansas City Royals  395     39.5%        Milwaukee Brewers  408     40.8%
+    Cleveland Guardians  389     38.9%             Chicago Cubs  396     39.6%
+        Minnesota Twins  383     38.3%       Pittsburgh Pirates  396     39.6%
+         Detroit Tigers  381     38.1%      St. Louis Cardinals  394     39.4%
+                                                                              
+               AL West  Count  Percent                 NL West  Count  Percent
+                  --------------------                    --------------------
+          Texas Rangers  417     41.7%      Los Angeles Dodgers  421     42.1%
+       Seattle Mariners  414     41.4%         San Diego Padres  409     40.9%
+         Houston Astros  405     40.5%     Arizona Diamondbacks  399     39.9%
+      Oakland Athletics  393     39.3%         Colorado Rockies  395     39.5%
+     Los Angeles Angels  391     39.1%     San Francisco Giants  385     38.5%</code></pre>
 </div>
 </div>
 <p>Level is an ordinal response variable. Using a proportional odds model, model the ordinal response as a function of the team’s talent.</p>

@@ -10,7 +10,6 @@ date: "2023-05-31"
 library(tidyverse)
 library(dplyr)
 library("readxl")
-library("stargazer")
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE)
@@ -197,6 +196,11 @@ Also I am adding several helper functions `increasefont()` and `centertitle()` t
 increasefont <- function(Size = 18){
   theme(text = element_text(size = Size))
 }
+
+decreasefont <- function(Size = 14){
+  theme(text = element_text(size = Size))
+}
+
 centertitle <- function(Color = "blue"){
     theme(plot.title = 
             element_text(colour = Color, size = 18, 
@@ -408,21 +412,21 @@ Printing percentage of playoffs made from each team over 1000 seasons.
 
 ```{r, echo = FALSE}
 playoffs %>%  
-    mutate(Line = paste("   ",teams, Num_Playoffs, Percent_Playoffs, sep="      ")) %>% 
+    mutate(Line = paste(" ",teams, Num_Playoffs, " ", Percent_Playoffs, sep="  ")) %>% 
     dplyr::select(Line) -> out2
 
-  breaks <- c("------------------", "------------------")
-  Heading1 <- c("AL East    Number     Percentage", "NL East    Number     Percentage")
+  breaks <- c("--------------------", "--------------------")
+  Heading1 <- c("AL East  Count  Percent", "NL East  Count  Percent")
   results1 <- cbind(out2[6:10, ], out2[21:25, ])
   names(results1) <- c("A", "B")
   d1 <- rbind(Heading1, breaks, results1)
 
-  Heading2 <- c("AL Cent   Number     Percentage", "NL Cent     Number     Percentage")
+  Heading2 <- c("AL Cent  Count  Percent", "NL Cent  Count  Percent")
   results2 <- cbind(out2[1:5, ], out2[16:20, ])
   names(results2) <- c("A", "B")
   d2 <- rbind(Heading2,  breaks, results2)
 
-  Heading3 <- c("AL West   Number     Percentage", "NL West     Number    Percentage")
+  Heading3 <- c("AL West  Count  Percent", "NL West  Count  Percent")
   results3 <- cbind(out2[11:15, ], out2[26:30, ])
   names(results3) <- c("A", "B")
   d3 <- rbind(Heading3, breaks, results3)
