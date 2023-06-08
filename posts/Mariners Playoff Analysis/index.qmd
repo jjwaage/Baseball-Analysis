@@ -23,7 +23,7 @@ Simulates a 2023 season of all 161 games using the Bradley-Terry model.
 
 By repeated simulations, can explore the relationship between talent and season performance.
 
-Talent has been edited so that each team has the same talent. Essentially a 50/50 chance for each game.
+Talent has been edited so that it is decided by z-scores of average runs score - average runs allowed by each team and then divided by 10. 
 
 #### Main functions
 
@@ -35,9 +35,12 @@ Read in two functions:
 Reads in the data:
 
 -   `schedule1 <- read_excel("schedule.xlsx")` reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
+-   `battingstats <- read_excel("2022battingstats.xlsx")` reads in a excel sheet with 2022 MLB batting statistics for all teams
+-   `fieldingstats <- read_excel("fieldingstats2022.xlsx")`reads in a excel sheet with 2022 MLB fielding statistics for all teams
+
 
 ```{r, echo = FALSE}
-one.simulation <- function(s.talent = 0.01){
+one.simulation <- function() {
   require(dplyr)
 
   NL_East <- c("Atlanta Braves", "Miami Marlins", "New York Mets","Philadelphia Phillies","Washington Nationals")
@@ -54,14 +57,16 @@ one.simulation <- function(s.talent = 0.01){
 
   teams <- c(NL_East, NL_Cent, NL_West,
              AL_East, AL_Cent, AL_West)
+  
   league <- c(rep("NL", 15), rep("AL", 15))
+  
   division <- c(rep("NL_East", 5), rep("NL_Cent", 5),
                 rep("NL_West", 5), rep("AL_East", 5),
                 rep("AL_Cent", 5), rep("AL_West", 5))
+  
   Team_info <- data.frame(Team = teams,
                           League = league,
                           Division = division)
-
   Teams <- sort(teams)
   
   schedule <- read_excel("schedule.xlsx")
@@ -141,37 +146,37 @@ one.simulation <- function(s.talent = 0.01){
     out_final
 }
 
-print_standings <- function(out){
-  require(dplyr)
-  out %>%  
-    mutate(Losses = 161 - Wins,
-    Line = paste("  ",Team, Wins, Losses, sep="   ")) %>% 
-    dplyr::select(Line) -> out2
+print_al <- function(out2){
+  out2 %>%
+     mutate(Losses = 161 - Wins) -> out2
+  
+  al <- cbind(out2[6:10, 1],out2[6:10, 5], out2[6:10, 8],
+           out2[1:5, 1], out2[1:5, 5], out2[1:5, 8],
+           out2[11:15, 1],  out2[11:15, 5],  out2[11:15, 8])
 
-  breaks <- c("------------------", "------------------")
-  Heading1 <- c("AL East    W     L", "NL East    W     L")
-  results1 <- cbind(out2[6:10, ], out2[21:25, ])
-  names(results1) <- c("A", "B")
-  d1 <- rbind(Heading1, breaks, results1)
+  colnames(al)<-c("AL East", "Wins", "Losses", "AL Cent", "Wins", "Losses",
+                  "AL West", "Wins", "Losses")
 
-  Heading2 <- c("AL Cent    W     L", "NL Cent    W     L")
-  results2 <- cbind(out2[1:5, ], out2[16:20, ])
-  names(results2) <- c("A", "B")
-  d2 <- rbind(Heading2,  breaks, results2)
+   knitr::kable(al, align = "crlcrlcrl")
+}
 
-  Heading3 <- c("AL West    W     L", "NL West   W     L")
-  results3 <- cbind(out2[11:15, ], out2[26:30, ])
-  names(results3) <- c("A", "B")
-  d3 <- rbind(Heading3, breaks, results3)
-
-  d <- rbind(d1, "", d2, "", d3)
-  names(d) <- c("", "")
-  rownames(d) <- NULL
-
-  print(d, row.names = FALSE)
+print_nl <- function(out2) {
+    out2 %>%
+     mutate(Losses = 161 - Wins) -> out2
+  
+    nl <- cbind(out2[21:25, 1], out2[21:25, 5], out2[21:25, 8],
+              out2[16:20, 1], out2[16:20, 5], out2[16:20, 8],
+              out2[26:30, 1], out2[26:30, 5], out2[26:30, 8])
+    
+    colnames(nl)<-c("NL East", "Wins", "Losses", "NL Cent", "Wins", "Losses",
+                  "NL West", "Wins", "Losses")
+    
+    knitr::kable(nl, align = "crlcrlcrl")
+    
 }
 
 ```
+
 
 Also I am adding several helper functions `increasefont()` and `centertitle()` that I will use in ggplot2.
 
@@ -189,11 +194,12 @@ centertitle <- function(Color = "blue"){
 
 #### One simulation
 
-One simulation assuming a standard deviation of 0.3.
+One season simulation with Wins and Losses from each team
 
-```{r}
-out <- one.simulation(0.01)
-print_standings(out)
+```{r, echo=FALSE}
+out <- one.simulation()
+print_nl(out)
+print_al(out)
 ```
 
 #### 1000 Simulations
@@ -203,7 +209,7 @@ Store the results of 1000 simulated seasons:
 ```{r}
 all_out <- NULL  
 for(j in 1:100){
-  out <- one.simulation(0.01)
+  out <- one.simulation()
   out$Simulation <- j
   all_out <- rbind(all_out, out)
 }
@@ -215,10 +221,10 @@ Define a new variable Level that is 0 (missed playoffs), 1 (wild-card), or 2 (wi
 
 ```{r, echo = FALSE}
 
-playoffs <- NULL
-
 all_out %>%
   mutate(Level = as.factor(2 * (Winner.Div == 1) + (Wild.Card == 1))) -> all_out
+
+playoffs <- NULL
   
 all_out <- all_out %>% 
   mutate(playoffs = Winner.Div + Wild.Card)
@@ -227,11 +233,14 @@ playoffsummary <- all_out %>%
   group_by(Team) %>% 
   summarize(playoffpercent = sum(playoffs) / 100)
 
+
 ```
 
 Printing percentage of playoffs made from each team over 1000 seasons.
 
 ```{r, echo = FALSE}
+colnames(playoffsummary) <- c("Team", "Percent Playoffs Made")
+
 knitr::kable(playoffsummary)
 ```
 

@@ -203,7 +203,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4 class="anchored" data-anchor-id="introduction">Introduction</h4>
 <p>Simulates a 2023 season of all 161 games using the Bradley-Terry model.</p>
 <p>By repeated simulations, can explore the relationship between talent and season performance.</p>
-<p>Talent has been edited so that each team has the same talent. Essentially a 50/50 chance for each game.</p>
+<p>Talent has been edited so that it is decided by z-scores of average runs score - average runs allowed by each team and then divided by 10.</p>
 </section>
 <section id="main-functions" class="level4">
 <h4 class="anchored" data-anchor-id="main-functions">Main functions</h4>
@@ -215,6 +215,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Reads in the data:</p>
 <ul>
 <li><code>schedule1 &lt;- read_excel("schedule.xlsx")</code> reads in a two column excel sheet with headers ‘Home’ and ‘Away’ and teams from each game listed below</li>
+<li><code>battingstats &lt;- read_excel("2022battingstats.xlsx")</code> reads in a excel sheet with 2022 MLB batting statistics for all teams</li>
+<li><code>fieldingstats &lt;- read_excel("fieldingstats2022.xlsx")</code>reads in a excel sheet with 2022 MLB fielding statistics for all teams</li>
 </ul>
 <div class="cell">
 
@@ -234,35 +236,177 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="one-simulation" class="level4">
 <h4 class="anchored" data-anchor-id="one-simulation">One simulation</h4>
-<p>One simulation assuming a standard deviation of 0.3.</p>
+<p>One season simulation with Wins and Losses from each team</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">one.simulation</span>(<span class="fl">0.01</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print_standings</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                                                                        
-                 AL East    W     L                   NL East    W     L
-                 ------------------                   ------------------
-           Tampa Bay Rays   89   72             Atlanta Braves   91   70
-        Baltimore Orioles   87   74      Philadelphia Phillies   90   71
-           Boston Red Sox   86   75              New York Mets   80   81
-         New York Yankees   86   75              Miami Marlins   79   82
-        Toronto Blue Jays   83   78       Washington Nationals   75   86
-                                                                        
-                 AL Cent    W     L                   NL Cent    W     L
-                 ------------------                   ------------------
-          Minnesota Twins   82   79          Milwaukee Brewers   84   77
-        Chicago White Sox   78   83            Cincinnati Reds   80   81
-       Kansas City Royals   78   83        St. Louis Cardinals   77   84
-      Cleveland Guardians   77   84               Chicago Cubs   75   86
-           Detroit Tigers   76   85         Pittsburgh Pirates   68   93
-                                                                        
-                 AL West    W     L                    NL West   W     L
-                 ------------------                   ------------------
-           Houston Astros   87   74        Los Angeles Dodgers   90   71
-       Los Angeles Angels   86   75           San Diego Padres   87   74
-            Texas Rangers   84   77       San Francisco Giants   77   84
-         Seattle Mariners   83   78           Colorado Rockies   73   88
-        Oakland Athletics   69   92       Arizona Diamondbacks   73   88</code></pre>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 20%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 21%">
+<col style="width: 4%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">NL East</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+<th style="text-align: center;">NL Cent</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+<th style="text-align: center;">NL West</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Atlanta Braves</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: left;">62</td>
+<td style="text-align: center;">Cincinnati Reds</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: left;">70</td>
+<td style="text-align: center;">Los Angeles Dodgers</td>
+<td style="text-align: right;">97</td>
+<td style="text-align: left;">64</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Philadelphia Phillies</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: left;">76</td>
+<td style="text-align: center;">Milwaukee Brewers</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">75</td>
+<td style="text-align: center;">San Diego Padres</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Miami Marlins</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">80</td>
+<td style="text-align: center;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">80</td>
+<td style="text-align: center;">Colorado Rockies</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: left;">76</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">New York Mets</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: left;">87</td>
+<td style="text-align: center;">Chicago Cubs</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: left;">87</td>
+<td style="text-align: center;">Arizona Diamondbacks</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Washington Nationals</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: left;">89</td>
+<td style="text-align: center;">Pittsburgh Pirates</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: left;">94</td>
+<td style="text-align: center;">San Francisco Giants</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">82</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 21%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 20%">
+<col style="width: 5%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">AL East</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+<th style="text-align: center;">AL Cent</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+<th style="text-align: center;">AL West</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Tampa Bay Rays</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: left;">68</td>
+<td style="text-align: center;">Chicago White Sox</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: left;">72</td>
+<td style="text-align: center;">Seattle Mariners</td>
+<td style="text-align: right;">92</td>
+<td style="text-align: left;">69</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Baltimore Orioles</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">73</td>
+<td style="text-align: center;">Minnesota Twins</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: left;">79</td>
+<td style="text-align: center;">Houston Astros</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: left;">79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Toronto Blue Jays</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">75</td>
+<td style="text-align: center;">Cleveland Guardians</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: left;">85</td>
+<td style="text-align: center;">Texas Rangers</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">93</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">New York Yankees</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: left;">76</td>
+<td style="text-align: center;">Detroit Tigers</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: left;">89</td>
+<td style="text-align: center;">Oakland Athletics</td>
+<td style="text-align: right;">66</td>
+<td style="text-align: left;">95</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Boston Red Sox</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: left;">83</td>
+<td style="text-align: center;">Kansas City Royals</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: left;">92</td>
+<td style="text-align: center;">Los Angeles Angels</td>
+<td style="text-align: right;">66</td>
+<td style="text-align: left;">95</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </section>
@@ -270,12 +414,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4 class="anchored" data-anchor-id="simulations">1000 Simulations</h4>
 <p>Store the results of 1000 simulated seasons:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>all_out <span class="ot">&lt;-</span> <span class="cn">NULL</span>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">one.simulation</span>(<span class="fl">0.01</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  out<span class="sc">$</span>Simulation <span class="ot">&lt;-</span> j</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  all_out <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_out, out)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>all_out <span class="ot">&lt;-</span> <span class="cn">NULL</span>  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">one.simulation</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  out<span class="sc">$</span>Simulation <span class="ot">&lt;-</span> j</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  all_out <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_out, out)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="talent-and-probability-of-making-playoffs" class="level4">
@@ -291,65 +435,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <thead>
 <tr class="header">
 <th style="text-align: left;">Team</th>
-<th style="text-align: right;">playoffpercent</th>
+<th style="text-align: right;">Percent Playoffs Made</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Arizona Diamondbacks</td>
-<td style="text-align: right;">0.26</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Atlanta Braves</td>
-<td style="text-align: right;">0.62</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Baltimore Orioles</td>
-<td style="text-align: right;">0.34</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Boston Red Sox</td>
-<td style="text-align: right;">0.34</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Chicago Cubs</td>
 <td style="text-align: right;">0.29</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">Atlanta Braves</td>
+<td style="text-align: right;">0.70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Baltimore Orioles</td>
+<td style="text-align: right;">0.30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Boston Red Sox</td>
+<td style="text-align: right;">0.27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chicago Cubs</td>
+<td style="text-align: right;">0.35</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">Chicago White Sox</td>
-<td style="text-align: right;">0.31</td>
+<td style="text-align: right;">0.32</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Cincinnati Reds</td>
-<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.10</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Cleveland Guardians</td>
-<td style="text-align: right;">0.53</td>
+<td style="text-align: right;">0.52</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Colorado Rockies</td>
-<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.13</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Detroit Tigers</td>
-<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.17</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Houston Astros</td>
-<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">0.76</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Kansas City Royals</td>
-<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.16</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Los Angeles Angels</td>
-<td style="text-align: right;">0.32</td>
+<td style="text-align: right;">0.33</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Los Angeles Dodgers</td>
-<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.86</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Miami Marlins</td>
@@ -357,23 +501,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td style="text-align: left;">Milwaukee Brewers</td>
-<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.48</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Minnesota Twins</td>
-<td style="text-align: right;">0.44</td>
+<td style="text-align: right;">0.45</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">New York Mets</td>
-<td style="text-align: right;">0.71</td>
+<td style="text-align: right;">0.59</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">New York Yankees</td>
-<td style="text-align: right;">0.82</td>
+<td style="text-align: right;">0.78</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Oakland Athletics</td>
-<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.08</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Philadelphia Phillies</td>
@@ -381,39 +525,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td style="text-align: left;">Pittsburgh Pirates</td>
-<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.11</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">San Diego Padres</td>
-<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">0.45</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">San Francisco Giants</td>
-<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">0.52</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Seattle Mariners</td>
-<td style="text-align: right;">0.44</td>
+<td style="text-align: right;">0.45</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
-<td style="text-align: right;">0.79</td>
+<td style="text-align: right;">0.66</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Tampa Bay Rays</td>
-<td style="text-align: right;">0.41</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Texas Rangers</td>
-<td style="text-align: right;">0.37</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Toronto Blue Jays</td>
 <td style="text-align: right;">0.53</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">Texas Rangers</td>
+<td style="text-align: right;">0.32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Toronto Blue Jays</td>
+<td style="text-align: right;">0.56</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">Washington Nationals</td>
-<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.06</td>
 </tr>
 </tbody>
 </table>
@@ -422,26 +566,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Level is an ordinal response variable. Using a proportional odds model, model the ordinal response as a function of the team’s talent.</p>
 <p>For a range of talent values from -0.9 to 0.9, find the fitted model probability of the three outcomes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pfit <span class="ot">&lt;-</span> <span class="fu">polr</span>(Level <span class="sc">~</span> Talent,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> all_out)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>DF <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Talent =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.9</span>, <span class="fl">0.9</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">length.out =</span> <span class="dv">200</span>))</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>Prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(pfit, DF, <span class="at">type =</span> <span class="st">"probs"</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>DF1 <span class="ot">&lt;-</span> DF2 <span class="ot">&lt;-</span> DF3 <span class="ot">&lt;-</span> DF</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>DF1<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">3</span>]; DF1<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Division"</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>DF2<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">2</span>]; DF2<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Wild Card"</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>DF3<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">3</span>] <span class="sc">+</span> Prob[, <span class="dv">2</span>]</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>DF3<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Playoff"</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>DFall <span class="ot">&lt;-</span> <span class="fu">rbind</span>(DF1, DF2, DF3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pfit <span class="ot">&lt;-</span> <span class="fu">polr</span>(Level <span class="sc">~</span> Talent,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> all_out)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>DF <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Talent =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.9</span>, <span class="fl">0.9</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">length.out =</span> <span class="dv">200</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(pfit, DF, <span class="at">type =</span> <span class="st">"probs"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>DF1 <span class="ot">&lt;-</span> DF2 <span class="ot">&lt;-</span> DF3 <span class="ot">&lt;-</span> DF</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>DF1<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">3</span>]; DF1<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Division"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>DF2<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">2</span>]; DF2<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Wild Card"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>DF3<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">3</span>] <span class="sc">+</span> Prob[, <span class="dv">2</span>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>DF3<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Playoff"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>DFall <span class="ot">&lt;-</span> <span class="fu">rbind</span>(DF1, DF2, DF3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Graph of this division, wild card, and playoff probabilities.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(DFall, <span class="fu">aes</span>(Talent, Probability,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">color =</span> Type)) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Probability of Reaching Different Levels"</span>) <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">centertitle</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(DFall, <span class="fu">aes</span>(Talent, Probability,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">color =</span> Type)) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Probability of Reaching Different Levels"</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">centertitle</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -456,18 +600,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>teams that get wild card</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(all_out, Wild.Card <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"Wild Card"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">filter</span>(all_out, Winner.Div <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"Win Division"</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> all_out <span class="sc">%&gt;%</span> </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"All Teams"</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">rbind</span>(data1, data2, data3), </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Talent, <span class="at">color =</span> Type)) <span class="sc">+</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span> <span class="fu">centertitle</span>() <span class="sc">+</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Talent Distributions for Three Types of Teams"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(all_out, Wild.Card <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"Wild Card"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">filter</span>(all_out, Winner.Div <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"Win Division"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> all_out <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"All Teams"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">rbind</span>(data1, data2, data3), </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Talent, <span class="at">color =</span> Type)) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span> <span class="fu">centertitle</span>() <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Talent Distributions for Three Types of Teams"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -477,40 +621,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4 class="anchored" data-anchor-id="how-many-games-to-win">How many games to win?</h4>
 <p>Find the conditional probability of winning division title, of getting wild card, and making the playoffs given you won X games.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>all_out <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Wins <span class="sc">&gt;=</span> <span class="dv">25</span>, Wins <span class="sc">&lt;=</span> <span class="dv">45</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Wins) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">N =</span> <span class="fu">n</span>(), </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">Prob_Div =</span> <span class="fu">mean</span>(Winner.Div),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Prob_WC =</span> <span class="fu">mean</span>(Wild.Card),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="ot">-&gt;</span> S</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>all_out <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Wins <span class="sc">&gt;=</span> <span class="dv">25</span>, Wins <span class="sc">&lt;=</span> <span class="dv">45</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Wins) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">N =</span> <span class="fu">n</span>(), </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">Prob_Div =</span> <span class="fu">mean</span>(Winner.Div),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Prob_WC =</span> <span class="fu">mean</span>(Wild.Card),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="ot">-&gt;</span> S</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Plot smooths of these empirical probabilities.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>S <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_Div), <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"red"</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_WC), <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"blue"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span> </span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_Div <span class="sc">+</span> Prob_WC),</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Probability"</span>) <span class="sc">+</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">32</span>, <span class="at">y =</span> <span class="fl">0.75</span>,</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Playoffs"</span>, <span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">40.3</span>, <span class="at">y =</span> <span class="fl">0.75</span>,</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Division"</span>, <span class="at">size =</span> <span class="dv">7</span>,</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">40.8</span>, <span class="at">y =</span> <span class="fl">0.25</span>,</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Wild Card"</span>, <span class="at">size =</span> <span class="dv">7</span>,</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"How Many Games Does Team Need to Win?"</span>) <span class="sc">+</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">centertitle</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>S <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_Div), <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"red"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_WC), <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"blue"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span> </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_Div <span class="sc">+</span> Prob_WC),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Probability"</span>) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">32</span>, <span class="at">y =</span> <span class="fl">0.75</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Playoffs"</span>, <span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">40.3</span>, <span class="at">y =</span> <span class="fl">0.75</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Division"</span>, <span class="at">size =</span> <span class="dv">7</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">40.8</span>, <span class="at">y =</span> <span class="fl">0.25</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Wild Card"</span>, <span class="at">size =</span> <span class="dv">7</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"How Many Games Does Team Need to Win?"</span>) <span class="sc">+</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">centertitle</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
