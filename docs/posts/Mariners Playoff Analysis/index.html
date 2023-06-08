@@ -9,7 +9,7 @@
 <meta name="author" content="Jonna Waage">
 <meta name="dcterms.date" content="2023-05-31">
 
-<title>Sports Data Analysis and Visualization - Mariners Playoff Analysis</title>
+<title>Sports Data Analysis and Visualization - Estimating Playoffs Based on the Previous Year’s Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,69 +22,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -163,7 +100,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Mariners Playoff Analysis</h1>
+      <h1 class="title">Estimating Playoffs Based on the Previous Year’s Data</h1>
                       </div>
   </div>
     
@@ -198,45 +135,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<p><strong>If the rest of the MLB games this season were decided by a coin flip, would the Mariners make the playoffs?</strong></p>
+<p><strong>Can the next MLB season be estimated by the last year’s run differential data?</strong></p>
 <section id="introduction" class="level4">
 <h4 class="anchored" data-anchor-id="introduction">Introduction</h4>
-<p>Simulates a 2023 season of all 161 games using the Bradley-Terry model.</p>
-<p>By repeated simulations, can explore the relationship between talent and season performance.</p>
-<p>Talent has been edited so that it is decided by z-scores of average runs score - average runs allowed by each team and then divided by 10.</p>
+<p>Simulates a 2023 season of all 162 games using the Bradley-Terry model.</p>
+<p>Uses last year’s run differentials (average runs scored minus average runs allowed) to try to estimate this year’s top performers.</p>
 </section>
-<section id="main-functions" class="level4">
-<h4 class="anchored" data-anchor-id="main-functions">Main functions</h4>
-<p>Read in two functions:</p>
-<ul>
-<li><code>one.simulation()</code> performs the simulation</li>
-<li><code>print_standings()</code> prints the division standings of the simulation</li>
-</ul>
-<p>Reads in the data:</p>
-<ul>
-<li><code>schedule1 &lt;- read_excel("schedule.xlsx")</code> reads in a two column excel sheet with headers ‘Home’ and ‘Away’ and teams from each game listed below</li>
-<li><code>battingstats &lt;- read_excel("2022battingstats.xlsx")</code> reads in a excel sheet with 2022 MLB batting statistics for all teams</li>
-<li><code>fieldingstats &lt;- read_excel("fieldingstats2022.xlsx")</code>reads in a excel sheet with 2022 MLB fielding statistics for all teams</li>
-</ul>
+<section id="data" class="level4">
+<h4 class="anchored" data-anchor-id="data">Data</h4>
+<p><code>schedule1 &lt;- read_excel("schedule.xlsx")</code> - reads in a two column excel sheet with headers ‘Home’ and ‘Away’ and teams from each game listed below</p>
+<p><code>battingstats &lt;- read_excel("2022battingstats.xlsx")</code> - reads in a excel sheet with 2022 MLB batting statistics for all teams</p>
+<p><code>fieldingstats &lt;- read_excel("fieldingstats2022.xlsx")</code> - reads in a excel sheet with 2022 MLB fielding statistics for all teams</p>
+<p>2022 statistics are from <a href="https://www.baseball-reference.com/leagues/majors/2022.shtml">here</a>.</p>
+</section>
+<section id="calculations" class="level4">
+<h4 class="anchored" data-anchor-id="calculations">Calculations</h4>
+<p>The <a href="https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model">Bradley-Terry model</a> is a probability model to predict outcomes of object i beating object j based on each objects ability or talent. In this instance, it is used to compare teams but it was originally to be used with players.</p>
+<p>Talent is calculated by z-scores of seasonal average run differential of each team and then divided by 10. It is then adjusted for home field advantage so 0.04, based on <a href="https://sabr.org/journal/article/home-field-advantage/#:~:text=In%20every%20sport%20and%20at,percent%20of%20the%20games%20played.">this</a> article, is added to the probability of the home team winning.</p>
+<p>The equation used in this project for probability is:</p>
+<pre><code>prob.Home = exp(Talent.Home) / (exp(Talent.Home) + exp(Talent.Visitor)) + 0.04)</code></pre>
+<p>Then, that probability is plugged into another equation to calculate a winner from each game.</p>
+<pre><code>outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor))</code></pre>
+<p>This equation uses <a href="https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/">rbinom</a> which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins.</p>
 <div class="cell">
 
 </div>
-<p>Also I am adding several helper functions <code>increasefont()</code> and <code>centertitle()</code> that I will use in ggplot2.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>increasefont <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">Size =</span> <span class="dv">18</span>){</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> Size))</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>centertitle <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">Color =</span> <span class="st">"blue"</span>){</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">element_text</span>(<span class="at">colour =</span> Color, <span class="at">size =</span> <span class="dv">18</span>, </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.8</span>, <span class="at">angle =</span> <span class="dv">0</span>))</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<!-- Also I am adding several helper functions `increasefont()` and `centertitle()` that I will use in ggplot2. -->
+<!-- ```{r} -->
+<!-- increasefont <- function(Size = 18){ -->
+<!--   theme(text = element_text(size = Size)) -->
+<!-- } -->
+<!-- centertitle <- function(Color = "blue"){ -->
+<!--     theme(plot.title =  -->
+<!--             element_text(colour = Color, size = 18,  -->
+<!--         hjust = 0.5, vjust = 0.8, angle = 0)) -->
+<!-- } -->
+<!-- ``` -->
 </section>
 <section id="one-simulation" class="level4">
 <h4 class="anchored" data-anchor-id="one-simulation">One simulation</h4>
-<p>One season simulation with Wins and Losses from each team</p>
+<p>One season simulation with Wins and Losses from each team using the Bradley Terry model to predict each game.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
@@ -267,58 +205,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">Atlanta Braves</td>
-<td style="text-align: right;">99</td>
-<td style="text-align: left;">62</td>
-<td style="text-align: center;">Cincinnati Reds</td>
-<td style="text-align: right;">91</td>
-<td style="text-align: left;">70</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">75</td>
+<td style="text-align: center;">Chicago Cubs</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: left;">71</td>
 <td style="text-align: center;">Los Angeles Dodgers</td>
-<td style="text-align: right;">97</td>
-<td style="text-align: left;">64</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: left;">63</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Philadelphia Phillies</td>
-<td style="text-align: right;">85</td>
-<td style="text-align: left;">76</td>
-<td style="text-align: center;">Milwaukee Brewers</td>
-<td style="text-align: right;">86</td>
-<td style="text-align: left;">75</td>
-<td style="text-align: center;">San Diego Padres</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: left;">79</td>
+<td style="text-align: center;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">82</td>
+<td style="text-align: center;">San Francisco Giants</td>
 <td style="text-align: right;">86</td>
 <td style="text-align: left;">75</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Miami Marlins</td>
-<td style="text-align: right;">81</td>
-<td style="text-align: left;">80</td>
-<td style="text-align: center;">St.&nbsp;Louis Cardinals</td>
-<td style="text-align: right;">81</td>
-<td style="text-align: left;">80</td>
-<td style="text-align: center;">Colorado Rockies</td>
-<td style="text-align: right;">85</td>
-<td style="text-align: left;">76</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">82</td>
+<td style="text-align: center;">Cincinnati Reds</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">82</td>
+<td style="text-align: center;">Arizona Diamondbacks</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: left;">78</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">New York Mets</td>
+<td style="text-align: center;">Washington Nationals</td>
 <td style="text-align: right;">74</td>
 <td style="text-align: left;">87</td>
-<td style="text-align: center;">Chicago Cubs</td>
+<td style="text-align: center;">Milwaukee Brewers</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: left;">85</td>
+<td style="text-align: center;">Colorado Rockies</td>
 <td style="text-align: right;">74</td>
 <td style="text-align: left;">87</td>
-<td style="text-align: center;">Arizona Diamondbacks</td>
-<td style="text-align: right;">81</td>
-<td style="text-align: left;">80</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Washington Nationals</td>
+<td style="text-align: center;">New York Mets</td>
 <td style="text-align: right;">72</td>
 <td style="text-align: left;">89</td>
 <td style="text-align: center;">Pittsburgh Pirates</td>
-<td style="text-align: right;">67</td>
-<td style="text-align: left;">94</td>
-<td style="text-align: center;">San Francisco Giants</td>
-<td style="text-align: right;">79</td>
-<td style="text-align: left;">82</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: left;">89</td>
+<td style="text-align: center;">San Diego Padres</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">93</td>
 </tr>
 </tbody>
 </table>
@@ -351,315 +289,285 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">Tampa Bay Rays</td>
-<td style="text-align: right;">93</td>
-<td style="text-align: left;">68</td>
-<td style="text-align: center;">Chicago White Sox</td>
-<td style="text-align: right;">89</td>
+<td style="text-align: center;">Toronto Blue Jays</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: left;">71</td>
+<td style="text-align: center;">Minnesota Twins</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: left;">71</td>
+<td style="text-align: center;">Texas Rangers</td>
+<td style="text-align: right;">90</td>
 <td style="text-align: left;">72</td>
-<td style="text-align: center;">Seattle Mariners</td>
-<td style="text-align: right;">92</td>
-<td style="text-align: left;">69</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">Baltimore Orioles</td>
-<td style="text-align: right;">88</td>
+<td style="text-align: center;">Boston Red Sox</td>
+<td style="text-align: right;">89</td>
 <td style="text-align: left;">73</td>
-<td style="text-align: center;">Minnesota Twins</td>
-<td style="text-align: right;">82</td>
+<td style="text-align: center;">Kansas City Royals</td>
+<td style="text-align: right;">83</td>
 <td style="text-align: left;">79</td>
 <td style="text-align: center;">Houston Astros</td>
-<td style="text-align: right;">82</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: left;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">New York Yankees</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: left;">73</td>
+<td style="text-align: center;">Cleveland Guardians</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">81</td>
+<td style="text-align: center;">Oakland Athletics</td>
+<td style="text-align: right;">83</td>
 <td style="text-align: left;">79</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">Toronto Blue Jays</td>
-<td style="text-align: right;">86</td>
-<td style="text-align: left;">75</td>
-<td style="text-align: center;">Cleveland Guardians</td>
-<td style="text-align: right;">76</td>
-<td style="text-align: left;">85</td>
-<td style="text-align: center;">Texas Rangers</td>
-<td style="text-align: right;">68</td>
-<td style="text-align: left;">93</td>
-</tr>
 <tr class="even">
-<td style="text-align: center;">New York Yankees</td>
-<td style="text-align: right;">85</td>
-<td style="text-align: left;">76</td>
+<td style="text-align: center;">Tampa Bay Rays</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: left;">80</td>
 <td style="text-align: center;">Detroit Tigers</td>
-<td style="text-align: right;">72</td>
+<td style="text-align: right;">73</td>
 <td style="text-align: left;">89</td>
-<td style="text-align: center;">Oakland Athletics</td>
-<td style="text-align: right;">66</td>
-<td style="text-align: left;">95</td>
+<td style="text-align: center;">Los Angeles Angels</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">83</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Boston Red Sox</td>
+<td style="text-align: center;">Baltimore Orioles</td>
 <td style="text-align: right;">78</td>
-<td style="text-align: left;">83</td>
-<td style="text-align: center;">Kansas City Royals</td>
-<td style="text-align: right;">69</td>
-<td style="text-align: left;">92</td>
-<td style="text-align: center;">Los Angeles Angels</td>
-<td style="text-align: right;">66</td>
-<td style="text-align: left;">95</td>
+<td style="text-align: left;">84</td>
+<td style="text-align: center;">Chicago White Sox</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">94</td>
+<td style="text-align: center;">Seattle Mariners</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">94</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </section>
-<section id="simulations" class="level4">
-<h4 class="anchored" data-anchor-id="simulations">1000 Simulations</h4>
-<p>Store the results of 1000 simulated seasons:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>all_out <span class="ot">&lt;-</span> <span class="cn">NULL</span>  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">one.simulation</span>()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  out<span class="sc">$</span>Simulation <span class="ot">&lt;-</span> j</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  all_out <span class="ot">&lt;-</span> <span class="fu">rbind</span>(all_out, out)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="talent-and-probability-of-making-playoffs" class="level4">
-<h4 class="anchored" data-anchor-id="talent-and-probability-of-making-playoffs">Talent and probability of making playoffs</h4>
-<p>Define a new variable Level that is 0 (missed playoffs), 1 (wild-card), or 2 (win division).</p>
+<section id="season-simulations" class="level4">
+<h4 class="anchored" data-anchor-id="season-simulations">1000 Season Simulations</h4>
 <div class="cell">
 
 </div>
-<p>Printing percentage of playoffs made from each team over 1000 seasons.</p>
+<p>Here is the percentage of seasons in 1000 simulations where each team made the playoffs.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 12%">
+<col style="width: 22%">
+<col style="width: 12%">
+<col style="width: 21%">
+<col style="width: 12%">
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Team</th>
-<th style="text-align: right;">Percent Playoffs Made</th>
+<th style="text-align: left;">AL East</th>
+<th style="text-align: center;">Playoff %</th>
+<th style="text-align: left;">AL Cent</th>
+<th style="text-align: center;">Playoff %</th>
+<th style="text-align: left;">AL West</th>
+<th style="text-align: center;">Playoff %</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Arizona Diamondbacks</td>
-<td style="text-align: right;">0.29</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Atlanta Braves</td>
-<td style="text-align: right;">0.70</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Baltimore Orioles</td>
-<td style="text-align: right;">0.30</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Boston Red Sox</td>
-<td style="text-align: right;">0.27</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Chicago Cubs</td>
-<td style="text-align: right;">0.35</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Chicago White Sox</td>
-<td style="text-align: right;">0.32</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Cincinnati Reds</td>
-<td style="text-align: right;">0.10</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Cleveland Guardians</td>
-<td style="text-align: right;">0.52</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Colorado Rockies</td>
-<td style="text-align: right;">0.13</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Detroit Tigers</td>
-<td style="text-align: right;">0.17</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Houston Astros</td>
-<td style="text-align: right;">0.76</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Kansas City Royals</td>
-<td style="text-align: right;">0.16</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Los Angeles Angels</td>
-<td style="text-align: right;">0.33</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Los Angeles Dodgers</td>
-<td style="text-align: right;">0.86</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Miami Marlins</td>
-<td style="text-align: right;">0.20</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Milwaukee Brewers</td>
-<td style="text-align: right;">0.48</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Minnesota Twins</td>
-<td style="text-align: right;">0.45</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">New York Mets</td>
-<td style="text-align: right;">0.59</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">New York Yankees</td>
-<td style="text-align: right;">0.78</td>
+<td style="text-align: center;">78.1%</td>
+<td style="text-align: left;">Cleveland Guardians</td>
+<td style="text-align: center;">57.5%</td>
+<td style="text-align: left;">Houston Astros</td>
+<td style="text-align: center;">77.7%</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Oakland Athletics</td>
-<td style="text-align: right;">0.08</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Philadelphia Phillies</td>
-<td style="text-align: right;">0.50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Pittsburgh Pirates</td>
-<td style="text-align: right;">0.11</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">San Diego Padres</td>
-<td style="text-align: right;">0.45</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">San Francisco Giants</td>
-<td style="text-align: right;">0.52</td>
-</tr>
-<tr class="odd">
+<td style="text-align: left;">Toronto Blue Jays</td>
+<td style="text-align: center;">51.8%</td>
+<td style="text-align: left;">Minnesota Twins</td>
+<td style="text-align: center;">45.0%</td>
 <td style="text-align: left;">Seattle Mariners</td>
-<td style="text-align: right;">0.45</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
-<td style="text-align: right;">0.66</td>
+<td style="text-align: center;">41.6%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Tampa Bay Rays</td>
-<td style="text-align: right;">0.53</td>
+<td style="text-align: center;">44.7%</td>
+<td style="text-align: left;">Chicago White Sox</td>
+<td style="text-align: center;">35.8%</td>
+<td style="text-align: left;">Texas Rangers</td>
+<td style="text-align: center;">33.2%</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Texas Rangers</td>
-<td style="text-align: right;">0.32</td>
+<td style="text-align: left;">Baltimore Orioles</td>
+<td style="text-align: center;">31.9%</td>
+<td style="text-align: left;">Detroit Tigers</td>
+<td style="text-align: center;">17.6%</td>
+<td style="text-align: left;">Los Angeles Angels</td>
+<td style="text-align: center;">32.0%</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Toronto Blue Jays</td>
-<td style="text-align: right;">0.56</td>
+<td style="text-align: left;">Boston Red Sox</td>
+<td style="text-align: center;">26.0%</td>
+<td style="text-align: left;">Kansas City Royals</td>
+<td style="text-align: center;">16.1%</td>
+<td style="text-align: left;">Oakland Athletics</td>
+<td style="text-align: center;">11.0%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 11%">
+<col style="width: 20%">
+<col style="width: 11%">
+<col style="width: 21%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">NL East</th>
+<th style="text-align: center;">Playoff %</th>
+<th style="text-align: left;">NL Cent</th>
+<th style="text-align: center;">Playoff %</th>
+<th style="text-align: left;">NL West</th>
+<th style="text-align: center;">Playoff %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Atlanta Braves</td>
+<td style="text-align: center;">68.7%</td>
+<td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: center;">65.7%</td>
+<td style="text-align: left;">Los Angeles Dodgers</td>
+<td style="text-align: center;">87.9%</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">New York Mets</td>
+<td style="text-align: center;">66.2%</td>
+<td style="text-align: left;">Milwaukee Brewers</td>
+<td style="text-align: center;">45.0%</td>
+<td style="text-align: left;">San Francisco Giants</td>
+<td style="text-align: center;">47.6%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Philadelphia Phillies</td>
+<td style="text-align: center;">49.9%</td>
+<td style="text-align: left;">Chicago Cubs</td>
+<td style="text-align: center;">29.3%</td>
+<td style="text-align: left;">San Diego Padres</td>
+<td style="text-align: center;">41.9%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Miami Marlins</td>
+<td style="text-align: center;">23.5%</td>
+<td style="text-align: left;">Cincinnati Reds</td>
+<td style="text-align: center;">16.3%</td>
+<td style="text-align: left;">Arizona Diamondbacks</td>
+<td style="text-align: center;">30.4%</td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;">Washington Nationals</td>
-<td style="text-align: right;">0.06</td>
+<td style="text-align: center;">6.5%</td>
+<td style="text-align: left;">Pittsburgh Pirates</td>
+<td style="text-align: center;">10.8%</td>
+<td style="text-align: left;">Colorado Rockies</td>
+<td style="text-align: center;">10.3%</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p>Level is an ordinal response variable. Using a proportional odds model, model the ordinal response as a function of the team’s talent.</p>
-<p>For a range of talent values from -0.9 to 0.9, find the fitted model probability of the three outcomes.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pfit <span class="ot">&lt;-</span> <span class="fu">polr</span>(Level <span class="sc">~</span> Talent,</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> all_out)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>DF <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Talent =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.9</span>, <span class="fl">0.9</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">length.out =</span> <span class="dv">200</span>))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(pfit, DF, <span class="at">type =</span> <span class="st">"probs"</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>DF1 <span class="ot">&lt;-</span> DF2 <span class="ot">&lt;-</span> DF3 <span class="ot">&lt;-</span> DF</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>DF1<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">3</span>]; DF1<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Division"</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>DF2<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">2</span>]; DF2<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Wild Card"</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>DF3<span class="sc">$</span>Probability <span class="ot">&lt;-</span> Prob[, <span class="dv">3</span>] <span class="sc">+</span> Prob[, <span class="dv">2</span>]</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>DF3<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="st">"Playoff"</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>DFall <span class="ot">&lt;-</span> <span class="fu">rbind</span>(DF1, DF2, DF3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Graph of this division, wild card, and playoff probabilities.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(DFall, <span class="fu">aes</span>(Talent, Probability,</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">color =</span> Type)) <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Probability of Reaching Different Levels"</span>) <span class="sc">+</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">centertitle</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
 </section>
-<section id="talents-of-wild-card-teams-and-division-winners" class="level4">
-<h4 class="anchored" data-anchor-id="talents-of-wild-card-teams-and-division-winners">Talents of wild card teams and division-winners</h4>
-<p>Construct density estimates of</p>
-<ul>
-<li>all teams</li>
-<li>teams that win division</li>
-<li>teams that get wild card</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(all_out, Wild.Card <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"Wild Card"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">filter</span>(all_out, Winner.Div <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"Win Division"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> all_out <span class="sc">%&gt;%</span> </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="st">"All Teams"</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">rbind</span>(data1, data2, data3), </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Talent, <span class="at">color =</span> Type)) <span class="sc">+</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span> <span class="fu">centertitle</span>() <span class="sc">+</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Talent Distributions for Three Types of Teams"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="how-many-games-to-win" class="level4">
-<h4 class="anchored" data-anchor-id="how-many-games-to-win">How many games to win?</h4>
-<p>Find the conditional probability of winning division title, of getting wild card, and making the playoffs given you won X games.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>all_out <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Wins <span class="sc">&gt;=</span> <span class="dv">25</span>, Wins <span class="sc">&lt;=</span> <span class="dv">45</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Wins) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">N =</span> <span class="fu">n</span>(), </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">Prob_Div =</span> <span class="fu">mean</span>(Winner.Div),</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Prob_WC =</span> <span class="fu">mean</span>(Wild.Card),</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="ot">-&gt;</span> S</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Plot smooths of these empirical probabilities.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>S <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_Div), <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"red"</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_WC), <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"blue"</span>,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span> </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Wins, Prob_Div <span class="sc">+</span> Prob_WC),</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">increasefont</span>() <span class="sc">+</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Probability"</span>) <span class="sc">+</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">32</span>, <span class="at">y =</span> <span class="fl">0.75</span>,</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Playoffs"</span>, <span class="at">size =</span> <span class="dv">7</span>) <span class="sc">+</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">40.3</span>, <span class="at">y =</span> <span class="fl">0.75</span>,</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Division"</span>, <span class="at">size =</span> <span class="dv">7</span>,</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">40.8</span>, <span class="at">y =</span> <span class="fl">0.25</span>,</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"Wild Card"</span>, <span class="at">size =</span> <span class="dv">7</span>,</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"How Many Games Does Team Need to Win?"</span>) <span class="sc">+</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">centertitle</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>````</p>
+<section id="comparing-to-the-2023-season" class="level4">
+<h4 class="anchored" data-anchor-id="comparing-to-the-2023-season">Comparing to the 2023 Season</h4>
+<!-- Level is an ordinal response variable. Using a proportional odds model, model the ordinal response as a function of the team's talent. -->
+<!-- For a range of talent values from -0.9 to 0.9, find the fitted model probability of the three outcomes. -->
+<!-- ```{r} -->
+<!-- pfit <- polr(Level ~ Talent, -->
+<!--              data = all_out) -->
+<!-- DF <- data.frame(Talent = seq(-0.9, 0.9, -->
+<!--                                   length.out = 200)) -->
+<!-- Prob <- predict(pfit, DF, type = "probs") -->
+<!-- DF1 <- DF2 <- DF3 <- DF -->
+<!-- DF1$Probability <- Prob[, 3]; DF1$Type <- "Division" -->
+<!-- DF2$Probability <- Prob[, 2]; DF2$Type <- "Wild Card" -->
+<!-- DF3$Probability <- Prob[, 3] + Prob[, 2] -->
+<!-- DF3$Type <- "Playoff" -->
+<!-- DFall <- rbind(DF1, DF2, DF3) -->
+<!-- ``` -->
+<!-- Graph of this division, wild card, and playoff probabilities. -->
+<!-- ```{r} -->
+<!-- ggplot(DFall, aes(Talent, Probability, -->
+<!--                   color = Type)) + -->
+<!--   geom_line() + -->
+<!--   increasefont() + -->
+<!--   ggtitle("Probability of Reaching Different Levels") + -->
+<!--   centertitle() -->
+<!-- ``` -->
+<!-- #### Talents of wild card teams and division-winners -->
+<!-- Construct density estimates of -->
+<!-- -   all teams -->
+<!-- -   teams that win division -->
+<!-- -   teams that get wild card -->
+<!-- ```{r} -->
+<!-- data1 <- filter(all_out, Wild.Card == 1) %>%  -->
+<!--          mutate(Type = "Wild Card") -->
+<!-- data2 <- filter(all_out, Winner.Div == 1) %>%  -->
+<!--   mutate(Type = "Win Division") -->
+<!-- data3 <- all_out %>%  -->
+<!--   mutate(Type = "All Teams") -->
+<!-- ggplot(rbind(data1, data2, data3),  -->
+<!--        aes(Talent, color = Type)) + -->
+<!--   geom_density(size = 1.5) + -->
+<!--   increasefont() + centertitle() + -->
+<!--   ggtitle("Talent Distributions for Three Types of Teams") -->
+<!-- ``` -->
+<!-- #### How many games to win? -->
+<!-- Find the conditional probability of winning division title, of getting wild card, and making the playoffs given you won X games. -->
+<!-- ```{r} -->
+<!-- all_out %>%  -->
+<!--   filter(Wins >= 25, Wins <= 45) %>%  -->
+<!--   group_by(Wins) %>%  -->
+<!--   summarize(N = n(),  -->
+<!--             Prob_Div = mean(Winner.Div), -->
+<!--             Prob_WC = mean(Wild.Card), -->
+<!--             .groups = "drop") -> S -->
+<!-- ``` -->
+<!-- Plot smooths of these empirical probabilities. -->
+<!-- ```{r} -->
+<!-- S %>%  -->
+<!--   ggplot() + -->
+<!--   geom_smooth(aes(Wins, Prob_Div), se = FALSE, -->
+<!--               color = "red", -->
+<!--               method = "loess") + -->
+<!--   geom_smooth(aes(Wins, Prob_WC), se = FALSE, -->
+<!--               color = "blue", -->
+<!--               method = "loess") +  -->
+<!--   geom_smooth(aes(Wins, Prob_Div + Prob_WC), -->
+<!--                   se = FALSE, -->
+<!--               color = "black", -->
+<!--               method = "loess") + -->
+<!--   increasefont() + -->
+<!--   ylab("Probability") + -->
+<!--   annotate(geom = "text", x = 32, y = 0.75, -->
+<!--            label = "Playoffs", size = 7) + -->
+<!--   annotate(geom = "text", x = 40.3, y = 0.75, -->
+<!--            label = "Division", size = 7, -->
+<!--            color = "red") + -->
+<!--   annotate(geom = "text", x = 40.8, y = 0.25, -->
+<!--            label = "Wild Card", size = 7, -->
+<!--            color = "blue") + -->
+<!--   ggtitle("How Many Games Does Team Need to Win?") + -->
+<!--   centertitle() -->
+<!-- ``` -->
+<!-- \`\`\`\` -->
 
 
 </section>
