@@ -265,13 +265,101 @@ nl <- cbind(playoffsummary[6:10, 2], playoffsummary[6:10, 3],
 colnames(nl)<-c("NL East", "Playoff %", "NL Cent", "Playoff %",
                   "NL West", "Playoff %")
 
-knitr::kable(al, align = "lclclc")
 knitr::kable(nl, align = "lclclc")
+knitr::kable(al, align = "lclclc")
+
+```
+
+Here is the percentage of wins each team had after 1000 seasons
+
+```{r, echo=FALSE}
+winpercent <- NULL
+
+all_out <- all_out %>% 
+  mutate(winpercent = Wins)
+
+winpercent <- all_out %>% 
+  group_by(Division, Team) %>%
+  summarize(winpercent = sum(Wins) / 162000)
+
+colnames(winpercent) <- c("Division", "Team", "Percent Wins")
+
+winpercent <- winpercent[order(winpercent$`Division`, winpercent$`Percent Wins`, decreasing = TRUE), ]
+
+winpercent$`Percent Wins` <- percent(winpercent$`Percent Wins`, accuracy = 0.1)
+
+al <- cbind(winpercent[21:25, 2],winpercent[21:25, 3],
+           winpercent[26:30, 2], winpercent[26:30, 3],
+           winpercent[16:20, 2], winpercent[16:20, 3])
+
+colnames(al)<-c("AL East", "Win %", "AL Cent", "Win %",
+                  "AL West", "Win %")
+
+nl <- cbind(winpercent[6:10, 2], winpercent[6:10, 3], 
+            winpercent[11:15, 2], winpercent[11:15, 3], 
+            winpercent[1:5, 2], winpercent[1:5, 3])
+    
+colnames(nl)<-c("NL East", "Win %", "NL Cent", "Win %",
+                  "NL West", "Win %")
+
+knitr::kable(nl, align = "lclclc")
+knitr::kable(al, align = "lclclc")
 
 ```
 
 
 #### Comparing to the 2023 Season
+
+Here are the current standings and win percentages of each team in the MLB as of June 12th at 4 pm PST
+
+```{r, echo=FALSE}
+aldivisions <- c("AL East", "AL Cent", "AL West")
+
+  AL_East <- c("Tampa Bay Rays", "Baltimore Orioles", "New York Yankees", "Toronto Blue Jays", "Boston Red Sox")
+  
+  ALe_percent <- c("70.6%","63.1%", "56.7%","55.2%","50%") 
+  
+  AL_Cent <- c("Minnesota Twins", "Cleveland Guardians", "Chicago White Sox", "Detroit Tigers", "Kansas City Royals")
+  
+  ALc_percent <- c("50%", "47.7%", "43.3%",  "41.3%", "27.7%")
+  
+  AL_West <- c("Texas Rangers", "Houston Astros","Los Angeles Angels","Seattle Mariners", "Oakland Athletics")
+  
+  ALw_percent <- c("64.1%", "56.1%","53.7%","48.4%", "25.4%")
+
+  al <- cbind(AL_East, ALe_percent, AL_Cent,  ALc_percent, AL_West,  ALw_percent)
+
+  colnames(al)<-c("AL East", "Win %", "AL Cent", "Win %", "AL West", "Win %")
+
+  
+nldivisions <- c("NL East", "NL Cent", "NL West")
+
+  NL_East <- c("Atlanta Braves", "Miami Marlins", "Philadelphia Phillies", "New York Mets","Washington Nationals")
+  
+  NLe_percent <- c("61.5%","56.1%","49.2%" ,"47%", "40.6%")
+
+  NL_Cent <- c("Pittsburgh Pirates", "Milwaukee Brewers", "Cincinnati Reds", "Chicago Cubs", "St. Louis Cardinals")
+  
+  NLc_percent <- c("53.1%", "51.5%","47%","43.1%","40.9%")
+
+  NL_West <- c("Arizona Diamondbacks", "Los Angeles Dodgers", "San Francisco Giants", "San Diego Padres", "Colorado Rockies")
+  
+  NLw_percent <- c("61.5%", "56.1%", "50.8%", "47.7%", "40.3%")
+
+  nl <- cbind(NL_East, NLe_percent, NL_Cent, NLc_percent, NL_West, NLw_percent)
+
+  colnames(nl)<-c("NL East", "Win %", "NL Cent" , "Win %", "NL West", "Win %")
+
+knitr::kable(nl)
+knitr::kable(al)
+
+```
+
+
+<!-- add percentage of wins of each team from simulation and also this year to have a better idea and rank them that way -->
+
+As shown above, there are some similarities between the standings of last year and this year. 
+
 
 <!-- Level is an ordinal response variable. Using a proportional odds model, model the ordinal response as a function of the team's talent. -->
 
