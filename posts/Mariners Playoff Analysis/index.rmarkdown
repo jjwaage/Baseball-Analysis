@@ -4,7 +4,9 @@ author: "Jonna Waage"
 date: "2023-05-31"
 ---
 
+
 **Can the next MLB season be estimated by the last year's run differential data?**
+
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -17,6 +19,7 @@ library(ggplot2)
 library(MASS)
 library(scales)
 ```
+
 
 #### Introduction
 
@@ -51,6 +54,7 @@ Then, that probability is plugged into another equation to calculate a winner fr
     outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor))
     
 This equation uses [rbinom](https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/) which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins. 
+
 
 
 ```{r, echo = FALSE}
@@ -192,6 +196,7 @@ print_nl <- function(out2) {
 ```
 
 
+
 <!-- Also I am adding several helper functions `increasefont()` and `centertitle()` that I will use in ggplot2. -->
 
 <!-- ```{r} -->
@@ -211,6 +216,7 @@ print_nl <- function(out2) {
 
 One season simulation with Wins and Losses from each team using the Bradley Terry model to predict each game. 
 
+
 ```{r, echo=FALSE}
 out <- one.simulation()
 print_nl(out)
@@ -218,7 +224,9 @@ print_al(out)
 ```
 
 
+
 #### 1000 Season Simulations
+
 
 ```{r, echo = FALSE}
 all_out <- NULL  
@@ -229,7 +237,9 @@ for(j in 1:1000){
 }
 ```
 
+
 Here is the percentage of seasons in 1000 simulations where each team made the playoffs. 
+
 
 ```{r, echo = FALSE}
 
@@ -270,7 +280,9 @@ knitr::kable(al, align = "lclclc")
 
 ```
 
+
 Here is the percentage of wins each team had after 1000 seasons
+
 
 ```{r, echo=FALSE}
 winpercent <- NULL
@@ -308,9 +320,11 @@ knitr::kable(al, align = "lclclc")
 ```
 
 
+
 #### Comparing to the 2023 Season
 
 Here are the current standings and win percentages of each team in the MLB as of June 12th at 4 pm PST
+
 
 ```{r, echo=FALSE}
 aldivisions <- c("AL East", "AL Cent", "AL West")
@@ -354,6 +368,7 @@ knitr::kable(nl)
 knitr::kable(al)
 
 ```
+
 
 
 <!-- add percentage of wins of each team from simulation and also this year to have a better idea and rank them that way -->
@@ -457,3 +472,4 @@ As shown above, there are some similarities between the standings of last year a
 <!-- ``` -->
 
 <!-- \`\`\`\` -->
+
