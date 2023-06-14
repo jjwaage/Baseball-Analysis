@@ -305,61 +305,107 @@ colnames(nl)<-c("NL East", "Win %", "NL Cent", "Win %",
 knitr::kable(nl, align = "lclclc")
 knitr::kable(al, align = "lclclc")
 
+winpercent <- winpercent[order(winpercent$`Division`, winpercent$`Team`),]
+
 ```
 
 
-#### Comparing to the 2023 Season
+#### 2023 Season Actual Statistics
 
-Here are the current standings and win percentages of each team in the MLB as of June 12th at 4 pm PST
+Here are the current standings and win percentages of each team in the MLB as of June 13th
 
 ```{r, echo=FALSE}
 aldivisions <- c("AL East", "AL Cent", "AL West")
 
   AL_East <- c("Tampa Bay Rays", "Baltimore Orioles", "New York Yankees", "Toronto Blue Jays", "Boston Red Sox")
   
-  ALe_percent <- c("69.6%","63.1%", "56.7%","55.2%","49.3%") 
+  ALe_percent <- c("68.6%","63.6%", "57.4%","54.4%","48.5%") 
   
   AL_Cent <- c("Minnesota Twins", "Cleveland Guardians", "Chicago White Sox", "Detroit Tigers", "Kansas City Royals")
   
-  ALc_percent <- c("50%", "47.7%", "43.3%",  "42.2%", "27.3%")
+  ALc_percent <- c("50.7%", "47.0%", "42.6%",  "42.2%", "26.9%")
   
   AL_West <- c("Texas Rangers", "Houston Astros","Los Angeles Angels","Seattle Mariners", "Oakland Athletics")
   
-  ALw_percent <- c("63.1%", "56.1%","54.4%","49.2%", "26.5%")
+  ALw_percent <- c("62.1%", "56.7%","55.1%","50%", "27.5%")
 
-  al <- cbind(AL_East, ALe_percent, AL_Cent,  ALc_percent, AL_West,  ALw_percent)
+  al_ <- cbind(AL_East, ALe_percent, AL_Cent,  ALc_percent, AL_West,  ALw_percent)
 
-  colnames(al)<-c("AL East", "Win %", "AL Cent", "Win %", "AL West", "Win %")
+  colnames(al_)<-c("AL East", "Win %", "AL Cent", "Win %", "AL West", "Win %")
 
   
 nldivisions <- c("NL East", "NL Cent", "NL West")
 
   NL_East <- c("Atlanta Braves", "Miami Marlins", "Philadelphia Phillies", "New York Mets","Washington Nationals")
   
-  NLe_percent <- c("60.6%","55.2%","48.5%" ,"47%", "40.6%")
+  NLe_percent <- c("60.6%","54.4%","49.3%" ,"46.3%", "40%")
 
   NL_Cent <- c("Pittsburgh Pirates", "Milwaukee Brewers", "Cincinnati Reds", "Chicago Cubs", "St. Louis Cardinals")
   
-  NLc_percent <- c("53.1%", "51.5%","47.8%","43.1%","40.3%")
+  NLc_percent <- c("52.3%", "50.7%","48.5%","43.9%","39.7%")
 
   NL_West <- c("Arizona Diamondbacks", "Los Angeles Dodgers", "San Francisco Giants", "San Diego Padres", "Colorado Rockies")
   
-  NLw_percent <- c("62.1%", "56.1%", "51.5%", "47.7%", "41.2%")
+  NLw_percent <- c("61.2%", "56.7%", "52.2%", "48.5%", "42%")
+  
+  nl_ <- cbind(NL_East, NLe_percent, NL_Cent, NLc_percent, NL_West, NLw_percent)
 
-  nl <- cbind(NL_East, NLe_percent, NL_Cent, NLc_percent, NL_West, NLw_percent)
+  colnames(nl_)<-c("NL East", "Win %", "NL Cent" , "Win %", "NL West", "Win %")
 
-  colnames(nl)<-c("NL East", "Win %", "NL Cent" , "Win %", "NL West", "Win %")
-
-knitr::kable(nl)
-knitr::kable(al)
+knitr::kable(nl_)
+knitr::kable(al_)
 
 ```
 
+#### Comparison of Projected and Actual Statistics
 
-<!-- add percentage of wins of each team from simulation and also this year to have a better idea and rank them that way -->
+Here are the projected winning percentage and the actual winning percentage side by side
 
-As shown above, there are some similarities between the standings of last year and this year but there are also some teams that are doing way worse or better than projected. The Oakland Athletics and Kansas City Royals have a 20% difference between their winning percentage now and the average win percentage that was simulated. The Tampa Bay Rays also have a 20% difference but they are winning more than projected. 
+```{r, echo = FALSE}
+  
+  NL_East <- c("Atlanta Braves", "Miami Marlins", "New York Mets", "Philadelphia Phillies", "Washington Nationals")
+  
+  NLe_percent <- c("60.6%","54.4%","46.3%", "49.3%", "40%")
+  
+  NL_Cent <- c( "Chicago Cubs", "Cincinnati Reds", "Milwaukee Brewers", "Pittsburgh Pirates", "St. Louis Cardinals")
+  
+  NLc_percent <- c("43.9%","48.5%","50.7%","52.3%","39.7%")
+  
+  NL_West <- c("Arizona Diamondbacks", "Colorado Rockies", "Los Angeles Dodgers", "San Diego Padres", "San Francisco Giants")
 
+  NLw_percent <- c("61.2%", "42%", "56.7%","48.5%", "52.2%")
+  
+  nl_ <- cbind(NL_East, NLe_percent, winpercent[21:25, 3], NL_Cent, NLc_percent,winpercent[16:20, 3], NL_West, NLw_percent, winpercent[26:30, 3])
+  
+  colnames(nl_)<-c("NL East", "Actual Win %", "Projected Win %", "NL Cent" , "Actual Win %", "Projected Win %", "NL West", "Actual Win %", "Projected Win %")
+
+knitr::kable(nl_, align = "lcclcclcc")
+
+
+
+  
+  AL_East <- c("Baltimore Orioles","Boston Red Sox", "New York Yankees", "Tampa Bay Rays", "Toronto Blue Jays")
+  
+  ALe_percent <- c("63.6%","48.5%","57.4%","68.6%","54.4%")
+  
+  AL_Cent <- c("Chicago White Sox", "Cleveland Guardians", "Detroit Tigers", "Kansas City Royals", "Minnesota Twins")
+  
+  ALc_percent <- c("42.6%", "47.0%", "42.2%", "26.9%", "50.7%")
+  
+  AL_West <- c("Texas Rangers", "Houston Astros","Los Angeles Angels","Seattle Mariners", "Oakland Athletics")
+  
+  AL_West <- c("Houston Astros", "Los Angeles Angels", "Oakland Athletics", "Seattle Mariners", "Texas Rangers")
+  
+  ALw_percent <- c("62.1%", "56.7%","55.1%","50%", "27.5%")
+  
+  ALw_percent <- c("56.7%","55.1%","27.5%","50%","62.1%")
+
+  al_ <- cbind(AL_East, ALe_percent, winpercent[6:10, 3], AL_Cent,  ALc_percent, winpercent[1:5, 3], AL_West,  ALw_percent, winpercent[11:15, 3])
+  
+  colnames(al_)<-c("AL East", "Actual Win %", "Projected Win %", "AL Cent" , "Actual Win %", "Projected Win %", "AL West", "Actual Win %", "Projected Win %")
+
+knitr::kable(al_, align = "lcclcclcc")
+```
 
 <!-- Level is an ordinal response variable. Using a proportional odds model, model the ordinal response as a function of the team's talent. -->
 
