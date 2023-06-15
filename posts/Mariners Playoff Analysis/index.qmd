@@ -220,6 +220,7 @@ print_al(out)
 
 #### 1000 Season Simulations
 
+
 ```{r, echo = FALSE}
 all_out <- NULL  
 for(j in 1:1000){
@@ -228,6 +229,8 @@ for(j in 1:1000){
   all_out <- rbind(all_out, out)
 }
 ```
+
+##### Playoff Percentage
 
 Here is the percentage of seasons in 1000 simulations where each team made the playoffs. 
 
@@ -269,6 +272,9 @@ knitr::kable(nl, align = "lclclc")
 knitr::kable(al, align = "lclclc")
 
 ```
+
+##### Win Percentage
+
 
 Here is the percentage of wins each team had after 1000 seasons
 
