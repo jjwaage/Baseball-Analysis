@@ -4,7 +4,7 @@ author: "Jonna Waage"
 date: "2023-05-31"
 ---
 
-**Can the next MLB season be estimated by the last year's run differential data?**
+## Can the next MLB season be estimated by the last year's run differential data?
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -18,14 +18,15 @@ library(MASS)
 library(scales)
 ```
 
-#### Introduction
+### Introduction
 
 Simulates a 2023 season of all 162 games using the Bradley-Terry model.
 
 Uses last year's run differentials (average runs scored minus average runs allowed) to try to estimate this year's top performers. 
 
-
-#### Data
+  
+    
+### Data
 
   `schedule1 <- read_excel("schedule.xlsx")`  - reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
         
@@ -35,8 +36,9 @@ Uses last year's run differentials (average runs scored minus average runs allow
 
 2022 statistics are from [here](https://www.baseball-reference.com/leagues/majors/2022.shtml).
 
-
-#### Calculations
+  
+  
+### Calculations
 
 The [Bradley-Terry model](https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model) is a probability model to predict outcomes of object i beating object j based on each objects ability or talent. In this instance, it is used to compare teams but it was originally to be used with players.
 
@@ -207,7 +209,7 @@ print_nl <- function(out2) {
 <!-- ``` -->
 
 
-#### One simulation
+### One simulation
 
 One season simulation with Wins and Losses from each team using the Bradley Terry model to predict each game. 
 
@@ -216,11 +218,10 @@ out <- one.simulation()
 print_nl(out)
 print_al(out)
 ```
-
-
-#### 1000 Season Simulations
-
-
+  
+  
+### 1000 Season Simulations
+  
 ```{r, echo = FALSE}
 all_out <- NULL  
 for(j in 1:1000){
@@ -230,7 +231,7 @@ for(j in 1:1000){
 }
 ```
 
-##### Playoff Percentage
+#### Playoff Percentage
 
 Here is the percentage of seasons in 1000 simulations where each team made the playoffs. 
 
@@ -272,8 +273,8 @@ knitr::kable(nl, align = "lclclc")
 knitr::kable(al, align = "lclclc")
 
 ```
-
-##### Win Percentage
+  
+#### Win Percentage
 
 
 Here is the percentage of wins each team had after 1000 seasons
@@ -314,9 +315,9 @@ knitr::kable(al, align = "lclclc")
 winpercent <- winpercent[order(winpercent$`Division`, winpercent$`Team`),]
 
 ```
-
-
-#### 2023 Season Actual Statistics
+  
+  
+### 2023 Season Actual Statistics
 
 Here are the current standings and win percentages of each team in the MLB as of June 13th
 
@@ -362,8 +363,9 @@ knitr::kable(nl_)
 knitr::kable(al_)
 
 ```
-
-#### Comparison of Projected and Actual Statistics
+  
+    
+### Comparison of Projected and Actual Statistics
 
 Here are the projected winning percentage and the actual winning percentage side by side
 
@@ -509,3 +511,26 @@ knitr::kable(al_, align = "lcclcclcc")
 <!-- ``` -->
 
 <!-- \`\`\`\` -->
+  
+
+  
+
+
+
+### Links to resources used
+
+[How FiveThirtyEight does their predictions](https://fivethirtyeight.com/features/how-our-mlb-predictions-work/)
+
+[Playoff Simulator](https://playoffpredictors.com/Baseball?L=Aw18ZXTt-DFOS1b0c17Pd-wYUcSaWeRZVdTbXfQ408y6xQEwCMw7wn7Azvy6CuQ4QLHD+QqZMkyxI+VPEy1I6UtnilowVp3KFE3etOztpqzq2rFB9XN1Xjh88flnH+h06+Wii6WyiESns4qXgoGAYHSZua2blEa9h4ebi7OGgmGomqF4XklTmFpiY5hkRkOoQVV+rHRVRXJKu7BJkFZ1SFNRd2teq3JpWNVPHKaSQkdMz2aNrNZJqOhifEBC4E+Q8F2xTGpMeEDFSfcuctrS0bzm3W9RrkHhafWC8eucz92jUI+BtohZfGDrHkAUtpp1topEEA)
+
+[Simulator in R](https://baseballwithr.wordpress.com/2020/06/29/simulating-a-60-game-season/)
+
+[2022 Updated Playoffs](https://www.sportingnews.com/us/mlb/news/mlb-expanded-playoffs-postseason-2022-teams/sayv4pysmmlopks7hg2o2lbv)
+
+[Home Field Advantage](https://sabr.org/journal/article/home-field-advantage/#:~:text=In%20every%20sport%20and%20at,percent%20of%20the%20games%20played.)
+
+[Contributing Factors in Increasing Winning Percentage](https://digitalcommons.bryant.edu/cgi/viewcontent.cgi?article=1021&context=honors_finance#:~:text=Potential%20factors%20that%20affect%20winning,home%20runs%2C%20runs%20batted%20in)
+
+[2022 Stats](https://www.baseball-reference.com/leagues/majors/2022.shtml)
+
+
