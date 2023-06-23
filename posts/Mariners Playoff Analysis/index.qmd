@@ -16,6 +16,8 @@ knitr::opts_chunk$set(echo = TRUE,
 library(ggplot2)
 library(MASS)
 library(scales)
+library(reshape2)
+library(data.table)
 ```
 
 ### Introduction
@@ -400,11 +402,7 @@ knitr::kable(nl_, align = "lcclcclcc")
   
   ALc_percent <- c("42.6%", "47.0%", "42.2%", "26.9%", "50.7%")
   
-  AL_West <- c("Texas Rangers", "Houston Astros","Los Angeles Angels","Seattle Mariners", "Oakland Athletics")
-  
   AL_West <- c("Houston Astros", "Los Angeles Angels", "Oakland Athletics", "Seattle Mariners", "Texas Rangers")
-  
-  ALw_percent <- c("62.1%", "56.7%","55.1%","50%", "27.5%")
   
   ALw_percent <- c("56.7%","55.1%","27.5%","50%","62.1%")
 
@@ -415,107 +413,139 @@ knitr::kable(nl_, align = "lcclcclcc")
 knitr::kable(al_, align = "lcclcclcc")
 ```
 
-<!-- Level is an ordinal response variable. Using a proportional odds model, model the ordinal response as a function of the team's talent. -->
+```{r, echo = FALSE}
+alewin <- c(winpercent[6, 3],winpercent[7, 3],winpercent[8, 3],winpercent[9, 3],winpercent[10, 3])
 
-<!-- For a range of talent values from -0.9 to 0.9, find the fitted model probability of the three outcomes. -->
+alewin <-as.numeric(sub("%", "", alewin))
+ALe_percent <- as.numeric(sub("%", "", ALe_percent))
 
-<!-- ```{r} -->
-<!-- pfit <- polr(Level ~ Talent, -->
-<!--              data = all_out) -->
-<!-- DF <- data.frame(Talent = seq(-0.9, 0.9, -->
-<!--                                   length.out = 200)) -->
-<!-- Prob <- predict(pfit, DF, type = "probs") -->
-<!-- DF1 <- DF2 <- DF3 <- DF -->
-<!-- DF1$Probability <- Prob[, 3]; DF1$Type <- "Division" -->
-<!-- DF2$Probability <- Prob[, 2]; DF2$Type <- "Wild Card" -->
-<!-- DF3$Probability <- Prob[, 3] + Prob[, 2] -->
-<!-- DF3$Type <- "Playoff" -->
-<!-- DFall <- rbind(DF1, DF2, DF3) -->
-<!-- ``` -->
+graphal <- rbind(ALe_percent, alewin)
+graphal <- data.frame(graphal)
+names(graphal) <- c("TB", "BAL", "NYY", "TOR", "BOS")
 
-<!-- Graph of this division, wild card, and playoff probabilities. -->
+x <- barplot(as.matrix(graphal), main="American League East", ylab="Percentage of Wins", ylim = c(0, 100), 
+             beside=TRUE, col = c("#00006B", "#9fe2ff"))
 
-<!-- ```{r} -->
-<!-- ggplot(DFall, aes(Talent, Probability, -->
-<!--                   color = Type)) + -->
-<!--   geom_line() + -->
-<!--   increasefont() + -->
-<!--   ggtitle("Probability of Reaching Different Levels") + -->
-<!--   centertitle() -->
-<!-- ``` -->
+y <- as.matrix(graphal)
 
-<!-- #### Talents of wild card teams and division-winners -->
-
-<!-- Construct density estimates of -->
-
-<!-- -   all teams -->
-<!-- -   teams that win division -->
-<!-- -   teams that get wild card -->
-
-<!-- ```{r} -->
-<!-- data1 <- filter(all_out, Wild.Card == 1) %>%  -->
-<!--          mutate(Type = "Wild Card") -->
-<!-- data2 <- filter(all_out, Winner.Div == 1) %>%  -->
-<!--   mutate(Type = "Win Division") -->
-<!-- data3 <- all_out %>%  -->
-<!--   mutate(Type = "All Teams") -->
-
-<!-- ggplot(rbind(data1, data2, data3),  -->
-<!--        aes(Talent, color = Type)) + -->
-<!--   geom_density(size = 1.5) + -->
-<!--   increasefont() + centertitle() + -->
-<!--   ggtitle("Talent Distributions for Three Types of Teams") -->
-<!-- ``` -->
-
-<!-- #### How many games to win? -->
-
-<!-- Find the conditional probability of winning division title, of getting wild card, and making the playoffs given you won X games. -->
-
-<!-- ```{r} -->
-<!-- all_out %>%  -->
-<!--   filter(Wins >= 25, Wins <= 45) %>%  -->
-<!--   group_by(Wins) %>%  -->
-<!--   summarize(N = n(),  -->
-<!--             Prob_Div = mean(Winner.Div), -->
-<!--             Prob_WC = mean(Wild.Card), -->
-<!--             .groups = "drop") -> S -->
-<!-- ``` -->
-
-<!-- Plot smooths of these empirical probabilities. -->
-
-<!-- ```{r} -->
-<!-- S %>%  -->
-<!--   ggplot() + -->
-<!--   geom_smooth(aes(Wins, Prob_Div), se = FALSE, -->
-<!--               color = "red", -->
-<!--               method = "loess") + -->
-<!--   geom_smooth(aes(Wins, Prob_WC), se = FALSE, -->
-<!--               color = "blue", -->
-<!--               method = "loess") +  -->
-<!--   geom_smooth(aes(Wins, Prob_Div + Prob_WC), -->
-<!--                   se = FALSE, -->
-<!--               color = "black", -->
-<!--               method = "loess") + -->
-<!--   increasefont() + -->
-<!--   ylab("Probability") + -->
-<!--   annotate(geom = "text", x = 32, y = 0.75, -->
-<!--            label = "Playoffs", size = 7) + -->
-<!--   annotate(geom = "text", x = 40.3, y = 0.75, -->
-<!--            label = "Division", size = 7, -->
-<!--            color = "red") + -->
-<!--   annotate(geom = "text", x = 40.8, y = 0.25, -->
-<!--            label = "Wild Card", size = 7, -->
-<!--            color = "blue") + -->
-<!--   ggtitle("How Many Games Does Team Need to Win?") + -->
-<!--   centertitle() -->
-<!-- ``` -->
-
-<!-- \`\`\`\` -->
-  
-
-  
+text(x,y + 4,cex = 0.75, labels = as.character(y))
 
 
+legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0, bty="n", fill = c("#00006B", "#9fe2ff"))
+
+
+```
+
+```{r, echo = FALSE}
+alcwin <- c(winpercent[1, 3],winpercent[2, 3],winpercent[3, 3],winpercent[4, 3],winpercent[5, 3])
+
+alcwin <-as.numeric(sub("%", "", alcwin))
+ALc_percent <- as.numeric(sub("%", "", ALc_percent))
+
+graphalc <- rbind(ALc_percent, alcwin)
+graphalc <- data.frame(graphalc)
+names(graphalc) <- c("CWS", "CLE", "DET", "KAN", "MIN")
+
+x <- barplot(as.matrix(graphalc), main="American League Central", ylab="Percentage of Wins", ylim = c(0, 100), 
+             beside=TRUE, col = c("#00006B", "#9fe2ff"))
+
+y <- as.matrix(graphalc)
+
+text(x,y + 4,cex = 0.75, labels = as.character(y))
+
+
+legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0, bty="n", fill = c("#00006B", "#9fe2ff"))
+
+
+```
+
+```{r, echo = FALSE}
+alwwin <- c(winpercent[11, 3],winpercent[12, 3],winpercent[13, 3],winpercent[14, 3],winpercent[15, 3])
+
+alwwin <-as.numeric(sub("%", "", alwwin))
+ALw_percent <- as.numeric(sub("%", "", ALw_percent))
+
+graphalw <- rbind(ALw_percent, alwwin)
+graphalw <- data.frame(graphalw)
+names(graphalw) <- c("HOU", "LAA", "OAK", "SEA", "TEX")
+
+x <- barplot(as.matrix(graphalw), main="American League West", ylab="Percentage of Wins", ylim = c(0, 100), 
+             beside=TRUE, col = c("#00006B", "#9fe2ff"))
+
+y <- as.matrix(graphalw)
+
+text(x,y + 4,cex = 0.75, labels = as.character(y))
+
+
+legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0, bty="n", fill = c("#00006B", "#9fe2ff"))
+
+```
+
+```{r, echo = FALSE}
+nlewin <- c(winpercent[21, 3],winpercent[22, 3],winpercent[23, 3],winpercent[24, 3],winpercent[25, 3])
+
+nlewin <-as.numeric(sub("%", "", nlewin))
+NLe_percent <- as.numeric(sub("%", "", NLe_percent))
+
+graphnle <- rbind(NLe_percent, nlewin)
+graphnle <- data.frame(graphnle)
+names(graphnle) <- c("ATL", "MIA", "NYM", "PHI", "WAS")
+
+x <- barplot(as.matrix(graphnle), main="National League East", ylab="Percentage of Wins", ylim = c(0, 100), 
+             beside=TRUE, col = c("#940119", "#de0226"))
+
+y <- as.matrix(graphnle)
+
+text(x,y + 4,cex = 0.75, labels = as.character(y))
+
+
+legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0, bty="n", fill = c("#940119", "#de0226"))
+
+```
+
+```{r, echo = FALSE}
+nlcwin <- c(winpercent[16, 3],winpercent[17, 3],winpercent[18, 3],winpercent[19, 3],winpercent[20, 3])
+
+nlcwin <-as.numeric(sub("%", "", nlcwin))
+NLc_percent <- as.numeric(sub("%", "", NLc_percent))
+
+graphnlc <- rbind(NLc_percent, nlcwin)
+graphnlc <- data.frame(graphnlc)
+names(graphnlc) <- c("CHC", "CIN", "MIL", "PIT", "STL")
+
+x <- barplot(as.matrix(graphnlc), main="National League Central", ylab="Percentage of Wins", ylim = c(0, 100), 
+             beside=TRUE, col = c("#940119", "#de0226"))
+
+y <- as.matrix(graphnlc)
+
+text(x,y + 4,cex = 0.75, labels = as.character(y))
+
+
+legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0, bty="n", fill = c("#940119", "#de0226"))
+
+```
+
+```{r, echo = FALSE}
+nlwwin <- c(winpercent[26, 3],winpercent[27, 3],winpercent[28, 3],winpercent[29, 3],winpercent[30, 3])
+
+nlwwin <-as.numeric(sub("%", "", nlwwin))
+NLw_percent <- as.numeric(sub("%", "", NLw_percent))
+
+graphnlw <- rbind(NLw_percent, nlwwin)
+graphnlw <- data.frame(graphnlw)
+names(graphnlw) <- c("ARI", "COL", "LAD", "SD", "SF")
+
+x <- barplot(as.matrix(graphnlw), main="National League West", ylab="Percentage of Wins", ylim = c(0, 100), 
+             beside=TRUE, col = c("#940119", "#de0226"))
+
+y <- as.matrix(graphnlw)
+
+text(x,y + 4,cex = 0.75, labels = as.character(y))
+
+
+legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0, bty="n", fill = c("#940119", "#de0226"))
+
+```
 
 ### Links to resources used
 
