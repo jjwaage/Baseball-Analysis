@@ -24,22 +24,18 @@ library(data.table)
 
 Simulates a 2023 season of all 162 games using the Bradley-Terry model.
 
-Uses last year's run differentials (average runs scored minus average runs allowed) to try to estimate this year's top performers. 
+Uses last year's run differentials (average runs scored minus average runs allowed) to try to estimate this year's top performers.
 
-  
-    
 ### Data
 
-  `schedule1 <- read_excel("schedule.xlsx")`  - reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
-        
-  `battingstats <- read_excel("2022battingstats.xlsx")` - reads in a excel sheet with 2022 MLB batting statistics for all teams 
-        
-  `fieldingstats <- read_excel("fieldingstats2022.xlsx")` - reads in a excel sheet with 2022 MLB fielding statistics for all teams
+`schedule1 <- read_excel("schedule.xlsx")` - reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
+
+`battingstats <- read_excel("2022battingstats.xlsx")` - reads in a excel sheet with 2022 MLB batting statistics for all teams
+
+`fieldingstats <- read_excel("fieldingstats2022.xlsx")` - reads in a excel sheet with 2022 MLB fielding statistics for all teams
 
 2022 statistics are from [here](https://www.baseball-reference.com/leagues/majors/2022.shtml).
 
-  
-  
 ### Calculations
 
 The [Bradley-Terry model](https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model) is a probability model to predict outcomes of object i beating object j based on each objects ability or talent. In this instance, it is used to compare teams but it was originally to be used with players.
@@ -48,14 +44,17 @@ Talent is calculated by z-scores of seasonal average run differential of each te
 
 The equation used in this project for probability is:
 
-    prob.Home = exp(Talent.Home) / (exp(Talent.Home) + exp(Talent.Visitor)) + 0.04)
+```         
+prob.Home = exp(Talent.Home) / (exp(Talent.Home) + exp(Talent.Visitor)) + 0.04)
+```
 
-Then, that probability is plugged into another equation to calculate a winner from each game. 
+Then, that probability is plugged into another equation to calculate a winner from each game.
 
-    outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor))
-    
-This equation uses [rbinom](https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/) which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins. 
+```         
+outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor))
+```
 
+This equation uses [rbinom](https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/) which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins.
 
 ```{r, echo = FALSE}
 one.simulation <- function() {
@@ -195,35 +194,18 @@ print_nl <- function(out2) {
 
 ```
 
-
-<!-- Also I am adding several helper functions `increasefont()` and `centertitle()` that I will use in ggplot2. -->
-
-<!-- ```{r} -->
-<!-- increasefont <- function(Size = 18){ -->
-<!--   theme(text = element_text(size = Size)) -->
-<!-- } -->
-
-<!-- centertitle <- function(Color = "blue"){ -->
-<!--     theme(plot.title =  -->
-<!--             element_text(colour = Color, size = 18,  -->
-<!--         hjust = 0.5, vjust = 0.8, angle = 0)) -->
-<!-- } -->
-<!-- ``` -->
-
-
 ### One simulation
 
-One season simulation with Wins and Losses from each team using the Bradley Terry model to predict each game. 
+One season simulation with Wins and Losses from each team using the Bradley Terry model to predict each game.
 
 ```{r, echo=FALSE}
 out <- one.simulation()
 print_nl(out)
 print_al(out)
 ```
-  
-  
+
 ### 1000 Season Simulations
-  
+
 ```{r, echo = FALSE}
 all_out <- NULL  
 for(j in 1:1000){
@@ -235,7 +217,7 @@ for(j in 1:1000){
 
 #### Playoff Percentage
 
-Here is the percentage of seasons in 1000 simulations where each team made the playoffs. 
+Here is the percentage of seasons in 1000 simulations where each team made the playoffs.
 
 ```{r, echo = FALSE}
 
@@ -275,9 +257,8 @@ knitr::kable(nl, align = "lclclc")
 knitr::kable(al, align = "lclclc")
 
 ```
-  
-#### Win Percentage
 
+#### Win Percentage
 
 Here is the percentage of wins each team had after 1000 seasons
 
@@ -317,8 +298,7 @@ knitr::kable(al, align = "lclclc")
 winpercent <- winpercent[order(winpercent$`Division`, winpercent$`Team`),]
 
 ```
-  
-  
+
 ### 2023 Season Actual Statistics
 
 Here are the current standings and win percentages of each team in the MLB as of June 13th
@@ -365,8 +345,7 @@ knitr::kable(nl_)
 knitr::kable(al_)
 
 ```
-  
-    
+
 ### Comparison of Projected and Actual Statistics
 
 Here are the projected winning percentage and the actual winning percentage side by side
@@ -562,5 +541,3 @@ legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0
 [Contributing Factors in Increasing Winning Percentage](https://digitalcommons.bryant.edu/cgi/viewcontent.cgi?article=1021&context=honors_finance#:~:text=Potential%20factors%20that%20affect%20winning,home%20runs%2C%20runs%20batted%20in)
 
 [2022 Stats](https://www.baseball-reference.com/leagues/majors/2022.shtml)
-
-

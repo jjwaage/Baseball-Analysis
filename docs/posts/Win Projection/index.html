@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jonna Waage">
+<meta name="dcterms.date" content="2023-05-31">
+
+<title>Sports Data Analysis and Visualization - Estimating Playoffs Based on the Previous Year’s Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Sports Data Analysis and Visualization</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Estimating Playoffs Based on the Previous Year’s Data</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jonna Waage </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 31, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="can-the-next-mlb-season-be-estimated-by-the-last-years-run-differential-data" class="level2">
+<h2 class="anchored" data-anchor-id="can-the-next-mlb-season-be-estimated-by-the-last-years-run-differential-data">Can the next MLB season be estimated by the last year’s run differential data?</h2>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>Simulates a 2023 season of all 162 games using the Bradley-Terry model.</p>
+<p>Uses last year’s run differentials (average runs scored minus average runs allowed) to try to estimate this year’s top performers.</p>
+</section>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
+<p><code>schedule1 &lt;- read_excel("schedule.xlsx")</code> - reads in a two column excel sheet with headers ‘Home’ and ‘Away’ and teams from each game listed below</p>
+<p><code>battingstats &lt;- read_excel("2022battingstats.xlsx")</code> - reads in a excel sheet with 2022 MLB batting statistics for all teams</p>
+<p><code>fieldingstats &lt;- read_excel("fieldingstats2022.xlsx")</code> - reads in a excel sheet with 2022 MLB fielding statistics for all teams</p>
+<p>2022 statistics are from <a href="https://www.baseball-reference.com/leagues/majors/2022.shtml">here</a>.</p>
+</section>
+<section id="calculations" class="level3">
+<h3 class="anchored" data-anchor-id="calculations">Calculations</h3>
+<p>The <a href="https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model">Bradley-Terry model</a> is a probability model to predict outcomes of object i beating object j based on each objects ability or talent. In this instance, it is used to compare teams but it was originally to be used with players.</p>
+<p>Talent is calculated by z-scores of seasonal average run differential of each team and then divided by 10. It is then adjusted for home field advantage so 0.04, based on <a href="https://sabr.org/journal/article/home-field-advantage/#:~:text=In%20every%20sport%20and%20at,percent%20of%20the%20games%20played.">this</a> article, is added to the probability of the home team winning.</p>
+<p>The equation used in this project for probability is:</p>
+<pre><code>prob.Home = exp(Talent.Home) / (exp(Talent.Home) + exp(Talent.Visitor)) + 0.04)</code></pre>
+<p>Then, that probability is plugged into another equation to calculate a winner from each game.</p>
+<pre><code>outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor))</code></pre>
+<p>This equation uses <a href="https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/">rbinom</a> which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins.</p>
+<!-- Also I am adding several helper functions `increasefont()` and `centertitle()` that I will use in ggplot2. -->
+<!-- ```{r} -->
+<!-- increasefont <- function(Size = 18){ -->
+<!--   theme(text = element_text(size = Size)) -->
+<!-- } -->
+<!-- centertitle <- function(Color = "blue"){ -->
+<!--     theme(plot.title =  -->
+<!--             element_text(colour = Color, size = 18,  -->
+<!--         hjust = 0.5, vjust = 0.8, angle = 0)) -->
+<!-- } -->
+<!-- ``` -->
+</section>
+<section id="one-simulation" class="level3">
+<h3 class="anchored" data-anchor-id="one-simulation">One simulation</h3>
+<p>One season simulation with Wins and Losses from each team using the Bradley Terry model to predict each game.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 20%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 21%">
+<col style="width: 4%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">NL East</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+<th style="text-align: center;">NL Cent</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+<th style="text-align: center;">NL West</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Philadelphia Phillies</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">75</td>
+<td style="text-align: center;">Milwaukee Brewers</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: left;">78</td>
+<td style="text-align: center;">Los Angeles Dodgers</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: left;">72</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">New York Mets</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">80</td>
+<td style="text-align: center;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: left;">79</td>
+<td style="text-align: center;">San Diego Padres</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: left;">74</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Washington Nationals</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: left;">86</td>
+<td style="text-align: center;">Pittsburgh Pirates</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">82</td>
+<td style="text-align: center;">San Francisco Giants</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: left;">81</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Atlanta Braves</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: left;">90</td>
+<td style="text-align: center;">Cincinnati Reds</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: left;">86</td>
+<td style="text-align: center;">Arizona Diamondbacks</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: left;">84</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Miami Marlins</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: left;">91</td>
+<td style="text-align: center;">Chicago Cubs</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: left;">90</td>
+<td style="text-align: center;">Colorado Rockies</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: left;">84</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 21%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 20%">
+<col style="width: 5%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">AL East</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+<th style="text-align: center;">AL Cent</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+<th style="text-align: center;">AL West</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: left;">Losses</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">New York Yankees</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: left;">71</td>
+<td style="text-align: center;">Cleveland Guardians</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: left;">71</td>
+<td style="text-align: center;">Texas Rangers</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: left;">78</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Toronto Blue Jays</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: left;">72</td>
+<td style="text-align: center;">Minnesota Twins</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: left;">75</td>
+<td style="text-align: center;">Seattle Mariners</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: left;">79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Boston Red Sox</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: left;">73</td>
+<td style="text-align: center;">Chicago White Sox</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: left;">79</td>
+<td style="text-align: center;">Houston Astros</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: left;">80</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Baltimore Orioles</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">76</td>
+<td style="text-align: center;">Detroit Tigers</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: left;">86</td>
+<td style="text-align: center;">Oakland Athletics</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: left;">86</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Tampa Bay Rays</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">76</td>
+<td style="text-align: center;">Kansas City Royals</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: left;">90</td>
+<td style="text-align: center;">Los Angeles Angels</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: left;">91</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="season-simulations" class="level3">
+<h3 class="anchored" data-anchor-id="season-simulations">1000 Season Simulations</h3>
+<section id="playoff-percentage" class="level4">
+<h4 class="anchored" data-anchor-id="playoff-percentage">Playoff Percentage</h4>
+<p>Here is the percentage of seasons in 1000 simulations where each team made the playoffs.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 11%">
+<col style="width: 20%">
+<col style="width: 11%">
+<col style="width: 21%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">NL East</th>
+<th style="text-align: center;">Playoff %</th>
+<th style="text-align: left;">NL Cent</th>
+<th style="text-align: center;">Playoff %</th>
+<th style="text-align: left;">NL West</th>
+<th style="text-align: center;">Playoff %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">New York Mets</td>
+<td style="text-align: center;">69.8%</td>
+<td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: center;">67.2%</td>
+<td style="text-align: left;">Los Angeles Dodgers</td>
+<td style="text-align: center;">89.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Atlanta Braves</td>
+<td style="text-align: center;">67.7%</td>
+<td style="text-align: left;">Milwaukee Brewers</td>
+<td style="text-align: center;">50.0%</td>
+<td style="text-align: left;">San Francisco Giants</td>
+<td style="text-align: center;">48.5%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Philadelphia Phillies</td>
+<td style="text-align: center;">48.7%</td>
+<td style="text-align: left;">Chicago Cubs</td>
+<td style="text-align: center;">24.6%</td>
+<td style="text-align: left;">San Diego Padres</td>
+<td style="text-align: center;">42.2%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Miami Marlins</td>
+<td style="text-align: center;">23.0%</td>
+<td style="text-align: left;">Cincinnati Reds</td>
+<td style="text-align: center;">13.8%</td>
+<td style="text-align: left;">Arizona Diamondbacks</td>
+<td style="text-align: center;">25.9%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Washington Nationals</td>
+<td style="text-align: center;">6.9%</td>
+<td style="text-align: left;">Pittsburgh Pirates</td>
+<td style="text-align: center;">9.5%</td>
+<td style="text-align: left;">Colorado Rockies</td>
+<td style="text-align: center;">13.1%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 12%">
+<col style="width: 22%">
+<col style="width: 12%">
+<col style="width: 21%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">AL East</th>
+<th style="text-align: center;">Playoff %</th>
+<th style="text-align: left;">AL Cent</th>
+<th style="text-align: center;">Playoff %</th>
+<th style="text-align: left;">AL West</th>
+<th style="text-align: center;">Playoff %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">New York Yankees</td>
+<td style="text-align: center;">78.5%</td>
+<td style="text-align: left;">Cleveland Guardians</td>
+<td style="text-align: center;">52.9%</td>
+<td style="text-align: left;">Houston Astros</td>
+<td style="text-align: center;">78.9%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Toronto Blue Jays</td>
+<td style="text-align: center;">53.0%</td>
+<td style="text-align: left;">Minnesota Twins</td>
+<td style="text-align: center;">47.1%</td>
+<td style="text-align: left;">Seattle Mariners</td>
+<td style="text-align: center;">41.5%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tampa Bay Rays</td>
+<td style="text-align: center;">44.1%</td>
+<td style="text-align: left;">Chicago White Sox</td>
+<td style="text-align: center;">35.8%</td>
+<td style="text-align: left;">Los Angeles Angels</td>
+<td style="text-align: center;">30.7%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Baltimore Orioles</td>
+<td style="text-align: center;">32.8%</td>
+<td style="text-align: left;">Kansas City Royals</td>
+<td style="text-align: center;">17.9%</td>
+<td style="text-align: left;">Texas Rangers</td>
+<td style="text-align: center;">29.8%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Boston Red Sox</td>
+<td style="text-align: center;">29.0%</td>
+<td style="text-align: left;">Detroit Tigers</td>
+<td style="text-align: center;">17.5%</td>
+<td style="text-align: left;">Oakland Athletics</td>
+<td style="text-align: center;">10.5%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="win-percentage" class="level4">
+<h4 class="anchored" data-anchor-id="win-percentage">Win Percentage</h4>
+<p>Here is the percentage of wins each team had after 1000 seasons</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 8%">
+<col style="width: 23%">
+<col style="width: 8%">
+<col style="width: 25%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">NL East</th>
+<th style="text-align: center;">Win %</th>
+<th style="text-align: left;">NL Cent</th>
+<th style="text-align: center;">Win %</th>
+<th style="text-align: left;">NL West</th>
+<th style="text-align: center;">Win %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">New York Mets</td>
+<td style="text-align: center;">53.2%</td>
+<td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: center;">52.8%</td>
+<td style="text-align: left;">Los Angeles Dodgers</td>
+<td style="text-align: center;">56.0%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Atlanta Braves</td>
+<td style="text-align: center;">53.0%</td>
+<td style="text-align: left;">Milwaukee Brewers</td>
+<td style="text-align: center;">51.1%</td>
+<td style="text-align: left;">San Francisco Giants</td>
+<td style="text-align: center;">51.0%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Philadelphia Phillies</td>
+<td style="text-align: center;">51.2%</td>
+<td style="text-align: left;">Chicago Cubs</td>
+<td style="text-align: center;">48.7%</td>
+<td style="text-align: left;">San Diego Padres</td>
+<td style="text-align: center;">50.6%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Miami Marlins</td>
+<td style="text-align: center;">48.4%</td>
+<td style="text-align: left;">Cincinnati Reds</td>
+<td style="text-align: center;">47.1%</td>
+<td style="text-align: left;">Arizona Diamondbacks</td>
+<td style="text-align: center;">49.0%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Washington Nationals</td>
+<td style="text-align: center;">45.4%</td>
+<td style="text-align: left;">Pittsburgh Pirates</td>
+<td style="text-align: center;">46.1%</td>
+<td style="text-align: left;">Colorado Rockies</td>
+<td style="text-align: center;">46.6%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 8%">
+<col style="width: 25%">
+<col style="width: 8%">
+<col style="width: 24%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">AL East</th>
+<th style="text-align: center;">Win %</th>
+<th style="text-align: left;">AL Cent</th>
+<th style="text-align: center;">Win %</th>
+<th style="text-align: left;">AL West</th>
+<th style="text-align: center;">Win %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">New York Yankees</td>
+<td style="text-align: center;">54.2%</td>
+<td style="text-align: left;">Cleveland Guardians</td>
+<td style="text-align: center;">51.2%</td>
+<td style="text-align: left;">Houston Astros</td>
+<td style="text-align: center;">54.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Toronto Blue Jays</td>
+<td style="text-align: center;">51.5%</td>
+<td style="text-align: left;">Minnesota Twins</td>
+<td style="text-align: center;">50.7%</td>
+<td style="text-align: left;">Seattle Mariners</td>
+<td style="text-align: center;">50.3%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tampa Bay Rays</td>
+<td style="text-align: center;">50.7%</td>
+<td style="text-align: left;">Chicago White Sox</td>
+<td style="text-align: center;">49.6%</td>
+<td style="text-align: left;">Texas Rangers</td>
+<td style="text-align: center;">49.3%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Baltimore Orioles</td>
+<td style="text-align: center;">49.5%</td>
+<td style="text-align: left;">Detroit Tigers</td>
+<td style="text-align: center;">47.4%</td>
+<td style="text-align: left;">Los Angeles Angels</td>
+<td style="text-align: center;">49.2%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Boston Red Sox</td>
+<td style="text-align: center;">49.0%</td>
+<td style="text-align: left;">Kansas City Royals</td>
+<td style="text-align: center;">47.1%</td>
+<td style="text-align: left;">Oakland Athletics</td>
+<td style="text-align: center;">46.1%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="season-actual-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="season-actual-statistics">2023 Season Actual Statistics</h3>
+<p>Here are the current standings and win percentages of each team in the MLB as of June 13th</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 7%">
+<col style="width: 24%">
+<col style="width: 7%">
+<col style="width: 25%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">NL East</th>
+<th style="text-align: left;">Win %</th>
+<th style="text-align: left;">NL Cent</th>
+<th style="text-align: left;">Win %</th>
+<th style="text-align: left;">NL West</th>
+<th style="text-align: left;">Win %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Atlanta Braves</td>
+<td style="text-align: left;">60.6%</td>
+<td style="text-align: left;">Pittsburgh Pirates</td>
+<td style="text-align: left;">52.3%</td>
+<td style="text-align: left;">Arizona Diamondbacks</td>
+<td style="text-align: left;">61.2%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Miami Marlins</td>
+<td style="text-align: left;">54.4%</td>
+<td style="text-align: left;">Milwaukee Brewers</td>
+<td style="text-align: left;">50.7%</td>
+<td style="text-align: left;">Los Angeles Dodgers</td>
+<td style="text-align: left;">56.7%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Philadelphia Phillies</td>
+<td style="text-align: left;">49.3%</td>
+<td style="text-align: left;">Cincinnati Reds</td>
+<td style="text-align: left;">48.5%</td>
+<td style="text-align: left;">San Francisco Giants</td>
+<td style="text-align: left;">52.2%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New York Mets</td>
+<td style="text-align: left;">46.3%</td>
+<td style="text-align: left;">Chicago Cubs</td>
+<td style="text-align: left;">43.9%</td>
+<td style="text-align: left;">San Diego Padres</td>
+<td style="text-align: left;">48.5%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Washington Nationals</td>
+<td style="text-align: left;">40%</td>
+<td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: left;">39.7%</td>
+<td style="text-align: left;">Colorado Rockies</td>
+<td style="text-align: left;">42%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 8%">
+<col style="width: 26%">
+<col style="width: 8%">
+<col style="width: 25%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">AL East</th>
+<th style="text-align: left;">Win %</th>
+<th style="text-align: left;">AL Cent</th>
+<th style="text-align: left;">Win %</th>
+<th style="text-align: left;">AL West</th>
+<th style="text-align: left;">Win %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Tampa Bay Rays</td>
+<td style="text-align: left;">68.6%</td>
+<td style="text-align: left;">Minnesota Twins</td>
+<td style="text-align: left;">50.7%</td>
+<td style="text-align: left;">Texas Rangers</td>
+<td style="text-align: left;">62.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Baltimore Orioles</td>
+<td style="text-align: left;">63.6%</td>
+<td style="text-align: left;">Cleveland Guardians</td>
+<td style="text-align: left;">47.0%</td>
+<td style="text-align: left;">Houston Astros</td>
+<td style="text-align: left;">56.7%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New York Yankees</td>
+<td style="text-align: left;">57.4%</td>
+<td style="text-align: left;">Chicago White Sox</td>
+<td style="text-align: left;">42.6%</td>
+<td style="text-align: left;">Los Angeles Angels</td>
+<td style="text-align: left;">55.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Toronto Blue Jays</td>
+<td style="text-align: left;">54.4%</td>
+<td style="text-align: left;">Detroit Tigers</td>
+<td style="text-align: left;">42.2%</td>
+<td style="text-align: left;">Seattle Mariners</td>
+<td style="text-align: left;">50%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Boston Red Sox</td>
+<td style="text-align: left;">48.5%</td>
+<td style="text-align: left;">Kansas City Royals</td>
+<td style="text-align: left;">26.9%</td>
+<td style="text-align: left;">Oakland Athletics</td>
+<td style="text-align: left;">27.5%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="comparison-of-projected-and-actual-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="comparison-of-projected-and-actual-statistics">Comparison of Projected and Actual Statistics</h3>
+<p>Here are the projected winning percentage and the actual winning percentage side by side</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 12%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 13%">
+<col style="width: 8%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">NL East</th>
+<th style="text-align: center;">Actual Win %</th>
+<th style="text-align: center;">Projected Win %</th>
+<th style="text-align: left;">NL Cent</th>
+<th style="text-align: center;">Actual Win %</th>
+<th style="text-align: center;">Projected Win %</th>
+<th style="text-align: left;">NL West</th>
+<th style="text-align: center;">Actual Win %</th>
+<th style="text-align: center;">Projected Win %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Atlanta Braves</td>
+<td style="text-align: center;">60.6%</td>
+<td style="text-align: center;">53.0%</td>
+<td style="text-align: left;">Chicago Cubs</td>
+<td style="text-align: center;">43.9%</td>
+<td style="text-align: center;">48.7%</td>
+<td style="text-align: left;">Arizona Diamondbacks</td>
+<td style="text-align: center;">61.2%</td>
+<td style="text-align: center;">49.0%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Miami Marlins</td>
+<td style="text-align: center;">54.4%</td>
+<td style="text-align: center;">48.4%</td>
+<td style="text-align: left;">Cincinnati Reds</td>
+<td style="text-align: center;">48.5%</td>
+<td style="text-align: center;">47.1%</td>
+<td style="text-align: left;">Colorado Rockies</td>
+<td style="text-align: center;">42%</td>
+<td style="text-align: center;">46.6%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New York Mets</td>
+<td style="text-align: center;">46.3%</td>
+<td style="text-align: center;">53.2%</td>
+<td style="text-align: left;">Milwaukee Brewers</td>
+<td style="text-align: center;">50.7%</td>
+<td style="text-align: center;">51.1%</td>
+<td style="text-align: left;">Los Angeles Dodgers</td>
+<td style="text-align: center;">56.7%</td>
+<td style="text-align: center;">56.0%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Philadelphia Phillies</td>
+<td style="text-align: center;">49.3%</td>
+<td style="text-align: center;">51.2%</td>
+<td style="text-align: left;">Pittsburgh Pirates</td>
+<td style="text-align: center;">52.3%</td>
+<td style="text-align: center;">46.1%</td>
+<td style="text-align: left;">San Diego Padres</td>
+<td style="text-align: center;">48.5%</td>
+<td style="text-align: center;">50.6%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Washington Nationals</td>
+<td style="text-align: center;">40%</td>
+<td style="text-align: center;">45.4%</td>
+<td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: center;">39.7%</td>
+<td style="text-align: center;">52.8%</td>
+<td style="text-align: left;">San Francisco Giants</td>
+<td style="text-align: center;">52.2%</td>
+<td style="text-align: center;">51.0%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">AL East</th>
+<th style="text-align: center;">Actual Win %</th>
+<th style="text-align: center;">Projected Win %</th>
+<th style="text-align: left;">AL Cent</th>
+<th style="text-align: center;">Actual Win %</th>
+<th style="text-align: center;">Projected Win %</th>
+<th style="text-align: left;">AL West</th>
+<th style="text-align: center;">Actual Win %</th>
+<th style="text-align: center;">Projected Win %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Baltimore Orioles</td>
+<td style="text-align: center;">63.6%</td>
+<td style="text-align: center;">49.5%</td>
+<td style="text-align: left;">Chicago White Sox</td>
+<td style="text-align: center;">42.6%</td>
+<td style="text-align: center;">49.6%</td>
+<td style="text-align: left;">Houston Astros</td>
+<td style="text-align: center;">56.7%</td>
+<td style="text-align: center;">54.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Boston Red Sox</td>
+<td style="text-align: center;">48.5%</td>
+<td style="text-align: center;">49.0%</td>
+<td style="text-align: left;">Cleveland Guardians</td>
+<td style="text-align: center;">47.0%</td>
+<td style="text-align: center;">51.2%</td>
+<td style="text-align: left;">Los Angeles Angels</td>
+<td style="text-align: center;">55.1%</td>
+<td style="text-align: center;">49.2%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New York Yankees</td>
+<td style="text-align: center;">57.4%</td>
+<td style="text-align: center;">54.2%</td>
+<td style="text-align: left;">Detroit Tigers</td>
+<td style="text-align: center;">42.2%</td>
+<td style="text-align: center;">47.4%</td>
+<td style="text-align: left;">Oakland Athletics</td>
+<td style="text-align: center;">27.5%</td>
+<td style="text-align: center;">46.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tampa Bay Rays</td>
+<td style="text-align: center;">68.6%</td>
+<td style="text-align: center;">50.7%</td>
+<td style="text-align: left;">Kansas City Royals</td>
+<td style="text-align: center;">26.9%</td>
+<td style="text-align: center;">47.1%</td>
+<td style="text-align: left;">Seattle Mariners</td>
+<td style="text-align: center;">50%</td>
+<td style="text-align: center;">50.3%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Toronto Blue Jays</td>
+<td style="text-align: center;">54.4%</td>
+<td style="text-align: center;">51.5%</td>
+<td style="text-align: left;">Minnesota Twins</td>
+<td style="text-align: center;">50.7%</td>
+<td style="text-align: center;">50.7%</td>
+<td style="text-align: left;">Texas Rangers</td>
+<td style="text-align: center;">62.1%</td>
+<td style="text-align: center;">49.3%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="links-to-resources-used" class="level3">
+<h3 class="anchored" data-anchor-id="links-to-resources-used">Links to resources used</h3>
+<p><a href="https://fivethirtyeight.com/features/how-our-mlb-predictions-work/">How FiveThirtyEight does their predictions</a></p>
+<p><a href="https://playoffpredictors.com/Baseball?L=Aw18ZXTt-DFOS1b0c17Pd-wYUcSaWeRZVdTbXfQ408y6xQEwCMw7wn7Azvy6CuQ4QLHD+QqZMkyxI+VPEy1I6UtnilowVp3KFE3etOztpqzq2rFB9XN1Xjh88flnH+h06+Wii6WyiESns4qXgoGAYHSZua2blEa9h4ebi7OGgmGomqF4XklTmFpiY5hkRkOoQVV+rHRVRXJKu7BJkFZ1SFNRd2teq3JpWNVPHKaSQkdMz2aNrNZJqOhifEBC4E+Q8F2xTGpMeEDFSfcuctrS0bzm3W9RrkHhafWC8eucz92jUI+BtohZfGDrHkAUtpp1topEEA">Playoff Simulator</a></p>
+<p><a href="https://baseballwithr.wordpress.com/2020/06/29/simulating-a-60-game-season/">Simulator in R</a></p>
+<p><a href="https://www.sportingnews.com/us/mlb/news/mlb-expanded-playoffs-postseason-2022-teams/sayv4pysmmlopks7hg2o2lbv">2022 Updated Playoffs</a></p>
+<p><a href="https://sabr.org/journal/article/home-field-advantage/#:~:text=In%20every%20sport%20and%20at,percent%20of%20the%20games%20played.">Home Field Advantage</a></p>
+<p><a href="https://digitalcommons.bryant.edu/cgi/viewcontent.cgi?article=1021&amp;context=honors_finance#:~:text=Potential%20factors%20that%20affect%20winning,home%20runs%2C%20runs%20batted%20in">Contributing Factors in Increasing Winning Percentage</a></p>
+<p><a href="https://www.baseball-reference.com/leagues/majors/2022.shtml">2022 Stats</a></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

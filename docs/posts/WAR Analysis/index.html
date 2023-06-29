@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jonna Waage">
+<meta name="dcterms.date" content="2023-06-28">
 
-<title>Sports Data Analysis and Visualization</title>
+<title>Sports Data Analysis and Visualization - Analyzing The WAR Statistic for Pitchers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -60,56 +60,19 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-<style>
-
-      .quarto-title-block .quarto-title-banner {
-        background: #0C2C56;
-      }
-</style>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Sports Data Analysis and Visualization</span>
     </a>
   </div>
@@ -120,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
+    <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -138,129 +101,61 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title">Sports Data Analysis and Visualization</h1>
+    <div class="quarto-title column-body">
+      <h1 class="title">Analyzing The WAR Statistic for Pitchers</h1>
                       </div>
   </div>
     
   
   <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jonna Waage </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 28, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<section id="these-projects-use-real-mlb-data-to-do-a-deeper-analysis-of-how-different-statistics-influence-teams." class="level4">
-<h4 class="anchored" data-anchor-id="these-projects-use-real-mlb-data-to-do-a-deeper-analysis-of-how-different-statistics-influence-teams.">These projects use real MLB data to do a deeper analysis of how different statistics influence teams.</h4>
-<p><br></p>
-
+<section id="what-does-the-war-statistic-mean-and-what-can-be-inferred-from-higher-scores" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-the-war-statistic-mean-and-what-can-be-inferred-from-higher-scores">What does the WAR statistic mean and what can be inferred from higher scores?</h2>
+<p>Wins above replacement (WAR) is a statistic used to show how many more wins a player is worth than a replacement level player at the same position Like a free agent of a minor league player. The way to calculate it is different for position players and pitchers.</p>
+<p>According to the <a href="https://www.mlb.com/glossary/advanced-stats/wins-above-replacement">MLB glossary</a>, the formula for pitchers is, “Different WAR computations use either RA9 or FIP. Those numbers are adjusted for league and ballpark. Then, using league averages, it is determined how many wins a pitcher was worth based on those numbers and his innings pitched total.”</p>
+<p>RA9 is runs allowed per 9 innings pitched and “FIP is similar to ERA, but it focuses solely on the events a pitcher has the most control over – strikeouts, unintentional walks, hit-by-pitches and home runs. It entirely removes results on balls hit into the field of play,” also from the <a href="https://www.mlb.com/glossary/advanced-stats/wins-above-replacement">MLB glossary.</a></p>
+<p>To combat the possible difference of values from the different way of calculating WAR for pitchers, all statistics from last season will be taken from the same source.</p>
+<p><br> Looking at pitchers that recorded at least 20 IP, data is from <a href="https://www.fangraphs.com/leaders.aspx?pos=all&amp;stats=pit&amp;lg=all&amp;qual=20&amp;type=8&amp;season=2022&amp;month=0&amp;season1=2022&amp;ind=0&amp;team=11&amp;rost=0&amp;age=0&amp;filter=&amp;players=0&amp;startdate=2022-01-01&amp;enddate=2022-12-31">here</a>.</p>
+<section id="using-data-from-all-teams-here-is-a-graph-comparing-average-war-of-pitchers-that-had-over-20-innings-pitched-and-overall-win-percentage-in-the-2022-season." class="level3">
+<h3 class="anchored" data-anchor-id="using-data-from-all-teams-here-is-a-graph-comparing-average-war-of-pitchers-that-had-over-20-innings-pitched-and-overall-win-percentage-in-the-2022-season.">Using data from all teams, here is a graph comparing average WAR of pitchers that had over 20 innings pitched and overall win percentage in the 2022 season.</h3>
+</section>
+<section id="links-to-resources-used" class="level3">
+<h3 class="anchored" data-anchor-id="links-to-resources-used">Links to Resources Used</h3>
+<p><a href="https://www.mlb.com/glossary/advanced-stats/wins-above-replacement">MLB Glossary - Wins Above Replacement (WAR)</a></p>
 
 
 </section>
+</section>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1687935600000" data-listing-file-modified-sort="1688078967211" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
-<div class="thumbnail">
-<p><a href="./posts/WAR Analysis/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="./posts/WAR Analysis/index.html">
-<h3 class="no-anchor listing-title">
-Analyzing The WAR Statistic for Pitchers
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-Wins above replacement (WAR) is a statistic used to show how many more wins a player…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/WAR Analysis/index.html">
-<div class="listing-date">
-Jun 28, 2023
-</div>
-<div class="listing-author">
-Jonna Waage
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1685516400000" data-listing-file-modified-sort="1688021688638" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15">
-<div class="thumbnail">
-<p><a href="./posts/Win Projection/index.html"> <p class="card-img-top"><img src="posts/Win Projection/index_files/figure-html/unnamed-chunk-8-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Win Projection/index.html">
-<h3 class="no-anchor listing-title">
-Estimating Playoffs Based on the Previous Year’s Data
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-Simulates a 2023 season of all 162 games using the Bradley-Terry model.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Win Projection/index.html">
-<div class="listing-date">
-May 31, 2023
-</div>
-<div class="listing-author">
-Jonna Waage
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-date-sort="1593241200000" data-listing-file-modified-sort="1685649026952" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10">
-<div class="thumbnail">
-<p><a href="./posts/Barrie/index.html"> <p class="card-img-top"><img src="posts/Barrie/index_files/figure-html/unnamed-chunk-8-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Barrie/index.html">
-<h3 class="no-anchor listing-title">
-2020 Season Simulation
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-Simulates a 2020 season of 60 games using the Bradley-Terry model.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Barrie/index.html">
-<div class="listing-date">
-Jun 27, 2020
-</div>
-<div class="listing-author">
-Jim Albert
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

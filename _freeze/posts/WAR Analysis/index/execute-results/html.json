@@ -1,0 +1,14 @@
+{
+  "hash": "d9c94eb3be06d19e28b411bb777530e9",
+  "result": {
+    "markdown": "---\ntitle: \"Analyzing The WAR Statistic for Pitchers\"\nauthor: \"Jonna Waage\"\ndate: \"2023-06-28\"\n---\n\n\n## What does the WAR statistic mean and what can be inferred from higher scores?\n\nWins above replacement (WAR) is a statistic used to show how many more wins a player is worth than a replacement level player at the same position Like a free agent of a minor league player. The way to calculate it is different for position players and pitchers. \n  \nAccording to the [MLB glossary](https://www.mlb.com/glossary/advanced-stats/wins-above-replacement), the formula for pitchers is, \"Different WAR computations use either RA9 or FIP. Those numbers are adjusted for league and ballpark. Then, using league averages, it is determined how many wins a pitcher was worth based on those numbers and his innings pitched total.\"\n\nRA9 is runs allowed per 9 innings pitched and \"FIP is similar to ERA, but it focuses solely on the events a pitcher has the most control over -- strikeouts, unintentional walks, hit-by-pitches and home runs. It entirely removes results on balls hit into the field of play,\" also from the [MLB glossary.](https://www.mlb.com/glossary/advanced-stats/wins-above-replacement)\n\nTo combat the possible difference of values from the different way of calculating WAR for pitchers, all statistics from last season will be taken from the same source. \n\n\n\n\n\n<br>\nLooking at pitchers that recorded at least 20 IP, data is from [here](https://www.fangraphs.com/leaders.aspx?pos=all&stats=pit&lg=all&qual=20&type=8&season=2022&month=0&season1=2022&ind=0&team=11&rost=0&age=0&filter=&players=0&startdate=2022-01-01&enddate=2022-12-31). \n\n### Using data from all teams, here is a graph comparing average WAR of pitchers that had over 20 innings pitched and overall win percentage in the 2022 season. \n\n\n::: {.cell}\n\n:::\n\n\n\n### Links to Resources Used\n\n[MLB Glossary - Wins Above Replacement (WAR)](https://www.mlb.com/glossary/advanced-stats/wins-above-replacement)\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

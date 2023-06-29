@@ -10,6 +10,5 @@ page-layout: full
 title-block-banner: "#0C2C56"
 ---
 
-#### This project uses real MLB data to project how the 2023 season could finish. The first step was just using a 50/50 chance for each team to win for the rest of the season and then adding more determining factors as time went on. This program can also be altered to be used with many different types of data to create projections.
-
+#### These projects use real MLB data to do a deeper analysis of how different statistics influence teams.
 <br>
