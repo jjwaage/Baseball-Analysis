@@ -29,21 +29,20 @@ library(data.table)
 <br>
 Looking at pitchers that recorded at least 20 IP, data is from [here](https://www.fangraphs.com/leaders.aspx?pos=all&stats=pit&lg=all&qual=20&type=8&season=2022&month=0&season1=2022&ind=0&team=11&rost=0&age=0&filter=&players=0&startdate=2022-01-01&enddate=2022-12-31). 
 
-### Using data from all teams, here is a graph comparing average WAR of pitchers that had over 20 innings pitched and overall win percentage in the 2022 season. 
-
+### Comparing WAR of pitchers and team win percentage in the 2022 season. 
 ```{r, echo = FALSE} 
 
-  NL_East <- c("Atlanta Braves", "Miami Marlins", "New York Mets","Philadelphia Phillies","Washington Nationals")
+  NL_East <- c("ATL", "MIA", "NYM","PHI","WAS")
   
-  NL_Cent <- c("Chicago Cubs", "Cincinnati Reds","Milwaukee Brewers", "Pittsburgh Pirates", "St. Louis Cardinals")
+  NL_Cent <- c("CHC", "CIN","  MIL", "PIT", "STL")
   
-  NL_West <- c("Arizona Diamondbacks", "Colorado Rockies", "Los Angeles Dodgers","San Diego Padres", "San Francisco Giants")
+  NL_West <- c("ARI", "COL    ", "LAD","SD", "SF")
   
-  AL_East <- c("Baltimore Orioles", "Boston Red Sox","New York Yankees", "Tampa Bay Rays","Toronto Blue Jays")
+  AL_East <- c("BAL", "BOS","NYY", "TB  ","TOR")
   
-  AL_Cent <- c("Chicago White Sox", "Cleveland Guardians","Detroit Tigers", "Kansas City Royals","Minnesota Twins")
+  AL_Cent <- c("CWS", "CLE","DET", "KAN","MIN")
   
-  AL_West <- c("Oakland Athletics", "Houston Astros","Texas Rangers", "Los Angeles Angels","Seattle Mariners")
+  AL_West <- c("OAK", "HOU","TEX", "LAA","SEA")
 
   teams <- c(NL_East, NL_Cent, NL_West,
              AL_East, AL_Cent, AL_West)
@@ -68,7 +67,21 @@ Looking at pitchers that recorded at least 20 IP, data is from [here](https://ww
   
   war <- cbind(teams, scores, wins)
 
+  war <- war[order(scores),]
+  
+  scores <- as.numeric(war[,2])
+  wins <- as.numeric(war[,3])
+  teams <- (war[,1])
+  
+  plot(scores, wins, ylim = c(0.335, 0.68), xlim = c(.11, 1.67), cex = 0.7, pch = 16, xlab = "Avg War of Pitchers with at least 20 Innings Pitched", ylab = "Team Winning Percentage" )
+  text(scores, wins - 0.011, cex = 0.6, labels = teams)
+  
+  abline(lm(wins ~ scores))
+  
+
+
 ```
+The regression lines shows that there is a positive corrlelation between how many wins a team gets and how high their average WAR of their pitchers is. 
 
 
 ### Links to Resources Used
