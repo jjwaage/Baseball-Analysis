@@ -76,13 +76,27 @@ Looking at pitchers that recorded at least 20 IP, data is from [here](https://ww
   plot(scores, wins, ylim = c(0.335, 0.68), xlim = c(.11, 1.67), cex = 0.7, pch = 16, xlab = "Avg War of Pitchers with at least 20 Innings Pitched", ylab = "Team Winning Percentage" )
   text(scores, wins - 0.011, cex = 0.6, labels = teams)
   
-  abline(lm(wins ~ scores))
+  abline(lm(wins ~ scores), col = "red")
   
 
 
 ```
-The regression lines shows that there is a positive corrlelation between how many wins a team gets and how high their average WAR of their pitchers is. 
+The regression lines shows that there is a strong positive corrlelation between how many wins a team gets and how high their average WAR of their pitchers is. 
 
+Houston was the 2022 World Series Winner and they had the biggest average war. Looking at past years is that a common occurrence?
+
+```{r, echo = FALSE}
+
+years <- c(2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002)
+winners <- c("Houston Astros", "Atlanta Braves", "LA Dodgers", "Washington Nationals", "Boston Red Sox", "Houston Astros", "Chicago Cubs", "Kansas City Royals", "San Francisco Giants", "Boston Red Sox", "San Francisco Giants", "St. Louis Cardinals", "San Francisco Giants", "NY Yankees", "Philadelphia Phillies", "Boston Red Sox", "St. Louis Cardinals", "Chicago Whte Sox", "Boston Red Sox", "Florida Marlins", "Anaheim Angels" )
+war <- c()
+
+tablewinners <- cbind(years, winners, war)
+
+knitr::kable(tablewinners)
+
+
+```
 
 ### Links to Resources Used
 
