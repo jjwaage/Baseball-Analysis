@@ -11,4 +11,17 @@ title-block-banner: "#0C2C56"
 ---
 
 #### These projects use real MLB data to do a deeper analysis of how different statistics influence teams.
+
+::: callout-note
+About link takes us to a generic page. Need to fill out that page, or add the information to this page.
+
+Github link?
+
+You need a slightly longer summary about the blog. Why does it exist? You need to try to make people want to read further. The bolded sentence needs to be revised.
+
+You need to add visual interest. Images or data visualizations are your best bet.
+
+I think you should delete the "Barrie" post, as it is just the original BT model article I think.
+:::
+
 <br>

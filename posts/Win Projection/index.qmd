@@ -6,6 +6,10 @@ date: "2023-05-31"
 
 ## Can the next MLB season be estimated by the last year's run differential data?
 
+::: callout-note
+Need a punchier question here.
+:::
+
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(dplyr)
@@ -22,11 +26,21 @@ library(data.table)
 
 ### Introduction
 
+::: callout-note
+You should switch to a more complete writing style for the introduction, rather than this bulleted list. This section should motivate the post by describing WHY it exists. It is literally ok to say it exists because we thought it was a good starting point for learning some of these tools.
+
+One writing framework to consider is called "AND, BUT, THEREFORE." You have Fact1 AND Fact2, BUT there is a Constraint or Limitation or Problem. THEREFORE, this post exists.
+:::
+
 Simulates a 2023 season of all 162 games using the Bradley-Terry model.
 
 Uses last year's run differentials (average runs scored minus average runs allowed) to try to estimate this year's top performers.
 
 ### Data
+
+::: callout-note
+This section is good. You COULD add an explanatory sentence, but you don't need to. You might define the three things you create as data frames.
+:::
 
 `schedule1 <- read_excel("schedule.xlsx")` - reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
 
@@ -55,6 +69,10 @@ outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor)
 ```
 
 This equation uses [rbinom](https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/) which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins.
+
+::: callout-note
+This section is really good. Concise, clear, and a mostly complete set of information. I can't remember why you divide the talent Z scores by 10, so you should explain that.
+:::
 
 ```{r, echo = FALSE}
 one.simulation <- function() {
@@ -303,6 +321,10 @@ winpercent <- winpercent[order(winpercent$`Division`, winpercent$`Team`),]
 
 Here are the current standings and win percentages of each team in the MLB as of June 13th
 
+::: callout-note
+Looking good. We should update this for current data. In a lot of the preceding code and the following chunk you are taking a pretty blunt approach to setting up your data frames. We should change this so that your tables can be dynamically updated.
+:::
+
 ```{r, echo=FALSE}
 aldivisions <- c("AL East", "AL Cent", "AL West")
 
@@ -349,6 +371,10 @@ knitr::kable(al_)
 ### Comparison of Projected and Actual Statistics
 
 Here are the projected winning percentage and the actual winning percentage side by side
+
+::: callout-note
+I love the figures. You do need a concluding statement. How well is your model performing? Which teams did it not predict well? Any theories as to why? It would be great if we could add a visual encoding for teams that over or under performed.
+:::
 
 ```{r, echo = FALSE}
   
