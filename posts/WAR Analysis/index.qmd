@@ -10,13 +10,13 @@ date: "2023-06-28"
 This is a perfect amount of detail. I do want you to read over the grammar in this section.
 :::
 
-Wins above replacement (WAR) is a statistic used to show how many more wins a player is worth than a replacement level player at the same position, such as a free agent of a minor league player. The way to calculate it is different for position players and pitchers.
+Wins above replacement (WAR) is a statistic used to show how many wins a player is worth above replacement. That compares the player to a replacement level player at the same position, such as a free agent of a minor league player. The algorithm to calculate WAR is different for position players and pitchers.
 
-According to the [MLB glossary](https://www.mlb.com/glossary/advanced-stats/wins-above-replacement), the formula for pitchers is, "Different WAR computations use either RA9 or FIP. Those numbers are adjusted for league and ballpark. Then, using league averages, it is determined how many wins a pitcher was worth based on those numbers and his innings pitched total."
+According to the [MLB glossary](https://www.mlb.com/glossary/advanced-stats/wins-above-replacement), the formula for WAR for pitchers is, "Different WAR computations use either RA9 or FIP. Those numbers are adjusted for league and ballpark. Then, using league averages, it is determined how many wins a pitcher was worth based on those numbers and his innings pitched total."
 
 RA9 is runs allowed per 9 innings pitched and "FIP is similar to ERA, but it focuses solely on the events a pitcher has the most control over -- strikeouts, unintentional walks, hit-by-pitches and home runs. It entirely removes results on balls hit into the field of play," also from the [MLB glossary.](https://www.mlb.com/glossary/advanced-stats/wins-above-replacement)
 
-To combat the possible difference of values from the different way of calculating WAR for pitchers, all statistics from last season will be taken from the same source.
+To combat the possible difference of values from the different ways of calculating WAR for pitchers, all statistics will be taken from the same source.
 
 ```{r setup, include=FALSE}
 library(tidyverse)

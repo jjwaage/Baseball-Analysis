@@ -4,11 +4,11 @@ author: "Jonna Waage"
 date: "2023-05-31"
 ---
 
-## Can the next MLB season be estimated by the last year's run differential data?
+## Can the MLB Playoff contending teams be estimated with last year's data?
 
-::: callout-note
-Need a punchier question here.
-:::
+<!-- ::: callout-note -->
+<!-- Need a punchier question here. -->
+<!-- ::: -->
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -26,21 +26,20 @@ library(data.table)
 
 ### Introduction
 
-::: callout-note
-You should switch to a more complete writing style for the introduction, rather than this bulleted list. This section should motivate the post by describing WHY it exists. It is literally ok to say it exists because we thought it was a good starting point for learning some of these tools.
+<!-- ::: callout-note -->
+<!-- You should switch to a more complete writing style for the introduction, rather than this bulleted list. This section should motivate the post by describing WHY it exists. It is literally ok to say it exists because we thought it was a good starting point for learning some of these tools. -->
 
-One writing framework to consider is called "AND, BUT, THEREFORE." You have Fact1 AND Fact2, BUT there is a Constraint or Limitation or Problem. THEREFORE, this post exists.
-:::
+<!-- One writing framework to consider is called "AND, BUT, THEREFORE." You have Fact1 AND Fact2, BUT there is a Constraint or Limitation or Problem. THEREFORE, this post exists. -->
+<!-- ::: -->
+There are many different algorithms that try to simulate the next MLB season with extreme accuracy. The goal of this was to learn about this model and see how accurate a simulation can be with just a couple statistics taken into account.
 
-Simulates a 2023 season of all 162 games using the Bradley-Terry model.
-
-Uses last year's run differentials (average runs scored minus average runs allowed) to try to estimate this year's top performers.
+This program simulates a 2023 season of all 162 games using the Bradley-Terry model. It uses last year's run differentials (average runs scored minus average runs allowed) to try to estimate this year's top performers.
 
 ### Data
 
-::: callout-note
-This section is good. You COULD add an explanatory sentence, but you don't need to. You might define the three things you create as data frames.
-:::
+<!-- ::: callout-note -->
+<!-- This section is good. You COULD add an explanatory sentence, but you don't need to. You might define the three things you create as data frames. -->
+<!-- ::: -->
 
 `schedule1 <- read_excel("schedule.xlsx")` - reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
 
@@ -54,7 +53,7 @@ This section is good. You COULD add an explanatory sentence, but you don't need 
 
 The [Bradley-Terry model](https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model) is a probability model to predict outcomes of object i beating object j based on each objects ability or talent. In this instance, it is used to compare teams but it was originally to be used with players.
 
-Talent is calculated by z-scores of seasonal average run differential of each team and then divided by 10. It is then adjusted for home field advantage so 0.04, based on [this](https://sabr.org/journal/article/home-field-advantage/#:~:text=In%20every%20sport%20and%20at,percent%20of%20the%20games%20played.) article, is added to the probability of the home team winning.
+Talent is calculated by z-scores of seasonal average run differential of each team and then divided by 10. The talents were divided by 10 to decrease variation between teams even more. It is then adjusted for home field advantage so 0.04, based on [this](https://sabr.org/journal/article/home-field-advantage/#:~:text=In%20every%20sport%20and%20at,percent%20of%20the%20games%20played.) article, is added to the probability of the home team winning.
 
 The equation used in this project for probability is:
 
@@ -70,9 +69,9 @@ outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor)
 
 This equation uses [rbinom](https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/) which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins.
 
-::: callout-note
-This section is really good. Concise, clear, and a mostly complete set of information. I can't remember why you divide the talent Z scores by 10, so you should explain that.
-:::
+<!-- ::: callout-note -->
+<!-- This section is really good. Concise, clear, and a mostly complete set of information. I can't remember why you divide the talent Z scores by 10, so you should explain that. -->
+<!-- ::: -->
 
 ```{r, echo = FALSE}
 one.simulation <- function() {
@@ -319,26 +318,26 @@ winpercent <- winpercent[order(winpercent$`Division`, winpercent$`Team`),]
 
 ### 2023 Season Actual Statistics
 
-Here are the current standings and win percentages of each team in the MLB as of June 13th
+Here are the current standings and win percentages of each team in the MLB as of Sept 6th
 
-::: callout-note
-Looking good. We should update this for current data. In a lot of the preceding code and the following chunk you are taking a pretty blunt approach to setting up your data frames. We should change this so that your tables can be dynamically updated.
-:::
+<!-- ::: callout-note -->
+<!-- Looking good. We should update this for current data. In a lot of the preceding code and the following chunk you are taking a pretty blunt approach to setting up your data frames. We should change this so that your tables can be dynamically updated. -->
+<!-- ::: -->
 
 ```{r, echo=FALSE}
 aldivisions <- c("AL East", "AL Cent", "AL West")
 
-  AL_East <- c("Tampa Bay Rays", "Baltimore Orioles", "New York Yankees", "Toronto Blue Jays", "Boston Red Sox")
+  AL_East <- c("Baltimore Orioles","Tampa Bay Rays", "Toronto Blue Jays", "Boston Red Sox", "New York Yankees")
   
-  ALe_percent <- c("68.6%","63.6%", "57.4%","54.4%","48.5%") 
+  ALe_percent <- c("63.3%","60.3%", "55%","51.4%","50%") 
   
-  AL_Cent <- c("Minnesota Twins", "Cleveland Guardians", "Chicago White Sox", "Detroit Tigers", "Kansas City Royals")
+  AL_Cent <- c("Minnesota Twins", "Cleveland Guardians", "Detroit Tigers", "Chicago White Sox", "Kansas City Royals")
   
-  ALc_percent <- c("50.7%", "47.0%", "42.6%",  "42.2%", "26.9%")
+  ALc_percent <- c("52.1%", "47.9%", "45.7%",  "38.6%", "31.2%")
   
-  AL_West <- c("Texas Rangers", "Houston Astros","Los Angeles Angels","Seattle Mariners", "Oakland Athletics")
+  AL_West <- c("Houston Astros","Seattle Mariners", "Texas Rangers", "Los Angeles Angels","Oakland Athletics")
   
-  ALw_percent <- c("62.1%", "56.7%","55.1%","50%", "27.5%")
+  ALw_percent <- c("56.7%", "56.4%","54.7%","45.7%", "36.5%")
 
   al_ <- cbind(AL_East, ALe_percent, AL_Cent,  ALc_percent, AL_West,  ALw_percent)
 
@@ -347,17 +346,17 @@ aldivisions <- c("AL East", "AL Cent", "AL West")
   
 nldivisions <- c("NL East", "NL Cent", "NL West")
 
-  NL_East <- c("Atlanta Braves", "Miami Marlins", "Philadelphia Phillies", "New York Mets","Washington Nationals")
+  NL_East <- c("Atlanta Braves", "Philadelphia Phillies", "Miami Marlins", "New York Mets","Washington Nationals")
   
-  NLe_percent <- c("60.6%","54.4%","49.3%" ,"46.3%", "40%")
+  NLe_percent <- c("65.5%","55.4%","51.4%" ,"46%", "45%")
 
-  NL_Cent <- c("Pittsburgh Pirates", "Milwaukee Brewers", "Cincinnati Reds", "Chicago Cubs", "St. Louis Cardinals")
+  NL_Cent <- c("Milwaukee Brewers", "Chicago Cubs", "Cincinnati Reds", "Pittsburgh Pirates", "St. Louis Cardinals")
   
-  NLc_percent <- c("52.3%", "50.7%","48.5%","43.9%","39.7%")
+  NLc_percent <- c("55.4%", "53.9%","51.4%","46.4%","43.6%")
 
-  NL_West <- c("Arizona Diamondbacks", "Los Angeles Dodgers", "San Francisco Giants", "San Diego Padres", "Colorado Rockies")
+  NL_West <- c("Los Angeles Dodgers", "Arizona Diamondbacks", "San Francisco Giants", "San Diego Padres", "Colorado Rockies")
   
-  NLw_percent <- c("61.2%", "56.7%", "52.2%", "48.5%", "42%")
+  NLw_percent <- c("61.2%", "51.8%", "50%", "46.8%", "36.7%")
   
   nl_ <- cbind(NL_East, NLe_percent, NL_Cent, NLc_percent, NL_West, NLw_percent)
 
@@ -372,23 +371,22 @@ knitr::kable(al_)
 
 Here are the projected winning percentage and the actual winning percentage side by side
 
-::: callout-note
-I love the figures. You do need a concluding statement. How well is your model performing? Which teams did it not predict well? Any theories as to why? It would be great if we could add a visual encoding for teams that over or under performed.
-:::
+<!-- ::: callout-note -->
+<!-- I love the figures. You do need a concluding statement. How well is your model performing? Which teams did it not predict well? Any theories as to why? It would be great if we could add a visual encoding for teams that over or under performed. -->
+<!-- ::: -->
 
 ```{r, echo = FALSE}
+  NL_East <- c("Atlanta Braves", "Philadelphia Phillies", "Miami Marlins", "New York Mets","Washington Nationals")
   
-  NL_East <- c("Atlanta Braves", "Miami Marlins", "New York Mets", "Philadelphia Phillies", "Washington Nationals")
+  NLe_percent <- c("65.5%","55.4%","51.4%" ,"46%", "45%")
   
-  NLe_percent <- c("60.6%","54.4%","46.3%", "49.3%", "40%")
+  NL_Cent <- c("Milwaukee Brewers", "Chicago Cubs", "Cincinnati Reds", "Pittsburgh Pirates", "St. Louis Cardinals")
   
-  NL_Cent <- c( "Chicago Cubs", "Cincinnati Reds", "Milwaukee Brewers", "Pittsburgh Pirates", "St. Louis Cardinals")
-  
-  NLc_percent <- c("43.9%","48.5%","50.7%","52.3%","39.7%")
-  
-  NL_West <- c("Arizona Diamondbacks", "Colorado Rockies", "Los Angeles Dodgers", "San Diego Padres", "San Francisco Giants")
+  NLc_percent <- c("55.4%", "53.9%","51.4%","46.4%","43.6%")
 
-  NLw_percent <- c("61.2%", "42%", "56.7%","48.5%", "52.2%")
+  NL_West <- c("Los Angeles Dodgers", "Arizona Diamondbacks", "San Francisco Giants", "San Diego Padres", "Colorado Rockies")
+  
+  NLw_percent <- c("61.2%", "51.8%", "50%", "46.8%", "36.7%")
   
   nl_ <- cbind(NL_East, NLe_percent, winpercent[21:25, 3], NL_Cent, NLc_percent,winpercent[16:20, 3], NL_West, NLw_percent, winpercent[26:30, 3])
   
@@ -399,17 +397,17 @@ knitr::kable(nl_, align = "lcclcclcc")
 
 
   
-  AL_East <- c("Baltimore Orioles","Boston Red Sox", "New York Yankees", "Tampa Bay Rays", "Toronto Blue Jays")
+  AL_East <- c("Baltimore Orioles","Tampa Bay Rays", "Toronto Blue Jays", "Boston Red Sox", "New York Yankees")
   
-  ALe_percent <- c("63.6%","48.5%","57.4%","68.6%","54.4%")
+  ALe_percent <- c("63.3%","60.3%", "55%","51.4%","50%") 
   
-  AL_Cent <- c("Chicago White Sox", "Cleveland Guardians", "Detroit Tigers", "Kansas City Royals", "Minnesota Twins")
+  AL_Cent <- c("Minnesota Twins", "Cleveland Guardians", "Detroit Tigers", "Chicago White Sox", "Kansas City Royals")
   
-  ALc_percent <- c("42.6%", "47.0%", "42.2%", "26.9%", "50.7%")
+  ALc_percent <- c("52.1%", "47.9%", "45.7%",  "38.6%", "31.2%")
   
-  AL_West <- c("Houston Astros", "Los Angeles Angels", "Oakland Athletics", "Seattle Mariners", "Texas Rangers")
+  AL_West <- c("Houston Astros","Seattle Mariners", "Texas Rangers", "Los Angeles Angels","Oakland Athletics")
   
-  ALw_percent <- c("56.7%","55.1%","27.5%","50%","62.1%")
+  ALw_percent <- c("56.7%", "56.4%","54.7%","45.7%", "36.5%")
 
   al_ <- cbind(AL_East, ALe_percent, winpercent[6:10, 3], AL_Cent,  ALc_percent, winpercent[1:5, 3], AL_West,  ALw_percent, winpercent[11:15, 3])
   
@@ -426,7 +424,7 @@ ALe_percent <- as.numeric(sub("%", "", ALe_percent))
 
 graphal <- rbind(ALe_percent, alewin)
 graphal <- data.frame(graphal)
-names(graphal) <- c("TB", "BAL", "NYY", "TOR", "BOS")
+names(graphal) <- c("BAL", "TB", "TOR", "BOS", "NYY")
 
 x <- barplot(as.matrix(graphal), main="American League East", ylab="Percentage of Wins", ylim = c(0, 100), 
              beside=TRUE, col = c("#00006B", "#9fe2ff"))
@@ -449,7 +447,7 @@ ALc_percent <- as.numeric(sub("%", "", ALc_percent))
 
 graphalc <- rbind(ALc_percent, alcwin)
 graphalc <- data.frame(graphalc)
-names(graphalc) <- c("CWS", "CLE", "DET", "KAN", "MIN")
+names(graphalc) <- c("MIN", "CLE", "DET", "CWS", "KAN")
 
 x <- barplot(as.matrix(graphalc), main="American League Central", ylab="Percentage of Wins", ylim = c(0, 100), 
              beside=TRUE, col = c("#00006B", "#9fe2ff"))
@@ -472,7 +470,7 @@ ALw_percent <- as.numeric(sub("%", "", ALw_percent))
 
 graphalw <- rbind(ALw_percent, alwwin)
 graphalw <- data.frame(graphalw)
-names(graphalw) <- c("HOU", "LAA", "OAK", "SEA", "TEX")
+names(graphalw) <- c("HOU", "SEA", "TEX", "LAA", "OAK")
 
 x <- barplot(as.matrix(graphalw), main="American League West", ylab="Percentage of Wins", ylim = c(0, 100), 
              beside=TRUE, col = c("#00006B", "#9fe2ff"))
@@ -494,7 +492,7 @@ NLe_percent <- as.numeric(sub("%", "", NLe_percent))
 
 graphnle <- rbind(NLe_percent, nlewin)
 graphnle <- data.frame(graphnle)
-names(graphnle) <- c("ATL", "MIA", "NYM", "PHI", "WAS")
+names(graphnle) <- c("ATL", "PHI","MIA", "NYM", "WAS")
 
 x <- barplot(as.matrix(graphnle), main="National League East", ylab="Percentage of Wins", ylim = c(0, 100), 
              beside=TRUE, col = c("#940119", "#de0226"))
@@ -516,7 +514,7 @@ NLc_percent <- as.numeric(sub("%", "", NLc_percent))
 
 graphnlc <- rbind(NLc_percent, nlcwin)
 graphnlc <- data.frame(graphnlc)
-names(graphnlc) <- c("CHC", "CIN", "MIL", "PIT", "STL")
+names(graphnlc) <- c( "MIL", "CHC", "CIN", "PIT", "STL")
 
 x <- barplot(as.matrix(graphnlc), main="National League Central", ylab="Percentage of Wins", ylim = c(0, 100), 
              beside=TRUE, col = c("#940119", "#de0226"))
@@ -538,7 +536,7 @@ NLw_percent <- as.numeric(sub("%", "", NLw_percent))
 
 graphnlw <- rbind(NLw_percent, nlwwin)
 graphnlw <- data.frame(graphnlw)
-names(graphnlw) <- c("ARI", "COL", "LAD", "SD", "SF")
+names(graphnlw) <- c("LAD", "ARI","SF", "SD", "COL")
 
 x <- barplot(as.matrix(graphnlw), main="National League West", ylab="Percentage of Wins", ylim = c(0, 100), 
              beside=TRUE, col = c("#940119", "#de0226"))
@@ -551,6 +549,9 @@ text(x,y + 4,cex = 0.75, labels = as.character(y))
 legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0, bty="n", fill = c("#940119", "#de0226"))
 
 ```
+
+Based on the graphs above, the model did the best job of estimating win percentages of teams that had winning percentages of about 50%. It did not do a good job of estimating teams that have won or lost a lot more games than last year. This is understandable because these teams are either scoring a lot more or less runs than last season which is what the winning percentages were based on. 
+
 
 ### Links to resources used
 
