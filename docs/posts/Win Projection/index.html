@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -148,7 +182,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- You should switch to a more complete writing style for the introduction, rather than this bulleted list. This section should motivate the post by describing WHY it exists. It is literally ok to say it exists because we thought it was a good starting point for learning some of these tools. -->
 <!-- One writing framework to consider is called "AND, BUT, THEREFORE." You have Fact1 AND Fact2, BUT there is a Constraint or Limitation or Problem. THEREFORE, this post exists. -->
 <!-- ::: -->
-<p>There are many different algorithms that try to simulate the next MLB season with extreme accuracy. The goal of this was to learn about this model and see how accurate a simulation can be with just a couple statistics taken into account.</p>
+<p>There are many different algorithms that try to simulate the next MLB season with a lot of complex statistics. The goal of this was to learn about this model and see how accurate a simulation can be with just a couple simple statistics taken into account.</p>
 <p>This program simulates a 2023 season of all 162 games using the Bradley-Terry model. It uses last year’s run differentials (average runs scored minus average runs allowed) to try to estimate this year’s top performers.</p>
 </section>
 <section id="data" class="level3">
@@ -157,8 +191,8 @@ ul.task-list li input[type="checkbox"] {
 <!-- This section is good. You COULD add an explanatory sentence, but you don't need to. You might define the three things you create as data frames. -->
 <!-- ::: -->
 <p><code>schedule1 &lt;- read_excel("schedule.xlsx")</code> - reads in a two column excel sheet with headers ‘Home’ and ‘Away’ and teams from each game listed below</p>
-<p><code>battingstats &lt;- read_excel("2022battingstats.xlsx")</code> - reads in a excel sheet with 2022 MLB batting statistics for all teams</p>
-<p><code>fieldingstats &lt;- read_excel("fieldingstats2022.xlsx")</code> - reads in a excel sheet with 2022 MLB fielding statistics for all teams</p>
+<!-- `battingstats <- read_excel("2022battingstats.xlsx")` - reads in a excel sheet with 2022 MLB batting statistics for all teams -->
+<!-- `fieldingstats <- read_excel("fieldingstats2022.xlsx")` - reads in a excel sheet with 2022 MLB fielding statistics for all teams -->
 <p>2022 statistics are from <a href="https://www.baseball-reference.com/leagues/majors/2022.shtml">here</a>.</p>
 </section>
 <section id="calculations" class="level3">
@@ -206,59 +240,59 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">Atlanta Braves</td>
-<td style="text-align: right;">99</td>
-<td style="text-align: left;">62</td>
-<td style="text-align: center;">St.&nbsp;Louis Cardinals</td>
-<td style="text-align: right;">95</td>
-<td style="text-align: left;">66</td>
-<td style="text-align: center;">Los Angeles Dodgers</td>
-<td style="text-align: right;">90</td>
-<td style="text-align: left;">71</td>
-</tr>
-<tr class="even">
 <td style="text-align: center;">New York Mets</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: left;">70</td>
+<td style="text-align: center;">Milwaukee Brewers</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: left;">76</td>
+<td style="text-align: center;">Los Angeles Dodgers</td>
 <td style="text-align: right;">87</td>
 <td style="text-align: left;">74</td>
-<td style="text-align: center;">Chicago Cubs</td>
-<td style="text-align: right;">83</td>
-<td style="text-align: left;">78</td>
-<td style="text-align: center;">San Francisco Giants</td>
-<td style="text-align: right;">90</td>
-<td style="text-align: left;">71</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">Philadelphia Phillies</td>
-<td style="text-align: right;">80</td>
-<td style="text-align: left;">81</td>
-<td style="text-align: center;">Milwaukee Brewers</td>
-<td style="text-align: right;">81</td>
-<td style="text-align: left;">80</td>
-<td style="text-align: center;">Colorado Rockies</td>
-<td style="text-align: right;">81</td>
-<td style="text-align: left;">80</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">Washington Nationals</td>
-<td style="text-align: right;">77</td>
-<td style="text-align: left;">84</td>
+<td style="text-align: center;">Philadelphia Phillies</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: left;">74</td>
+<td style="text-align: center;">St.&nbsp;Louis Cardinals</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">80</td>
+<td style="text-align: center;">San Francisco Giants</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Atlanta Braves</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">75</td>
 <td style="text-align: center;">Cincinnati Reds</td>
-<td style="text-align: right;">72</td>
-<td style="text-align: left;">89</td>
-<td style="text-align: center;">San Diego Padres</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: left;">81</td>
+<td style="text-align: center;">Colorado Rockies</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: left;">77</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Miami Marlins</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">82</td>
+<td style="text-align: center;">Pittsburgh Pirates</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: left;">86</td>
+<td style="text-align: center;">Arizona Diamondbacks</td>
 <td style="text-align: right;">80</td>
 <td style="text-align: left;">81</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Miami Marlins</td>
-<td style="text-align: right;">76</td>
-<td style="text-align: left;">85</td>
-<td style="text-align: center;">Pittsburgh Pirates</td>
-<td style="text-align: right;">62</td>
-<td style="text-align: left;">99</td>
-<td style="text-align: center;">Arizona Diamondbacks</td>
+<td style="text-align: center;">Washington Nationals</td>
 <td style="text-align: right;">72</td>
 <td style="text-align: left;">89</td>
+<td style="text-align: center;">Chicago Cubs</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: left;">94</td>
+<td style="text-align: center;">San Diego Padres</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: left;">85</td>
 </tr>
 </tbody>
 </table>
@@ -291,59 +325,59 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">New York Yankees</td>
-<td style="text-align: right;">91</td>
-<td style="text-align: left;">71</td>
+<td style="text-align: center;">Toronto Blue Jays</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: left;">69</td>
 <td style="text-align: center;">Cleveland Guardians</td>
 <td style="text-align: right;">88</td>
 <td style="text-align: left;">74</td>
-<td style="text-align: center;">Texas Rangers</td>
-<td style="text-align: right;">90</td>
-<td style="text-align: left;">72</td>
+<td style="text-align: center;">Houston Astros</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: left;">64</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">Toronto Blue Jays</td>
-<td style="text-align: right;">85</td>
-<td style="text-align: left;">77</td>
-<td style="text-align: center;">Minnesota Twins</td>
+<td style="text-align: center;">New York Yankees</td>
 <td style="text-align: right;">88</td>
 <td style="text-align: left;">74</td>
-<td style="text-align: center;">Houston Astros</td>
+<td style="text-align: center;">Chicago White Sox</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: left;">78</td>
+<td style="text-align: center;">Oakland Athletics</td>
 <td style="text-align: right;">86</td>
 <td style="text-align: left;">76</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Boston Red Sox</td>
-<td style="text-align: right;">74</td>
-<td style="text-align: left;">88</td>
-<td style="text-align: center;">Chicago White Sox</td>
-<td style="text-align: right;">84</td>
-<td style="text-align: left;">78</td>
-<td style="text-align: center;">Los Angeles Angels</td>
-<td style="text-align: right;">82</td>
-<td style="text-align: left;">80</td>
+<td style="text-align: center;">Baltimore Orioles</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: left;">87</td>
+<td style="text-align: center;">Minnesota Twins</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: left;">86</td>
+<td style="text-align: center;">Texas Rangers</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: left;">82</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Tampa Bay Rays</td>
-<td style="text-align: right;">72</td>
-<td style="text-align: left;">90</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: left;">88</td>
 <td style="text-align: center;">Detroit Tigers</td>
-<td style="text-align: right;">81</td>
-<td style="text-align: left;">81</td>
-<td style="text-align: center;">Oakland Athletics</td>
 <td style="text-align: right;">76</td>
 <td style="text-align: left;">86</td>
+<td style="text-align: center;">Seattle Mariners</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: left;">84</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Baltimore Orioles</td>
-<td style="text-align: right;">69</td>
-<td style="text-align: left;">93</td>
-<td style="text-align: center;">Kansas City Royals</td>
-<td style="text-align: right;">67</td>
-<td style="text-align: left;">95</td>
-<td style="text-align: center;">Seattle Mariners</td>
+<td style="text-align: center;">Boston Red Sox</td>
 <td style="text-align: right;">72</td>
 <td style="text-align: left;">90</td>
+<td style="text-align: center;">Kansas City Royals</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: left;">87</td>
+<td style="text-align: center;">Los Angeles Angels</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: left;">91</td>
 </tr>
 </tbody>
 </table>
@@ -379,43 +413,43 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Atlanta Braves</td>
-<td style="text-align: center;">71.7%</td>
+<td style="text-align: center;">68.0%</td>
 <td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
-<td style="text-align: center;">68.7%</td>
+<td style="text-align: center;">66.4%</td>
 <td style="text-align: left;">Los Angeles Dodgers</td>
-<td style="text-align: center;">89.6%</td>
+<td style="text-align: center;">88.4%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">New York Mets</td>
-<td style="text-align: center;">66.3%</td>
+<td style="text-align: center;">67.7%</td>
 <td style="text-align: left;">Milwaukee Brewers</td>
-<td style="text-align: center;">46.4%</td>
+<td style="text-align: center;">48.0%</td>
 <td style="text-align: left;">San Francisco Giants</td>
-<td style="text-align: center;">48.4%</td>
+<td style="text-align: center;">47.2%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Philadelphia Phillies</td>
-<td style="text-align: center;">47.1%</td>
+<td style="text-align: center;">47.4%</td>
 <td style="text-align: left;">Chicago Cubs</td>
-<td style="text-align: center;">28.3%</td>
+<td style="text-align: center;">27.5%</td>
 <td style="text-align: left;">San Diego Padres</td>
-<td style="text-align: center;">42.7%</td>
+<td style="text-align: center;">45.7%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Miami Marlins</td>
-<td style="text-align: center;">21.4%</td>
+<td style="text-align: center;">23.0%</td>
 <td style="text-align: left;">Cincinnati Reds</td>
-<td style="text-align: center;">16.4%</td>
+<td style="text-align: center;">13.3%</td>
 <td style="text-align: left;">Arizona Diamondbacks</td>
-<td style="text-align: center;">28.3%</td>
+<td style="text-align: center;">28.1%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Washington Nationals</td>
-<td style="text-align: center;">5.5%</td>
+<td style="text-align: center;">7.8%</td>
 <td style="text-align: left;">Pittsburgh Pirates</td>
-<td style="text-align: center;">8.0%</td>
+<td style="text-align: center;">9.0%</td>
 <td style="text-align: left;">Colorado Rockies</td>
-<td style="text-align: center;">11.2%</td>
+<td style="text-align: center;">12.5%</td>
 </tr>
 </tbody>
 </table>
@@ -443,43 +477,43 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">New York Yankees</td>
-<td style="text-align: center;">77.1%</td>
+<td style="text-align: center;">78.8%</td>
 <td style="text-align: left;">Cleveland Guardians</td>
-<td style="text-align: center;">53.2%</td>
+<td style="text-align: center;">53.6%</td>
 <td style="text-align: left;">Houston Astros</td>
-<td style="text-align: center;">76.9%</td>
+<td style="text-align: center;">75.9%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Toronto Blue Jays</td>
-<td style="text-align: center;">50.4%</td>
+<td style="text-align: center;">51.1%</td>
 <td style="text-align: left;">Minnesota Twins</td>
-<td style="text-align: center;">45.3%</td>
+<td style="text-align: center;">44.0%</td>
 <td style="text-align: left;">Seattle Mariners</td>
-<td style="text-align: center;">43.3%</td>
+<td style="text-align: center;">37.1%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Tampa Bay Rays</td>
-<td style="text-align: center;">47.8%</td>
+<td style="text-align: center;">47.3%</td>
 <td style="text-align: left;">Chicago White Sox</td>
-<td style="text-align: center;">36.7%</td>
-<td style="text-align: left;">Los Angeles Angels</td>
-<td style="text-align: center;">30.8%</td>
+<td style="text-align: center;">39.1%</td>
+<td style="text-align: left;">Texas Rangers</td>
+<td style="text-align: center;">33.1%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Baltimore Orioles</td>
-<td style="text-align: center;">35.3%</td>
+<td style="text-align: center;">34.6%</td>
 <td style="text-align: left;">Detroit Tigers</td>
-<td style="text-align: center;">17.9%</td>
-<td style="text-align: left;">Texas Rangers</td>
-<td style="text-align: center;">30.4%</td>
+<td style="text-align: center;">19.3%</td>
+<td style="text-align: left;">Los Angeles Angels</td>
+<td style="text-align: center;">31.1%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Boston Red Sox</td>
-<td style="text-align: center;">28.6%</td>
+<td style="text-align: center;">26.5%</td>
 <td style="text-align: left;">Kansas City Royals</td>
-<td style="text-align: center;">15.5%</td>
+<td style="text-align: center;">15.6%</td>
 <td style="text-align: left;">Oakland Athletics</td>
-<td style="text-align: center;">10.8%</td>
+<td style="text-align: center;">12.9%</td>
 </tr>
 </tbody>
 </table>
@@ -513,15 +547,15 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Atlanta Braves</td>
-<td style="text-align: center;">53.5%</td>
+<td style="text-align: center;">53.2%</td>
 <td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
-<td style="text-align: center;">52.8%</td>
+<td style="text-align: center;">52.6%</td>
 <td style="text-align: left;">Los Angeles Dodgers</td>
-<td style="text-align: center;">56.0%</td>
+<td style="text-align: center;">56.1%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">New York Mets</td>
-<td style="text-align: center;">53.0%</td>
+<td style="text-align: center;">52.9%</td>
 <td style="text-align: left;">Milwaukee Brewers</td>
 <td style="text-align: center;">50.8%</td>
 <td style="text-align: left;">San Francisco Giants</td>
@@ -533,15 +567,15 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Chicago Cubs</td>
 <td style="text-align: center;">48.9%</td>
 <td style="text-align: left;">San Diego Padres</td>
-<td style="text-align: center;">50.8%</td>
+<td style="text-align: center;">50.7%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Miami Marlins</td>
-<td style="text-align: center;">48.3%</td>
+<td style="text-align: center;">48.5%</td>
 <td style="text-align: left;">Cincinnati Reds</td>
-<td style="text-align: center;">47.2%</td>
+<td style="text-align: center;">47.0%</td>
 <td style="text-align: left;">Arizona Diamondbacks</td>
-<td style="text-align: center;">49.1%</td>
+<td style="text-align: center;">49.2%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Washington Nationals</td>
@@ -549,7 +583,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Pittsburgh Pirates</td>
 <td style="text-align: center;">45.9%</td>
 <td style="text-align: left;">Colorado Rockies</td>
-<td style="text-align: center;">46.5%</td>
+<td style="text-align: center;">46.8%</td>
 </tr>
 </tbody>
 </table>
@@ -579,41 +613,41 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">New York Yankees</td>
 <td style="text-align: center;">54.2%</td>
 <td style="text-align: left;">Cleveland Guardians</td>
-<td style="text-align: center;">51.3%</td>
+<td style="text-align: center;">51.4%</td>
 <td style="text-align: left;">Houston Astros</td>
-<td style="text-align: center;">53.9%</td>
+<td style="text-align: center;">53.8%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Toronto Blue Jays</td>
-<td style="text-align: center;">51.3%</td>
+<td style="text-align: center;">51.4%</td>
 <td style="text-align: left;">Minnesota Twins</td>
-<td style="text-align: center;">50.3%</td>
+<td style="text-align: center;">50.4%</td>
 <td style="text-align: left;">Seattle Mariners</td>
-<td style="text-align: center;">50.6%</td>
+<td style="text-align: center;">49.9%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Tampa Bay Rays</td>
-<td style="text-align: center;">50.9%</td>
+<td style="text-align: center;">50.8%</td>
 <td style="text-align: left;">Chicago White Sox</td>
-<td style="text-align: center;">49.6%</td>
-<td style="text-align: left;">Los Angeles Angels</td>
-<td style="text-align: center;">49.2%</td>
+<td style="text-align: center;">49.9%</td>
+<td style="text-align: left;">Texas Rangers</td>
+<td style="text-align: center;">49.4%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Baltimore Orioles</td>
 <td style="text-align: center;">49.6%</td>
 <td style="text-align: left;">Detroit Tigers</td>
 <td style="text-align: center;">47.4%</td>
-<td style="text-align: left;">Texas Rangers</td>
-<td style="text-align: center;">49.2%</td>
+<td style="text-align: left;">Los Angeles Angels</td>
+<td style="text-align: center;">49.3%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Boston Red Sox</td>
-<td style="text-align: center;">48.8%</td>
+<td style="text-align: center;">48.7%</td>
 <td style="text-align: left;">Kansas City Royals</td>
-<td style="text-align: center;">46.9%</td>
+<td style="text-align: center;">47.2%</td>
 <td style="text-align: left;">Oakland Athletics</td>
-<td style="text-align: center;">46.3%</td>
+<td style="text-align: center;">46.4%</td>
 </tr>
 </tbody>
 </table>
@@ -796,35 +830,35 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td style="text-align: left;">Atlanta Braves</td>
 <td style="text-align: center;">65.5%</td>
-<td style="text-align: center;">53.5%</td>
+<td style="text-align: center;">53.2%</td>
 <td style="text-align: left;">Milwaukee Brewers</td>
 <td style="text-align: center;">55.4%</td>
 <td style="text-align: center;">48.9%</td>
 <td style="text-align: left;">Los Angeles Dodgers</td>
 <td style="text-align: center;">61.2%</td>
-<td style="text-align: center;">49.1%</td>
+<td style="text-align: center;">49.2%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Philadelphia Phillies</td>
 <td style="text-align: center;">55.4%</td>
-<td style="text-align: center;">48.3%</td>
+<td style="text-align: center;">48.5%</td>
 <td style="text-align: left;">Chicago Cubs</td>
 <td style="text-align: center;">53.9%</td>
-<td style="text-align: center;">47.2%</td>
+<td style="text-align: center;">47.0%</td>
 <td style="text-align: left;">Arizona Diamondbacks</td>
 <td style="text-align: center;">51.8%</td>
-<td style="text-align: center;">46.5%</td>
+<td style="text-align: center;">46.8%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Miami Marlins</td>
 <td style="text-align: center;">51.4%</td>
-<td style="text-align: center;">53.0%</td>
+<td style="text-align: center;">52.9%</td>
 <td style="text-align: left;">Cincinnati Reds</td>
 <td style="text-align: center;">51.4%</td>
 <td style="text-align: center;">50.8%</td>
 <td style="text-align: left;">San Francisco Giants</td>
 <td style="text-align: center;">50%</td>
-<td style="text-align: center;">56.0%</td>
+<td style="text-align: center;">56.1%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">New York Mets</td>
@@ -835,7 +869,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: center;">45.9%</td>
 <td style="text-align: left;">San Diego Padres</td>
 <td style="text-align: center;">46.8%</td>
-<td style="text-align: center;">50.8%</td>
+<td style="text-align: center;">50.7%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Washington Nationals</td>
@@ -843,7 +877,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: center;">45.4%</td>
 <td style="text-align: left;">St.&nbsp;Louis Cardinals</td>
 <td style="text-align: center;">43.6%</td>
-<td style="text-align: center;">52.8%</td>
+<td style="text-align: center;">52.6%</td>
 <td style="text-align: left;">Colorado Rockies</td>
 <td style="text-align: center;">36.7%</td>
 <td style="text-align: center;">51.1%</td>
@@ -884,21 +918,21 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: center;">49.6%</td>
 <td style="text-align: left;">Minnesota Twins</td>
 <td style="text-align: center;">52.1%</td>
-<td style="text-align: center;">49.6%</td>
+<td style="text-align: center;">49.9%</td>
 <td style="text-align: left;">Houston Astros</td>
 <td style="text-align: center;">56.7%</td>
-<td style="text-align: center;">53.9%</td>
+<td style="text-align: center;">53.8%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Tampa Bay Rays</td>
 <td style="text-align: center;">60.3%</td>
-<td style="text-align: center;">48.8%</td>
+<td style="text-align: center;">48.7%</td>
 <td style="text-align: left;">Cleveland Guardians</td>
 <td style="text-align: center;">47.9%</td>
-<td style="text-align: center;">51.3%</td>
+<td style="text-align: center;">51.4%</td>
 <td style="text-align: left;">Seattle Mariners</td>
 <td style="text-align: center;">56.4%</td>
-<td style="text-align: center;">49.2%</td>
+<td style="text-align: center;">49.3%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Toronto Blue Jays</td>
@@ -909,29 +943,29 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: center;">47.4%</td>
 <td style="text-align: left;">Texas Rangers</td>
 <td style="text-align: center;">54.7%</td>
-<td style="text-align: center;">46.3%</td>
+<td style="text-align: center;">46.4%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Boston Red Sox</td>
 <td style="text-align: center;">51.4%</td>
-<td style="text-align: center;">50.9%</td>
+<td style="text-align: center;">50.8%</td>
 <td style="text-align: left;">Chicago White Sox</td>
 <td style="text-align: center;">38.6%</td>
-<td style="text-align: center;">46.9%</td>
+<td style="text-align: center;">47.2%</td>
 <td style="text-align: left;">Los Angeles Angels</td>
 <td style="text-align: center;">45.7%</td>
-<td style="text-align: center;">50.6%</td>
+<td style="text-align: center;">49.9%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">New York Yankees</td>
 <td style="text-align: center;">50%</td>
-<td style="text-align: center;">51.3%</td>
+<td style="text-align: center;">51.4%</td>
 <td style="text-align: left;">Kansas City Royals</td>
 <td style="text-align: center;">31.2%</td>
-<td style="text-align: center;">50.3%</td>
+<td style="text-align: center;">50.4%</td>
 <td style="text-align: left;">Oakland Athletics</td>
 <td style="text-align: center;">36.5%</td>
-<td style="text-align: center;">49.2%</td>
+<td style="text-align: center;">49.4%</td>
 </tr>
 </tbody>
 </table>
@@ -967,7 +1001,22 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Based on the graphs above, the model did the best job of estimating win percentages of teams that had winning percentages of about 50%. It did not do a good job of estimating teams that have won or lost a lot more games than last year. This is understandable because these teams are either scoring a lot more or less runs than last season which is what the winning percentages were based on.</p>
+</section>
+<section id="comparison-of-projected-and-actual-statistics---playoffs" class="level3">
+<h3 class="anchored" data-anchor-id="comparison-of-projected-and-actual-statistics---playoffs">Comparison of Projected and Actual Statistics - Playoffs</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The slope from this regression line is r = 0.82592 and</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">expression</span>(<span class="st">"R"</span><span class="sc">^</span><span class="st">"2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>expression("R"^"2")</code></pre>
+</div>
+</div>
+<p>= 0.6821. This shows there is a strong positive correlation between my projection and the teams that are most likely to make the playoffs. This shows that it can be estimated fairly well whether or not teams make the playoffs based off of just win differential of the previous year and home field advantage.</p>
 </section>
 <section id="links-to-resources-used" class="level3">
 <h3 class="anchored" data-anchor-id="links-to-resources-used">Links to resources used</h3>
@@ -978,6 +1027,7 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="https://sabr.org/journal/article/home-field-advantage/#:~:text=In%20every%20sport%20and%20at,percent%20of%20the%20games%20played.">Home Field Advantage</a></p>
 <p><a href="https://digitalcommons.bryant.edu/cgi/viewcontent.cgi?article=1021&amp;context=honors_finance#:~:text=Potential%20factors%20that%20affect%20winning,home%20runs%2C%20runs%20batted%20in">Contributing Factors in Increasing Winning Percentage</a></p>
 <p><a href="https://www.baseball-reference.com/leagues/majors/2022.shtml">2022 Stats</a></p>
+<p><a href="https://www.fangraphs.com/standings/playoff-odds/fg/div">2023 Playoff Chances</a></p>
 
 
 </section>

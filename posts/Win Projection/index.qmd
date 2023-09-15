@@ -31,7 +31,7 @@ library(data.table)
 
 <!-- One writing framework to consider is called "AND, BUT, THEREFORE." You have Fact1 AND Fact2, BUT there is a Constraint or Limitation or Problem. THEREFORE, this post exists. -->
 <!-- ::: -->
-There are many different algorithms that try to simulate the next MLB season with extreme accuracy. The goal of this was to learn about this model and see how accurate a simulation can be with just a couple statistics taken into account.
+There are many different algorithms that try to simulate the next MLB season with a lot of complex statistics. The goal of this was to learn about this model and see how accurate a simulation can be with just a couple simple statistics taken into account.
 
 This program simulates a 2023 season of all 162 games using the Bradley-Terry model. It uses last year's run differentials (average runs scored minus average runs allowed) to try to estimate this year's top performers.
 
@@ -43,9 +43,9 @@ This program simulates a 2023 season of all 162 games using the Bradley-Terry mo
 
 `schedule1 <- read_excel("schedule.xlsx")` - reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
 
-`battingstats <- read_excel("2022battingstats.xlsx")` - reads in a excel sheet with 2022 MLB batting statistics for all teams
+<!-- `battingstats <- read_excel("2022battingstats.xlsx")` - reads in a excel sheet with 2022 MLB batting statistics for all teams -->
 
-`fieldingstats <- read_excel("fieldingstats2022.xlsx")` - reads in a excel sheet with 2022 MLB fielding statistics for all teams
+<!-- `fieldingstats <- read_excel("fieldingstats2022.xlsx")` - reads in a excel sheet with 2022 MLB fielding statistics for all teams -->
 
 2022 statistics are from [here](https://www.baseball-reference.com/leagues/majors/2022.shtml).
 
@@ -254,6 +254,8 @@ colnames(playoffsummary) <- c("Division", "Team", "Percent Playoffs Made")
 
 playoffsummary <- playoffsummary[order(playoffsummary$`Division`, playoffsummary$`Percent Playoffs Made`, decreasing = TRUE), ]
 
+playoffpercent <- playoffsummary
+
 playoffsummary$`Percent Playoffs Made` <- percent(playoffsummary$`Percent Playoffs Made`, accuracy=0.1)
 
 al <- cbind(playoffsummary[21:25, 2],playoffsummary[21:25, 3],
@@ -290,6 +292,7 @@ winpercent <- all_out %>%
   summarize(winpercent = sum(Wins) / 162000)
 
 colnames(winpercent) <- c("Division", "Team", "Percent Wins")
+
 
 winpercent <- winpercent[order(winpercent$`Division`, winpercent$`Percent Wins`, decreasing = TRUE), ]
 
@@ -550,8 +553,27 @@ legend("topleft", c("Actual Win Percentage","Projected Win Percentage"), cex=1.0
 
 ```
 
-Based on the graphs above, the model did the best job of estimating win percentages of teams that had winning percentages of about 50%. It did not do a good job of estimating teams that have won or lost a lot more games than last year. This is understandable because these teams are either scoring a lot more or less runs than last season which is what the winning percentages were based on. 
+### Comparison of Projected and Actual Statistics - Playoffs
+```{r, echo = FALSE}
 
+realplayoffperc <- c(1, .403, 0.1, .342, 0.0, 1, 0.0, .957, .238, 0.0, 0.0, .996, .769, .294, 0.0, .968, .775, .789, 0.0, 0.0, .03, .461, 1, 1, 0.04, 0.02, .998, 0.0, 0.0, 0.0)
+
+playoffs <- cbind(playoffpercent, realplayoffperc)
+data <- playoffs[0:30,3:4]
+
+playoffperc <- as.numeric(unlist(data[, 1]))
+
+
+plot(data, cex = 0.5, pch = 16, xlab = "Projected Chance of Making Playoffs", ylab = "Chances of Making 2023 Playoffs", col = "blue")
+abline(lm(realplayoffperc ~ playoffperc), col = "red")
+
+```
+
+The slope from this regression line is r = 0.82592 and 
+```{r}
+expression("R"^"2")
+```
+= 0.6821. This shows there is a strong positive correlation between my projection and the teams that are most likely to make the playoffs. This shows that it can be estimated fairly well whether or not teams make the playoffs based off of just win differential of the previous year and home field advantage. 
 
 ### Links to resources used
 
@@ -568,3 +590,5 @@ Based on the graphs above, the model did the best job of estimating win percenta
 [Contributing Factors in Increasing Winning Percentage](https://digitalcommons.bryant.edu/cgi/viewcontent.cgi?article=1021&context=honors_finance#:~:text=Potential%20factors%20that%20affect%20winning,home%20runs%2C%20runs%20batted%20in)
 
 [2022 Stats](https://www.baseball-reference.com/leagues/majors/2022.shtml)
+
+[2023 Playoff Chances](https://www.fangraphs.com/standings/playoff-odds/fg/div)
