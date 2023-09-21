@@ -569,11 +569,7 @@ abline(lm(realplayoffperc ~ playoffperc), col = "red")
 
 ```
 
-The slope from this regression line is r = 0.82592 and 
-```{r}
-expression("R"^"2")
-```
-= 0.6821. This shows there is a strong positive correlation between my projection and the teams that are most likely to make the playoffs. This shows that it can be estimated fairly well whether or not teams make the playoffs based off of just win differential of the previous year and home field advantage. 
+The slope from this regression line is r = 0.82592 and r^2 = 0.6821. This shows there is a strong positive correlation between my projection and the teams that are most likely to make the playoffs. This shows that it can be estimated fairly well whether or not teams make the playoffs based off of just win differential of the previous year and home field advantage. 
 
 ### Links to resources used
 

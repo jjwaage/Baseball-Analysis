@@ -8,9 +8,8 @@ website:
     background: "#0C2C56"
     foreground: light
     right:
-      - about.qmd
       - icon: github
-        href: https://github.com/
+        href: https://github.com/jjwaage/Baseball-Analysis 
 format:
   html:
     theme: cosmo

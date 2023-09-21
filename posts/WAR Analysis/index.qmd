@@ -6,11 +6,7 @@ date: "2023-06-28"
 
 ## What does the WAR statistic mean and what can be inferred from higher scores?
 
-::: callout-note
-This is a perfect amount of detail. I do want you to read over the grammar in this section.
-:::
-
-Wins above replacement (WAR) is a statistic used to show how many wins a player is worth above replacement. That compares the player to a replacement level player at the same position, such as a free agent of a minor league player. The algorithm to calculate WAR is different for position players and pitchers.
+Wins above replacement (WAR) is a statistic used to show how many wins a player is worth instead of their hypothetical replacement. This compares the player to a replacement level player at the same position, such as a free agent or a minor league player. The algorithm to calculate WAR is different for position players and pitchers.
 
 According to the [MLB glossary](https://www.mlb.com/glossary/advanced-stats/wins-above-replacement), the formula for WAR for pitchers is, "Different WAR computations use either RA9 or FIP. Those numbers are adjusted for league and ballpark. Then, using league averages, it is determined how many wins a pitcher was worth based on those numbers and his innings pitched total."
 
@@ -90,19 +86,19 @@ The regression lines shows that there is a strong positive correlation between h
 
 Houston was the 2022 World Series Winner and they had the biggest average war. Looking at past years is that a common occurrence?
 
-::: callout-note
-Yikes. You are hand encoding the data for this. We definitely don't want to do that.
+<!-- ::: callout-note -->
+<!-- Yikes. You are hand encoding the data for this. We definitely don't want to do that. -->
 
-This is a perfect place for the ABT framework. WAR for pitchers seems to explain team success, AND last year's World Series Champ had the best WAR for pitchers. BUT, this is just one season. THEREFORE I wanted to see if this pattern generalizes over the past 20 seasons.
+<!-- This is a perfect place for the ABT framework. WAR for pitchers seems to explain team success, AND last year's World Series Champ had the best WAR for pitchers. BUT, this is just one season. THEREFORE I wanted to see if this pattern generalizes over the past 20 seasons. -->
 
-Love the graph.
-:::
+<!-- Love the graph. -->
+<!-- ::: -->
 
 ### Comparing WAR of pitchers and team win percentage in the 2022 season to World Series Winners of the last 20 years.
 
-::: callout-note
-There is a lot of interesting analysis left to do here. Comparing only the WSW to the 2022 season doesn't make sense. I'd prefer, for example, to see a similar figure as Figure 1, but faceted by year to show the last 4 or 5 seasons. We should work on this next.
-:::
+<!-- ::: callout-note -->
+<!-- There is a lot of interesting analysis left to do here. Comparing only the WSW to the 2022 season doesn't make sense. I'd prefer, for example, to see a similar figure as Figure 1, but faceted by year to show the last 4 or 5 seasons. We should work on this next. -->
+<!-- ::: -->
 
 ```{r, echo = FALSE}
 

@@ -82,12 +82,8 @@ ul.task-list li input[type="checkbox"] {
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="../../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
-  </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/jjwaage/Baseball-Analysis" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -139,10 +135,10 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="what-does-the-war-statistic-mean-and-what-can-be-inferred-from-higher-scores" class="level2">
 <h2 class="anchored" data-anchor-id="what-does-the-war-statistic-mean-and-what-can-be-inferred-from-higher-scores">What does the WAR statistic mean and what can be inferred from higher scores?</h2>
-<p>Wins above replacement (WAR) is a statistic used to show how many more wins a player is worth than a replacement level player at the same position Like a free agent of a minor league player. The way to calculate it is different for position players and pitchers.</p>
-<p>According to the <a href="https://www.mlb.com/glossary/advanced-stats/wins-above-replacement">MLB glossary</a>, the formula for pitchers is, “Different WAR computations use either RA9 or FIP. Those numbers are adjusted for league and ballpark. Then, using league averages, it is determined how many wins a pitcher was worth based on those numbers and his innings pitched total.”</p>
+<p>Wins above replacement (WAR) is a statistic used to show how many wins a player is worth instead of their hypothetical replacement. This compares the player to a replacement level player at the same position, such as a free agent or a minor league player. The algorithm to calculate WAR is different for position players and pitchers.</p>
+<p>According to the <a href="https://www.mlb.com/glossary/advanced-stats/wins-above-replacement">MLB glossary</a>, the formula for WAR for pitchers is, “Different WAR computations use either RA9 or FIP. Those numbers are adjusted for league and ballpark. Then, using league averages, it is determined how many wins a pitcher was worth based on those numbers and his innings pitched total.”</p>
 <p>RA9 is runs allowed per 9 innings pitched and “FIP is similar to ERA, but it focuses solely on the events a pitcher has the most control over – strikeouts, unintentional walks, hit-by-pitches and home runs. It entirely removes results on balls hit into the field of play,” also from the <a href="https://www.mlb.com/glossary/advanced-stats/wins-above-replacement">MLB glossary.</a></p>
-<p>To combat the possible difference of values from the different way of calculating WAR for pitchers, all statistics from last season will be taken from the same source.</p>
+<p>To combat the possible difference of values from the different ways of calculating WAR for pitchers, all statistics will be taken from the same source.</p>
 <p><br> Looking at pitchers that recorded at least 20 IP, data is from <a href="https://www.fangraphs.com/leaders.aspx?pos=all&amp;stats=pit&amp;lg=all&amp;qual=20&amp;type=8&amp;season=2022&amp;month=0&amp;season1=2022&amp;ind=0&amp;team=11&amp;rost=0&amp;age=0&amp;filter=&amp;players=0&amp;startdate=2022-01-01&amp;enddate=2022-12-31">here</a>.</p>
 <section id="comparing-war-of-pitchers-and-team-win-percentage-in-the-2022-season." class="level3">
 <h3 class="anchored" data-anchor-id="comparing-war-of-pitchers-and-team-win-percentage-in-the-2022-season.">Comparing WAR of pitchers and team win percentage in the 2022 season.</h3>
@@ -151,11 +147,19 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The regression lines shows that there is a strong positive corrlelation between how many wins a team gets and how high their average WAR of their pitchers is.</p>
+<p>The regression lines shows that there is a strong positive correlation between how many wins a team gets and how high their average WAR of their pitchers is.</p>
 <p>Houston was the 2022 World Series Winner and they had the biggest average war. Looking at past years is that a common occurrence?</p>
+<!-- ::: callout-note -->
+<!-- Yikes. You are hand encoding the data for this. We definitely don't want to do that. -->
+<!-- This is a perfect place for the ABT framework. WAR for pitchers seems to explain team success, AND last year's World Series Champ had the best WAR for pitchers. BUT, this is just one season. THEREFORE I wanted to see if this pattern generalizes over the past 20 seasons. -->
+<!-- Love the graph. -->
+<!-- ::: -->
 </section>
 <section id="comparing-war-of-pitchers-and-team-win-percentage-in-the-2022-season-to-world-series-winners-of-the-last-20-years." class="level3">
 <h3 class="anchored" data-anchor-id="comparing-war-of-pitchers-and-team-win-percentage-in-the-2022-season-to-world-series-winners-of-the-last-20-years.">Comparing WAR of pitchers and team win percentage in the 2022 season to World Series Winners of the last 20 years.</h3>
+<!-- ::: callout-note -->
+<!-- There is a lot of interesting analysis left to do here. Comparing only the WSW to the 2022 season doesn't make sense. I'd prefer, for example, to see a similar figure as Figure 1, but faceted by year to show the last 4 or 5 seasons. We should work on this next. -->
+<!-- ::: -->
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>

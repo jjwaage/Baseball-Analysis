@@ -10,18 +10,19 @@ page-layout: full
 title-block-banner: "#0C2C56"
 ---
 
-#### These projects use real MLB data to do a deeper analysis of how different statistics influence teams.
+### Projects that use real MLB data to do a deeper analysis of how different statistics influence teams.
+#### This blog's main goal is to show different ways to visualize and analyze data for educational purposes. All of these projects can be recreated in non-baseball scenarios and used to teach data visualization. 
 
-::: callout-note
-About link takes us to a generic page. Need to fill out that page, or add the information to this page.
+<!-- ::: callout-note -->
+<!-- About link takes us to a generic page. Need to fill out that page, or add the information to this page. -->
 
-Github link?
+<!-- Github link? -->
 
-You need a slightly longer summary about the blog. Why does it exist? You need to try to make people want to read further. The bolded sentence needs to be revised.
+<!-- You need a slightly longer summary about the blog. Why does it exist? You need to try to make people want to read further. The bolded sentence needs to be revised. -->
 
-You need to add visual interest. Images or data visualizations are your best bet.
+<!-- You need to add visual interest. Images or data visualizations are your best bet. -->
 
-I think you should delete the "Barrie" post, as it is just the original BT model article I think.
-:::
+<!-- I think you should delete the "Barrie" post, as it is just the original BT model article I think. -->
+<!-- ::: -->
 
 <br>
