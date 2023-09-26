@@ -564,7 +564,7 @@ data <- playoffs[0:30,3:4]
 playoffperc <- as.numeric(unlist(data[, 1]))
 
 
-plot(data, cex = 0.5, pch = 16, xlab = "Projected Chance of Making Playoffs", ylab = "Chances of Making 2023 Playoffs", col = "blue")
+plot(data, cex = 0.5, pch = 16, xlab = "Projected Chance of Making Playoffs", ylab = "Chances of Making 2023 Playoffs 9/14", col = "blue")
 abline(lm(realplayoffperc ~ playoffperc), col = "red")
 
 ```

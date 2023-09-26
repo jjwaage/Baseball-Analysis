@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jonna Waage">
+<meta name="dcterms.date" content="2023-09-25">
 
-<title>Sports Data Analysis and Visualization</title>
+<title>Sports Data Analysis and Visualization - Comparing My Playoff Projection to Playoff Percentages Each Week</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -60,56 +60,19 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-<style>
-
-      .quarto-title-block .quarto-title-banner {
-        background: #0C2C56;
-      }
-</style>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Sports Data Analysis and Visualization</span>
     </a>
   </div>
@@ -134,167 +97,49 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title">Sports Data Analysis and Visualization</h1>
+    <div class="quarto-title column-body">
+      <h1 class="title">Comparing My Playoff Projection to Playoff Percentages Each Week</h1>
                       </div>
   </div>
     
   
   <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jonna Waage </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 25, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<section id="projects-that-use-real-mlb-data-to-do-a-deeper-analysis-of-how-different-statistics-influence-teams." class="level3">
-<h3 class="anchored" data-anchor-id="projects-that-use-real-mlb-data-to-do-a-deeper-analysis-of-how-different-statistics-influence-teams.">Projects that use real MLB data to do a deeper analysis of how different statistics influence teams.</h3>
-<section id="this-blogs-main-goal-is-to-show-different-ways-to-visualize-and-analyze-data-for-educational-purposes.-all-of-these-projects-can-be-recreated-in-non-baseball-scenarios-and-used-to-teach-data-visualization." class="level4">
-<h4 class="anchored" data-anchor-id="this-blogs-main-goal-is-to-show-different-ways-to-visualize-and-analyze-data-for-educational-purposes.-all-of-these-projects-can-be-recreated-in-non-baseball-scenarios-and-used-to-teach-data-visualization.">This blog’s main goal is to show different ways to visualize and analyze data for educational purposes. All of these projects can be recreated in non-baseball scenarios and used to teach data visualization.</h4>
-<!-- ::: callout-note -->
-<!-- About link takes us to a generic page. Need to fill out that page, or add the information to this page. -->
-<!-- Github link? -->
-<!-- You need a slightly longer summary about the blog. Why does it exist? You need to try to make people want to read further. The bolded sentence needs to be revised. -->
-<!-- You need to add visual interest. Images or data visualizations are your best bet. -->
-<!-- I think you should delete the "Barrie" post, as it is just the original BT model article I think. -->
-<!-- ::: -->
-<p><br></p>
-
+<section id="how-does-my-projection-of-playoff-contending-teams-compare-to-their-percentages-of-making-the-playoffs-every-week" class="level2">
+<h2 class="anchored" data-anchor-id="how-does-my-projection-of-playoff-contending-teams-compare-to-their-percentages-of-making-the-playoffs-every-week">How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Week?</h2>
 
 
 </section>
-</section>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1695625200000" data-listing-file-modified-sort="1695708127203" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<div class="thumbnail">
-<p><a href="./posts/Playoff Analysis/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Playoff Analysis/index.html">
-<h3 class="no-anchor listing-title">
-Comparing My Playoff Projection to Playoff Percentages Each Week
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Playoff Analysis/index.html">
-<div class="listing-date">
-Sep 25, 2023
-</div>
-<div class="listing-author">
-Jonna Waage
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1687935600000" data-listing-file-modified-sort="1695315026884" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="./posts/WAR Analysis/index.html"> <p class="card-img-top"><img src="posts/WAR Analysis/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/WAR Analysis/index.html">
-<h3 class="no-anchor listing-title">
-Analyzing The WAR Statistic for Pitchers
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-Wins above replacement (WAR) is a statistic used to show how many wins a player is worth instead of their hypothetical replacement. This compares the player…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/WAR Analysis/index.html">
-<div class="listing-date">
-Jun 28, 2023
-</div>
-<div class="listing-author">
-Jonna Waage
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-date-sort="1685516400000" data-listing-file-modified-sort="1695707605421" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17">
-<div class="thumbnail">
-<p><a href="./posts/Win Projection/index.html"> <p class="card-img-top"><img src="posts/Win Projection/index_files/figure-html/unnamed-chunk-8-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Win Projection/index.html">
-<h3 class="no-anchor listing-title">
-Estimating Playoffs Based on the Previous Year’s Data
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-There are many different algorithms that try to simulate the next MLB season…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Win Projection/index.html">
-<div class="listing-date">
-May 31, 2023
-</div>
-<div class="listing-author">
-Jonna Waage
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1593241200000" data-listing-file-modified-sort="1685649026952" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10">
-<div class="thumbnail">
-<p><a href="./posts/Barrie/index.html"> <p class="card-img-top"><img src="posts/Barrie/index_files/figure-html/unnamed-chunk-8-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Barrie/index.html">
-<h3 class="no-anchor listing-title">
-2020 Season Simulation
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-Simulates a 2020 season of 60 games using the Bradley-Terry model.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Barrie/index.html">
-<div class="listing-date">
-Jun 27, 2020
-</div>
-<div class="listing-author">
-Jim Albert
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
