@@ -7,4 +7,20 @@ date: "2023-09-25"
 ## How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Week?
 
 
+```{r}
+# Load necessary libraries
+library(tidyverse)
+library(readxl)
 
+# Get the list of Excel files in the directory
+files <- list.files( pattern = "*.xlsx", full.names = TRUE)
+
+# Reading and appending files using purrr
+all_data <- files %>% 
+  map_df(~ read_excel(.x, skip = 1) %>%
+           select(Date, Post) %>%
+           mutate(FileName = tools::file_path_sans_ext(basename(.x))))
+
+
+
+```
