@@ -20,78 +20,26 @@ library(reshape2)
 library(data.table)
 ```
 
-```{r, echo = FALSE}
-library(tidyverse)
-
-library(readxl)
-
- 
+```{r}
 
 # Get the list of Excel files in the directory
-
 files <- list.files( pattern = "*.xlsx", full.names = TRUE)
-
- 
-
-# Reading and appending files using purrr
 
 all_data <- files %>%
+  map_dfr(~ {
+    temp_data <- read_excel(.x, skip = 1)
+    temp_data <- temp_data[, c("Date", "Post")] %>%
+      mutate(FileName = tools::file_path_sans_ext(basename(.x)))
+    return(temp_data)
+  })
 
-  map_df(~ read_excel(.x, skip = 1) %>%
-
-           select(Date, Post) %>%
-
-           mutate(FileName = tools::file_path_sans_ext(basename(.x))))
-
-```{r}
-# Load necessary libraries
-library(tidyverse)
-library(readxl)
-
-<<<<<<< Updated upstream
-# Get the list of Excel files in the directory
-files <- list.files( pattern = "*.xlsx", full.names = TRUE)
-
-# Reading and appending files using purrr
-all_data <- files %>% 
-  map_df(~ read_excel(.x, skip = 1) %>%
-           select(Date, Post) %>%
-           mutate(FileName = tools::file_path_sans_ext(basename(.x))))
+all_data$Post <- gsub("<", "", all_data$Post)
+all_data$Post <- as.numeric(sub("%", "", all_data$Post)) / 100
+all_data$Post <- as.numeric(all_data$Post)
 
 
-
-```
-=======
-# braves <- read_excel("braves.xlsx")
-# phillies <- read_excel("phillies.xlsx")
-# marlins <- read_excel("marlins.xlsx")
-# mets <- read_excel("mets.xlsx")
-# nationals <- read_excel("Nationals.xlsx")
-# brewers <- read_excel("brewers.xlsx")
-# cubs <- read_excel("cubs.xlsx")
-# reds <- read_excel("reds.xlsx")
-# pirates <- read_excel("pirates.xlsx")
-# cardinals <- read_excel("cardinals.xlsx")
-# dodgers <- read_excel("dodgers.xlsx")
-# diamondbacks <- read_excel("diamondbacks.xlsx")
-# padres <- read_excel("padres.xlsx")
-# giants <- read_excel("giants.xlsx")
-# rockies <- read_excel("rockies.xlsx")
-# orioles  <- read_excel("orioles.xlsx")
-# rays <- read_excel("rays.xlsx")
-# bluejays <- read_excel("bluejays.xlsx")
-# yankees <- read_excel("yankees.xlsx")
-# redsox <- read_excel("redsox.xlsx")
-# twins <- read_excel("twins.xlsx")
-# guardians <- read_excel("guardians.xlsx")
-# whitesox <- read_excel("whitesox.xlsx")
-# royals <- read_excel("royals.xlsx")
-# astros <- read_excel("astros.xlsx")
-# rangers <- read_excel("rangers.xlsx")
-# mariners <- read_excel("mariners.xlsx")
-# angels <- read_excel("angels.xlsx")
-# athletics <- read_excel("athletics.xlsx")
+print(all_data)
+print(playoffpercent)
 
 ```
 
->>>>>>> Stashed changes
