@@ -4,13 +4,7 @@ author: "Jonna Waage"
 date: "2023-05-31"
 ---
 
-## Can the MLB Playoff contending teams be estimated with last year's data?
-
-<!-- ::: callout-note -->
-
-<!-- Need a punchier question here. -->
-
-<!-- ::: -->
+## Can the MLB Playoff contending teams be estimated with just last year's win-loss data?
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -28,31 +22,13 @@ library(data.table)
 
 ### Introduction
 
-<!-- ::: callout-note -->
-
-<!-- You should switch to a more complete writing style for the introduction, rather than this bulleted list. This section should motivate the post by describing WHY it exists. It is literally ok to say it exists because we thought it was a good starting point for learning some of these tools. -->
-
-<!-- One writing framework to consider is called "AND, BUT, THEREFORE." You have Fact1 AND Fact2, BUT there is a Constraint or Limitation or Problem. THEREFORE, this post exists. -->
-
-<!-- ::: -->
-
 There are many different algorithms that try to simulate the next MLB season with a lot of complex statistics. The goal of this was to learn about this model and see how accurate a simulation can be with just a couple simple statistics taken into account.
 
 This program simulates a 2023 season of all 162 games using the Bradley-Terry model. It uses last year's run differentials (average runs scored minus average runs allowed) to try to estimate this year's top performers.
 
 ### Data
 
-<!-- ::: callout-note -->
-
-<!-- This section is good. You COULD add an explanatory sentence, but you don't need to. You might define the three things you create as data frames. -->
-
-<!-- ::: -->
-
 `schedule1 <- read_excel("schedule.xlsx")` - reads in a two column excel sheet with headers 'Home' and 'Away' and teams from each game listed below
-
-<!-- `battingstats <- read_excel("2022battingstats.xlsx")` - reads in a excel sheet with 2022 MLB batting statistics for all teams -->
-
-<!-- `fieldingstats <- read_excel("fieldingstats2022.xlsx")` - reads in a excel sheet with 2022 MLB fielding statistics for all teams -->
 
 2022 statistics are from [here](https://www.baseball-reference.com/leagues/majors/2022.shtml).
 
@@ -76,11 +52,6 @@ outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor)
 
 This equation uses [rbinom](https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/) which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins.
 
-<!-- ::: callout-note -->
-
-<!-- This section is really good. Concise, clear, and a mostly complete set of information. I can't remember why you divide the talent Z scores by 10, so you should explain that. -->
-
-<!-- ::: -->
 
 ```{r, echo = FALSE}
 one.simulation <- function() {
@@ -343,15 +314,15 @@ aldivisions <- c("AL East", "AL Cent", "AL West")
 
   AL_East <- c("Baltimore Orioles","Tampa Bay Rays", "Toronto Blue Jays", "Boston Red Sox", "New York Yankees")
   
-  ALe_percent <- c("63.3%","60.3%", "55%","51.4%","50%") 
+  ALe_percent <- c("62.3%","61.1%", "54.9%","50.6%","48.1%") 
   
   AL_Cent <- c("Minnesota Twins", "Cleveland Guardians", "Detroit Tigers", "Chicago White Sox", "Kansas City Royals")
   
-  ALc_percent <- c("52.1%", "47.9%", "45.7%",  "38.6%", "31.2%")
+  ALc_percent <- c("53.7%", "48.1%", "46.9%",  "37.7%", "34.6%")
   
   AL_West <- c("Houston Astros","Seattle Mariners", "Texas Rangers", "Los Angeles Angels","Oakland Athletics")
   
-  ALw_percent <- c("56.7%", "56.4%","54.7%","45.7%", "36.5%")
+  ALw_percent <- c("55.6%", "55.6%","54.3%","45.1%", "30.9%")
 
   al_ <- cbind(AL_East, ALe_percent, AL_Cent,  ALc_percent, AL_West,  ALw_percent)
 
@@ -362,15 +333,15 @@ nldivisions <- c("NL East", "NL Cent", "NL West")
 
   NL_East <- c("Atlanta Braves", "Philadelphia Phillies", "Miami Marlins", "New York Mets","Washington Nationals")
   
-  NLe_percent <- c("65.5%","55.4%","51.4%" ,"46%", "45%")
+  NLe_percent <- c("64.2%","55.6%","51.9%" ,"46.3%", "43.8%")
 
   NL_Cent <- c("Milwaukee Brewers", "Chicago Cubs", "Cincinnati Reds", "Pittsburgh Pirates", "St. Louis Cardinals")
   
-  NLc_percent <- c("55.4%", "53.9%","51.4%","46.4%","43.6%")
+  NLc_percent <- c("56.8%", "51.2%","50.6%","46.9%","43.8%")
 
   NL_West <- c("Los Angeles Dodgers", "Arizona Diamondbacks", "San Francisco Giants", "San Diego Padres", "Colorado Rockies")
   
-  NLw_percent <- c("61.2%", "51.8%", "50%", "46.8%", "36.7%")
+  NLw_percent <- c("61.7%", "51.9%", "50.6%", "48.8%", "36.4%")
   
   nl_ <- cbind(NL_East, NLe_percent, NL_Cent, NLc_percent, NL_West, NLw_percent)
 
@@ -384,12 +355,6 @@ knitr::kable(al_)
 ### Comparison of Projected and Actual Statistics
 
 Here are the projected winning percentage and the actual winning percentage side by side
-
-<!-- ::: callout-note -->
-
-<!-- I love the figures. You do need a concluding statement. How well is your model performing? Which teams did it not predict well? Any theories as to why? It would be great if we could add a visual encoding for teams that over or under performed. -->
-
-<!-- ::: -->
 
 ```{r, echo = FALSE}
   NL_East <- c("Atlanta Braves", "Philadelphia Phillies", "Miami Marlins", "New York Mets","Washington Nationals")
@@ -580,6 +545,8 @@ playoffperc <- as.numeric(unlist(data[, 1]))
 
 plot(data, cex = 0.5, pch = 16, xlab = "Projected Chance of Making Playoffs", ylab = "Chances of Making 2023 Playoffs 9/14", col = "blue")
 abline(lm(realplayoffperc ~ playoffperc), col = "red")
+
+save(playoffsummary, file = "/Users/jonnawaage/Documents/GitHub/Baseball Analysis/posts/Win Projection/playoffsummary.RData")
 
 ```
 
