@@ -6,7 +6,6 @@ date: "2023-09-25"
 
 ## How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Week?
 
-
 ```{r setup, include=FALSE}
 library(quarto)
 library(tidyverse)
@@ -25,7 +24,6 @@ library(data.table)
 ```{r, include = FALSE}
 load("/Users/jonnawaage/Documents/GitHub/Baseball Analysis/posts/Win Projection/playoffsummary.RData")
 
-# Get the list of Excel files in the directory
 files <- list.files( pattern = "*.xlsx", full.names = TRUE)
 
 all_data <- files %>%
@@ -41,7 +39,7 @@ all_data$Post <- as.numeric(sub("%", "", all_data$Post)) / 100
 all_data$Post <- as.numeric(all_data$Post)
 
 
-print(all_data)
+# print(all_data)
 print(playoffsummary)
 
 
