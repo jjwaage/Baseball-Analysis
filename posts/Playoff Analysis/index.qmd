@@ -22,7 +22,7 @@ library(data.table)
 ```
 
 ```{r, include = FALSE}
-load("/Users/jonnawaage/Documents/GitHub/Baseball Analysis/posts/Win Projection/playoffsummary.RData")
+load("/Users/jonnawaage/Documents/GitHub/Baseball Analysis/posts/Win Projection/playoffsummarydata.RData")
 
 files <- list.files( pattern = "*.xlsx", full.names = TRUE)
 
@@ -34,12 +34,7 @@ all_data <- files %>%
     return(temp_data)
   })
 
-all_data$Post <- gsub("<", "", all_data$Post)
-all_data$Post <- as.numeric(sub("%", "", all_data$Post)) / 100
-all_data$Post <- as.numeric(all_data$Post)
-
-
-# print(all_data)
+print(all_data)
 print(playoffsummary)
 
 
