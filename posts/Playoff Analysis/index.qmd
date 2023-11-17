@@ -7,10 +7,10 @@ date: "2023-09-25"
 ## How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Week?
 
 ```{r setup, include=FALSE}
-install.packages("gganimate")
-
+##install.packages("gganimate")
+library(gifski)
 library(gganimate)
-library(animation)
+#library(animation)
 library(quarto)
 library(tidyverse)
 library(dplyr)
@@ -26,7 +26,7 @@ library(data.table)
 ```
 
 ```{r, echo=TRUE}
-load("/Users/jonnawaage/Documents/GitHub/Baseball Analysis/posts/Win Projection/playoffsummarydata.RData")
+load("playoffsummarydata.RData")
 
 files <- list.files( pattern = "*.xlsx", full.names = TRUE)
 
@@ -58,7 +58,10 @@ all_data$Post <- sapply(all_data$Post, convert_to_percentage)
 names(all_data)[names(all_data) == "FileName"] <- "Team"
 print(all_data)
 
-merged_data <- merge(playoffsummary, all_data, by.x = "Team", by.y = "Team")
+#write.csv(playoffsummary, file = "playoffsummary.csv")
+playoffsummary<-read.csv("playoffsummary.csv")
+
+merged_data <- merge(playoffsummary, all_data, by.x = "Team_short", by.y = "Team")
 
 # Assuming 'merged_data' is your merged data frame
 
@@ -66,7 +69,7 @@ merged_data <- merge(playoffsummary, all_data, by.x = "Team", by.y = "Team")
 merged_data$Team <- as.factor(merged_data$Team)
 
 # Create the animated dot plot using gganimate
-p <- ggplot(merged_data, aes(x = Division, y = `Percent Playoffs Made`, color = Team)) +
+p <- ggplot(merged_data, aes(x = Division, y = `Percent.Playoffs.Made`, color = Team)) +
   geom_point() +
   labs(title = "MLB Playoff Percentage Comparison") +
   theme_minimal() +
@@ -74,9 +77,14 @@ p <- ggplot(merged_data, aes(x = Division, y = `Percent Playoffs Made`, color = 
   enter_fade() +
   exit_fade()
 
+
+
+
 # Save the animation as a GIF using gganimate's animate function
 animation_file <- "mlb_playoff_animation.gif"
-animate(p, nframes = 100, duration = 2, end_pause = 10, filename = animation_file)
+animate(p, nframes = 100, duration = 2, end_pause = 10,
+        renderer = gifski_renderer,
+        width = 800, height = 600, units = "px", filename = animation_file)
 
 # Display the saved file path
 animation_file
@@ -85,4 +93,3 @@ animation_file
 
 
 ```
-
