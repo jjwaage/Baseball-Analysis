@@ -7,6 +7,10 @@ date: "2023-09-25"
 ## How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Week?
 
 ```{r setup, include=FALSE}
+install.packages("gganimate")
+
+library(gganimate)
+library(animation)
 library(quarto)
 library(tidyverse)
 library(dplyr)
@@ -21,7 +25,7 @@ library(reshape2)
 library(data.table)
 ```
 
-```{r, include = FALSE}
+```{r, echo=TRUE}
 load("/Users/jonnawaage/Documents/GitHub/Baseball Analysis/posts/Win Projection/playoffsummarydata.RData")
 
 files <- list.files( pattern = "*.xlsx", full.names = TRUE)
@@ -34,8 +38,50 @@ all_data <- files %>%
     return(temp_data)
   })
 
-print(all_data)
 print(playoffsummary)
+
+convert_to_percentage <- function(value) {
+  # Remove greater than and less than signs if present
+  cleaned_value <- gsub("[><]", "", as.character(value))
+  
+  if (grepl("%", cleaned_value)) {
+    return(cleaned_value)
+  } else if (grepl("E", cleaned_value)) {
+    return(sprintf("%.2f%%", as.numeric(cleaned_value) * 100))
+  } else {
+    return(sprintf("%.2f%%", as.numeric(cleaned_value) * 100))
+  }
+}
+
+all_data$Post <- sapply(all_data$Post, convert_to_percentage)
+
+names(all_data)[names(all_data) == "FileName"] <- "Team"
+print(all_data)
+
+merged_data <- merge(playoffsummary, all_data, by.x = "Team", by.y = "Team")
+
+# Assuming 'merged_data' is your merged data frame
+
+# Make sure 'Team' is a factor
+merged_data$Team <- as.factor(merged_data$Team)
+
+# Create the animated dot plot using gganimate
+p <- ggplot(merged_data, aes(x = Division, y = `Percent Playoffs Made`, color = Team)) +
+  geom_point() +
+  labs(title = "MLB Playoff Percentage Comparison") +
+  theme_minimal() +
+  transition_states(Team, transition_length = 2, state_length = 1) +
+  enter_fade() +
+  exit_fade()
+
+# Save the animation as a GIF using gganimate's animate function
+animation_file <- "mlb_playoff_animation.gif"
+animate(p, nframes = 100, duration = 2, end_pause = 10, filename = animation_file)
+
+# Display the saved file path
+animation_file
+
+
 
 
 ```

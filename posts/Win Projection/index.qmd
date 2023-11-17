@@ -7,6 +7,7 @@ date: "2023-05-31"
 ## Can the MLB Playoff contending teams be estimated with just last year's win-loss data?
 
 ```{r setup, include=FALSE}
+install.packages("gganimate")
 library(tidyverse)
 library(dplyr)
 library("readxl")
