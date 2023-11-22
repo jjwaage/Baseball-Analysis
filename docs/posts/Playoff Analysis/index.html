@@ -238,252 +238,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(playoffsummary, all_data, <span class="at">by.x =</span> <span class="st">"Team_short"</span>, <span class="at">by.y =</span> <span class="st">"Team"</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>Team <span class="ot">&lt;-</span> <span class="fu">factor</span>(merged_data<span class="sc">$</span>Team, <span class="at">levels =</span> <span class="fu">unique</span>(merged_data<span class="sc">$</span>Team))</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the animated dot plot using gganimate</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(merged_data, <span class="fu">aes</span>(<span class="at">x =</span> Percent.Playoffs.Made, <span class="at">y =</span> Post, <span class="at">color =</span> Team)) <span class="sc">+</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"MLB Playoff Percentage Comparison"</span>) <span class="sc">+</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_time</span>(Date) <span class="sc">+</span>  <span class="co"># Use transition_time for animation over time</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">enter_fade</span>() <span class="sc">+</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exit_fade</span>()</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the animation as a GIF using gganimate's animate function</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>animation_file <span class="ot">&lt;-</span> <span class="st">"mlb_playoff_animation.gif"</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">animate</span>(p, <span class="at">nframes =</span> <span class="dv">100</span>, <span class="at">duration =</span> <span class="dv">2</span>, <span class="at">end_pause =</span> <span class="dv">10</span>,</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">renderer =</span> gifski_renderer,</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">width =</span> <span class="dv">800</span>, <span class="at">height =</span> <span class="dv">600</span>, <span class="at">units =</span> <span class="st">"px"</span>, <span class="at">filename =</span> animation_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming 'merged_data' is your merged data frame</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the "Date" column to a proper date format</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>Date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(merged_data<span class="sc">$</span>Date, <span class="at">format =</span> <span class="st">"%Y-%m-%d"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure 'Team' is a factor</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>Team <span class="ot">&lt;-</span> <span class="fu">factor</span>(merged_data<span class="sc">$</span>Team, <span class="at">levels =</span> <span class="fu">unique</span>(merged_data<span class="sc">$</span>Team))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>Post <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"%"</span>, <span class="st">""</span>, merged_data<span class="sc">$</span>Post))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the animated dot plot using gganimate</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(merged_data, <span class="fu">aes</span>(<span class="at">x =</span> Percent.Playoffs.Made, <span class="at">y =</span> Post, <span class="at">color =</span> Team, <span class="at">label =</span> <span class="fu">as.character</span>(Date))) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span>  <span class="co"># Adjust the size of the points</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"MLB Playoff Percentage Comparison"</span>) <span class="sc">+</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_time</span>(Date) <span class="sc">+</span>  <span class="co"># Use transition_time for animation over time</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">enter_fade</span>() <span class="sc">+</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exit_fade</span>() <span class="sc">+</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),  <span class="co"># Adjust text size on the axes</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),  <span class="co"># Center the title</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),  <span class="co"># Rotate x-axis labels</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),  <span class="co"># Adjust y-axis text size</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),  <span class="co"># Remove axis ticks</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="st">"mm"</span>)) <span class="sc">+</span>  <span class="co"># Adjust plot margin</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>() <span class="sc">+</span>  <span class="co"># Use scale_x_discrete for discrete x-axis values</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="at">by =</span> <span class="dv">10</span>))</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="cn">Inf</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Date: "</span>, <span class="fu">as.character</span>(merged_data<span class="sc">$</span>Date[<span class="dv">1</span>])), <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>function (frames, fps) 
-{
-    if (is.null(file)) 
-        file &lt;- tempfile(fileext = ".gif")
-    if (!all(grepl(".png$", frames))) {
-        stop("gifski only supports png files", call. = FALSE)
-    }
-    if (is.null(width) || is.null(height)) {
-        dims &lt;- png_dim(frames[1])
-        height &lt;- height %||% dims[1]
-        width &lt;- width %||% dims[2]
-    }
-    progress &lt;- interactive()
-    if (progress) 
-        message("")
-    gif &lt;- gifski::gifski(frames, file, width, height, delay = 1/fps, 
-        loop, progress)
-    gif_file(gif)
-}
-&lt;bytecode: 0x7f9212dd6e18&gt;
-&lt;environment: 0x7f921fe66e80&gt;
-attr(,"frame_vars")
-     frame nframes   progress          frame_time
-1        1      90 0.01111111 2023-03-29 17:00:00
-2        2      90 0.02222222 2023-03-31 18:53:15
-3        3      90 0.03333333 2023-04-02 20:46:31
-4        4      90 0.04444444 2023-04-04 22:39:46
-5        5      90 0.05555556 2023-04-07 00:33:02
-6        6      90 0.06666667 2023-04-09 02:26:17
-7        7      90 0.07777778 2023-04-11 04:19:33
-8        8      90 0.08888889 2023-04-13 06:12:48
-9        9      90 0.10000000 2023-04-15 08:06:04
-10      10      90 0.11111111 2023-04-17 09:59:19
-11      11      90 0.12222222 2023-04-19 11:52:35
-12      12      90 0.13333333 2023-04-21 13:45:50
-13      13      90 0.14444444 2023-04-23 15:39:06
-14      14      90 0.15555556 2023-04-25 17:32:21
-15      15      90 0.16666667 2023-04-27 19:25:37
-16      16      90 0.17777778 2023-04-29 21:18:52
-17      17      90 0.18888889 2023-05-01 23:12:08
-18      18      90 0.20000000 2023-05-04 01:05:23
-19      19      90 0.21111111 2023-05-06 02:58:39
-20      20      90 0.22222222 2023-05-08 04:51:54
-21      21      90 0.23333333 2023-05-10 06:45:10
-22      22      90 0.24444444 2023-05-12 08:38:25
-23      23      90 0.25555556 2023-05-14 10:31:41
-24      24      90 0.26666667 2023-05-16 12:24:56
-25      25      90 0.27777778 2023-05-18 14:18:12
-26      26      90 0.28888889 2023-05-20 16:11:27
-27      27      90 0.30000000 2023-05-22 18:04:43
-28      28      90 0.31111111 2023-05-24 19:57:58
-29      29      90 0.32222222 2023-05-26 21:51:14
-30      30      90 0.33333333 2023-05-28 23:44:29
-31      31      90 0.34444444 2023-05-31 01:37:45
-32      32      90 0.35555556 2023-06-02 03:31:00
-33      33      90 0.36666667 2023-06-04 05:24:16
-34      34      90 0.37777778 2023-06-06 07:17:31
-35      35      90 0.38888889 2023-06-08 09:10:47
-36      36      90 0.40000000 2023-06-10 11:04:02
-37      37      90 0.41111111 2023-06-12 12:57:18
-38      38      90 0.42222222 2023-06-14 14:50:33
-39      39      90 0.43333333 2023-06-16 16:43:49
-40      40      90 0.44444444 2023-06-18 18:37:04
-41      41      90 0.45555556 2023-06-20 20:30:20
-42      42      90 0.46666667 2023-06-22 22:23:35
-43      43      90 0.47777778 2023-06-25 00:16:51
-44      44      90 0.48888889 2023-06-27 02:10:06
-45      45      90 0.50000000 2023-06-29 04:03:22
-46      46      90 0.51111111 2023-07-01 05:56:37
-47      47      90 0.52222222 2023-07-03 07:49:53
-48      48      90 0.53333333 2023-07-05 09:43:08
-49      49      90 0.54444444 2023-07-07 11:36:24
-50      50      90 0.55555556 2023-07-09 13:29:39
-51      51      90 0.56666667 2023-07-11 15:22:55
-52      52      90 0.57777778 2023-07-13 17:16:10
-53      53      90 0.58888889 2023-07-15 19:09:26
-54      54      90 0.60000000 2023-07-17 21:02:41
-55      55      90 0.61111111 2023-07-19 22:55:57
-56      56      90 0.62222222 2023-07-22 00:49:12
-57      57      90 0.63333333 2023-07-24 02:42:28
-58      58      90 0.64444444 2023-07-26 04:35:43
-59      59      90 0.65555556 2023-07-28 06:28:59
-60      60      90 0.66666667 2023-07-30 08:22:14
-61      61      90 0.67777778 2023-08-01 10:15:30
-62      62      90 0.68888889 2023-08-03 12:08:45
-63      63      90 0.70000000 2023-08-05 14:02:01
-64      64      90 0.71111111 2023-08-07 15:55:16
-65      65      90 0.72222222 2023-08-09 17:48:32
-66      66      90 0.73333333 2023-08-11 19:41:47
-67      67      90 0.74444444 2023-08-13 21:35:03
-68      68      90 0.75555556 2023-08-15 23:28:18
-69      69      90 0.76666667 2023-08-18 01:21:34
-70      70      90 0.77777778 2023-08-20 03:14:49
-71      71      90 0.78888889 2023-08-22 05:08:05
-72      72      90 0.80000000 2023-08-24 07:01:20
-73      73      90 0.81111111 2023-08-26 08:54:36
-74      74      90 0.82222222 2023-08-28 10:47:51
-75      75      90 0.83333333 2023-08-30 12:41:07
-76      76      90 0.84444444 2023-09-01 14:34:22
-77      77      90 0.85555556 2023-09-03 16:27:38
-78      78      90 0.86666667 2023-09-05 18:20:53
-79      79      90 0.87777778 2023-09-07 20:14:09
-80      80      90 0.88888889 2023-09-09 22:07:24
-81      81      90 0.90000000 2023-09-12 00:00:40
-82      82      90 0.91111111 2023-09-14 01:53:55
-83      83      90 0.92222222 2023-09-16 03:47:11
-84      84      90 0.93333333 2023-09-18 05:40:26
-85      85      90 0.94444444 2023-09-20 07:33:42
-86      86      90 0.95555556 2023-09-22 09:26:57
-87      87      90 0.96666667 2023-09-24 11:20:13
-88      88      90 0.97777778 2023-09-26 13:13:28
-89      89      90 0.98888889 2023-09-28 15:06:44
-90      90      90 1.00000000 2023-09-30 17:00:00
-901     90      90 1.00000000 2023-09-30 17:00:00
-90.1    90      90 1.00000000 2023-09-30 17:00:00
-90.2    90      90 1.00000000 2023-09-30 17:00:00
-90.3    90      90 1.00000000 2023-09-30 17:00:00
-90.4    90      90 1.00000000 2023-09-30 17:00:00
-90.5    90      90 1.00000000 2023-09-30 17:00:00
-90.6    90      90 1.00000000 2023-09-30 17:00:00
-90.7    90      90 1.00000000 2023-09-30 17:00:00
-90.8    90      90 1.00000000 2023-09-30 17:00:00
-90.9    90      90 1.00000000 2023-09-30 17:00:00
-                                                                                       frame_source
-1    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0001.png
-2    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0002.png
-3    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0003.png
-4    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0004.png
-5    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0005.png
-6    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0006.png
-7    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0007.png
-8    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0008.png
-9    /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0009.png
-10   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0010.png
-11   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0011.png
-12   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0012.png
-13   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0013.png
-14   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0014.png
-15   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0015.png
-16   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0016.png
-17   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0017.png
-18   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0018.png
-19   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0019.png
-20   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0020.png
-21   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0021.png
-22   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0022.png
-23   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0023.png
-24   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0024.png
-25   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0025.png
-26   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0026.png
-27   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0027.png
-28   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0028.png
-29   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0029.png
-30   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0030.png
-31   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0031.png
-32   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0032.png
-33   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0033.png
-34   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0034.png
-35   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0035.png
-36   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0036.png
-37   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0037.png
-38   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0038.png
-39   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0039.png
-40   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0040.png
-41   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0041.png
-42   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0042.png
-43   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0043.png
-44   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0044.png
-45   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0045.png
-46   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0046.png
-47   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0047.png
-48   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0048.png
-49   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0049.png
-50   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0050.png
-51   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0051.png
-52   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0052.png
-53   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0053.png
-54   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0054.png
-55   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0055.png
-56   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0056.png
-57   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0057.png
-58   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0058.png
-59   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0059.png
-60   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0060.png
-61   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0061.png
-62   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0062.png
-63   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0063.png
-64   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0064.png
-65   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0065.png
-66   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0066.png
-67   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0067.png
-68   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0068.png
-69   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0069.png
-70   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0070.png
-71   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0071.png
-72   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0072.png
-73   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0073.png
-74   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0074.png
-75   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0075.png
-76   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0076.png
-77   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0077.png
-78   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0078.png
-79   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0079.png
-80   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0080.png
-81   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0081.png
-82   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0082.png
-83   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0083.png
-84   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0084.png
-85   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0085.png
-86   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0086.png
-87   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0087.png
-88   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0088.png
-89   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0089.png
-90   /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-901  /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.1 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.2 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.3 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.4 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.5 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.6 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.7 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.8 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png
-90.9 /var/folders/32/1t2kjhgn7pbgvjvh117ny4_c0000gn/T//RtmpJwKflt/18482206d23d1/gganim_plot0090.png</code></pre>
+<pre><code>mapping: x = ~x, y = ~y 
+geom_text: na.rm = FALSE
+stat_identity: na.rm = FALSE
+position_identity </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the animation in the R Markdown document</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(animation_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the animation as a GIF directly to the desired location</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>final_animation_file <span class="ot">&lt;-</span> <span class="st">"/Users/jonnawaage/Documents/GitHub/Baseball Analysis/docs/posts/Playoff Analysis/mlb_playoff_animation.gif"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>gganimate<span class="sc">::</span><span class="fu">anim_save</span>(final_animation_file, <span class="fu">animate</span>(p, <span class="at">nframes =</span> <span class="dv">100</span>, <span class="at">duration =</span> <span class="dv">100</span>, <span class="at">end_pause =</span> <span class="dv">10</span>), <span class="at">renderer =</span> gifski_renderer)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the animation in the R Markdown document</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(final_animation_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="mlb_playoff_animation.gif" class="img-fluid"></p>
+<p><img src="../../docs/posts/Playoff Analysis/mlb_playoff_animation.gif" class="img-fluid"></p>
 </div>
 </div>
 
