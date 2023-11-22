@@ -63,22 +63,16 @@ playoffsummary<-read.csv("playoffsummary.csv")
 
 merged_data <- merge(playoffsummary, all_data, by.x = "Team_short", by.y = "Team")
 
-# Assuming 'merged_data' is your merged data frame
-
-# Make sure 'Team' is a factor
-merged_data$Team <- as.factor(merged_data$Team)
+merged_data$Team <- factor(merged_data$Team, levels = unique(merged_data$Team))
 
 # Create the animated dot plot using gganimate
-p <- ggplot(merged_data, aes(x = Division, y = `Percent.Playoffs.Made`, color = Team)) +
+p <- ggplot(merged_data, aes(x = Percent.Playoffs.Made, y = Post, color = Team)) +
   geom_point() +
   labs(title = "MLB Playoff Percentage Comparison") +
   theme_minimal() +
-  transition_states(Team, transition_length = 2, state_length = 1) +
+  transition_time(Date) +  # Use transition_time for animation over time
   enter_fade() +
   exit_fade()
-
-
-
 
 # Save the animation as a GIF using gganimate's animate function
 animation_file <- "mlb_playoff_animation.gif"
@@ -86,9 +80,8 @@ animate(p, nframes = 100, duration = 2, end_pause = 10,
         renderer = gifski_renderer,
         width = 800, height = 600, units = "px", filename = animation_file)
 
-# Display the saved file path
-animation_file
-
+# Display the animation in the R Markdown document
+knitr::include_graphics(animation_file)
 
 
 
