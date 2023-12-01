@@ -22,40 +22,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -167,117 +133,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="how-does-my-projection-of-playoff-contending-teams-compare-to-their-percentages-of-making-the-playoffs-every-week" class="level2">
-<h2 class="anchored" data-anchor-id="how-does-my-projection-of-playoff-contending-teams-compare-to-their-percentages-of-making-the-playoffs-every-week">How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Week?</h2>
+<section id="how-does-my-projection-of-playoff-contending-teams-compare-to-their-percentages-of-making-the-playoffs-every-day" class="level2">
+<h2 class="anchored" data-anchor-id="how-does-my-projection-of-playoff-contending-teams-compare-to-their-percentages-of-making-the-playoffs-every-day">How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Day?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"playoffsummarydata.RData"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">list.files</span>( <span class="at">pattern =</span> <span class="st">"*.xlsx"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>all_data <span class="ot">&lt;-</span> files <span class="sc">%&gt;%</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(<span class="sc">~</span> {</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    temp_data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(.x, <span class="at">skip =</span> <span class="dv">1</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    temp_data <span class="ot">&lt;-</span> temp_data[, <span class="fu">c</span>(<span class="st">"Date"</span>, <span class="st">"Post"</span>)] <span class="sc">%&gt;%</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">FileName =</span> tools<span class="sc">::</span><span class="fu">file_path_sans_ext</span>(<span class="fu">basename</span>(.x)))</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(temp_data)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(playoffsummary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 30 × 3
-# Groups:   Division [6]
-   Division Team                  `Percent Playoffs Made`
-   &lt;chr&gt;    &lt;chr&gt;                 &lt;chr&gt;                  
- 1 NL_West  Los Angeles Dodgers   89.3%                  
- 2 NL_West  San Francisco Giants  50.0%                  
- 3 NL_West  San Diego Padres      42.4%                  
- 4 NL_West  Arizona Diamondbacks  28.6%                  
- 5 NL_West  Colorado Rockies      10.6%                  
- 6 NL_East  Atlanta Braves        68.7%                  
- 7 NL_East  New York Mets         67.9%                  
- 8 NL_East  Philadelphia Phillies 49.4%                  
- 9 NL_East  Miami Marlins         22.9%                  
-10 NL_East  Washington Nationals  6.8%                   
-# ℹ 20 more rows</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>convert_to_percentage <span class="ot">&lt;-</span> <span class="cf">function</span>(value) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove greater than and less than signs if present</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  cleaned_value <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"[&gt;&lt;]"</span>, <span class="st">""</span>, <span class="fu">as.character</span>(value))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"%"</span>, cleaned_value)) {</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(cleaned_value)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"E"</span>, cleaned_value)) {</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">sprintf</span>(<span class="st">"%.2f%%"</span>, <span class="fu">as.numeric</span>(cleaned_value) <span class="sc">*</span> <span class="dv">100</span>))</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">sprintf</span>(<span class="st">"%.2f%%"</span>, <span class="fu">as.numeric</span>(cleaned_value) <span class="sc">*</span> <span class="dv">100</span>))</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>all_data<span class="sc">$</span>Post <span class="ot">&lt;-</span> <span class="fu">sapply</span>(all_data<span class="sc">$</span>Post, convert_to_percentage)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(all_data)[<span class="fu">names</span>(all_data) <span class="sc">==</span> <span class="st">"FileName"</span>] <span class="ot">&lt;-</span> <span class="st">"Team"</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(all_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5,460 × 3
-   Date                Post  Team  
-   &lt;dttm&gt;              &lt;chr&gt; &lt;chr&gt; 
- 1 2023-10-01 00:00:00 0.1%  angels
- 2 2023-09-30 00:00:00 0.1%  angels
- 3 2023-09-29 00:00:00 0.1%  angels
- 4 2023-09-28 00:00:00 0.1%  angels
- 5 2023-09-27 00:00:00 0.1%  angels
- 6 2023-09-26 00:00:00 0.1%  angels
- 7 2023-09-25 00:00:00 0.1%  angels
- 8 2023-09-24 00:00:00 0.1%  angels
- 9 2023-09-23 00:00:00 0.1%  angels
-10 2023-09-22 00:00:00 0.1%  angels
-# ℹ 5,450 more rows</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#write.csv(playoffsummary, file = "playoffsummary.csv")</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>playoffsummary<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"playoffsummary.csv"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(playoffsummary, all_data, <span class="at">by.x =</span> <span class="st">"Team_short"</span>, <span class="at">by.y =</span> <span class="st">"Team"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming 'merged_data' is your merged data frame</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the "Date" column to a proper date format</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>Date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(merged_data<span class="sc">$</span>Date, <span class="at">format =</span> <span class="st">"%Y-%m-%d"</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure 'Team' is a factor</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>Team <span class="ot">&lt;-</span> <span class="fu">factor</span>(merged_data<span class="sc">$</span>Team, <span class="at">levels =</span> <span class="fu">unique</span>(merged_data<span class="sc">$</span>Team))</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>merged_data<span class="sc">$</span>Post <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"%"</span>, <span class="st">""</span>, merged_data<span class="sc">$</span>Post))</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the animated dot plot using gganimate</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(merged_data, <span class="fu">aes</span>(<span class="at">x =</span> Percent.Playoffs.Made, <span class="at">y =</span> Post, <span class="at">color =</span> Team, <span class="at">label =</span> <span class="fu">as.character</span>(Date))) <span class="sc">+</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span>  <span class="co"># Adjust the size of the points</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"MLB Playoff Percentage Comparison"</span>) <span class="sc">+</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_time</span>(Date) <span class="sc">+</span>  <span class="co"># Use transition_time for animation over time</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">enter_fade</span>() <span class="sc">+</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exit_fade</span>() <span class="sc">+</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),  <span class="co"># Adjust text size on the axes</span></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),  <span class="co"># Center the title</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),  <span class="co"># Rotate x-axis labels</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),  <span class="co"># Adjust y-axis text size</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),  <span class="co"># Remove axis ticks</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="st">"mm"</span>)) <span class="sc">+</span>  <span class="co"># Adjust plot margin</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>() <span class="sc">+</span>  <span class="co"># Use scale_x_discrete for discrete x-axis values</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="at">by =</span> <span class="dv">10</span>))</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="cn">Inf</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Date: "</span>, <span class="fu">as.character</span>(merged_data<span class="sc">$</span>Date[<span class="dv">1</span>])), <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>mapping: x = ~x, y = ~y 
-geom_text: na.rm = FALSE
-stat_identity: na.rm = FALSE
-position_identity </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the animation as a GIF directly to the desired location</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>final_animation_file <span class="ot">&lt;-</span> <span class="st">"/Users/jonnawaage/Documents/GitHub/Baseball Analysis/docs/posts/Playoff Analysis/mlb_playoff_animation.gif"</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>gganimate<span class="sc">::</span><span class="fu">anim_save</span>(final_animation_file, <span class="fu">animate</span>(p, <span class="at">nframes =</span> <span class="dv">100</span>, <span class="at">duration =</span> <span class="dv">100</span>, <span class="at">end_pause =</span> <span class="dv">10</span>), <span class="at">renderer =</span> gifski_renderer)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the animation in the R Markdown document</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(final_animation_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="../../docs/posts/Playoff Analysis/mlb_playoff_animation.gif" class="img-fluid"></p>
 </div>
