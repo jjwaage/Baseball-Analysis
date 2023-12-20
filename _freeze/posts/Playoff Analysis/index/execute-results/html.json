@@ -1,7 +1,7 @@
 {
-  "hash": "746cf2d68433b37468e8b0a0a3c7c450",
+  "hash": "d007c5225eb652bfb9f4b83625c5750d",
   "result": {
-    "markdown": "---\ntitle: \"Comparing My Playoff Projection to Playoff Percentages Each Week\"\nauthor: \"Jonna Waage\"\ndate: \"2023-09-25\"\n---\n\n\n## How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Day?\n\n\n\n\n\nThis animation goes day by day of the 2023 MLB season and compares the team's ever-changing actual percentage of making the playoffs to the playoff percentage that I simulated in the other blog post.\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](../../../Baseball Analysis/docs/posts/Playoff Analysis/mlb_playoff_animation.gif)\n:::\n:::\n",
+    "markdown": "---\ntitle: \"Comparing My Playoff Projection to Playoff Percentages Each Week\"\nauthor: \"Jonna Waage\"\ndate: \"2023-09-25\"\n---\n\n\n## How does my Projection of Playoff Contending Teams Compare to their Percentages of Making the Playoffs Every Day?\n\nThis animation goes day by day of the 2023 MLB season and compares the team's ever-changing actual percentage of making the playoffs to the playoff percentage that I simulated in the other blog post.\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](../../../Baseball Analysis/docs/posts/Playoff Analysis/mlb_playoff_animation.gif)\n:::\n:::\n",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"
