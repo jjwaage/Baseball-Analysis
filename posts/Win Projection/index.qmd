@@ -53,7 +53,6 @@ outcome = rbinom(nrow(.), 1, prob.Home), winner = ifelse(outcome, Home, Visitor)
 
 This equation uses [rbinom](https://www.programmingr.com/examples/neat-tricks/sample-r-function/r-rbinom/) which simulates a series of Bernoulli trials and returns the results. This returns a 1 if the home team wins and a 0 if the visiting team wins.
 
-
 ```{r, echo = FALSE}
 one.simulation <- function() {
   require(dplyr)

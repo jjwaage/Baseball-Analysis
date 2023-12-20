@@ -13,5 +13,5 @@ title-block-banner: "#0C2C56"
 ### Projects that use real MLB data to do a deeper analysis of how different statistics influence teams.
 
 #### This blog's main goal is to show different ways to visualize and analyze data for educational purposes. All of these projects can be recreated in non-baseball scenarios and used to teach data visualization.
-#
 
+# 

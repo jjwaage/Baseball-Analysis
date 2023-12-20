@@ -25,6 +25,8 @@ library(reshape2)
 library(data.table)
 ```
 
+This animation goes day by day of the 2023 MLB season and compares the team's ever-changing actual percentage of making the playoffs to the playoff percentage that I simulated in the other blog post.
+
 ```{r, echo=FALSE}
 load("playoffsummarydata.RData")
 
