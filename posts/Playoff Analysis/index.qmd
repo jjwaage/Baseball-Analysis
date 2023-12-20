@@ -138,7 +138,7 @@ p <- ggplot(merged_data, aes(x = Percent.Playoffs.Made, y = Post, color = Team_a
   scale_y_continuous(breaks = seq(0, 100, by = 10)) 
 
 # Save the animation as a GIF directly to the desired location
-final_animation_file <- "/Users/jonnawaage/Documents/GitHub/Baseball Analysis/docs/posts/Playoff Analysis/mlb_playoff_animation.gif"
+final_animation_file <- "/Users/jonnawaage/Documents/GitHub/Baseball-Analysis/docs/posts/Playoff Analysis/mlb_playoff_animation.gif"
 gganimate::anim_save(final_animation_file, animate(p, nframes = 200, duration = 25, end_pause = 15), renderer = gifski_renderer)
 
 # Display the animation in the R Markdown document
